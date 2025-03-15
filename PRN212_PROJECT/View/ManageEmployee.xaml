@@ -1,0 +1,89 @@
+﻿<Window x:Class="PRN212_PROJECT.View.ManageEmployee"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        mc:Ignorable="d"
+        Title="ManageEmployee" Height="1080" Width="1920">
+    <Grid Background="#F5F5F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="#0277BD">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
+                <materialDesign:PackIcon Kind="AccountMultiple" Width="40" Height="40" Foreground="White" Margin="0,0,16,0"/>
+                <TextBlock Text="QUẢN LÝ NHÂN VIÊN" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="#0277BD" Margin="20,0">
+                <materialDesign:PackIcon Kind="ArrowLeft" />
+            </Button>
+        </Grid>
+
+        <!-- Main Content -->
+        <materialDesign:Card Grid.Row="1" Margin="16" UniformCornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Background="#E1F5FE">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="DANH SÁCH NHÂN VIÊN" FontSize="18" FontWeight="Bold" />
+
+                    <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Green">
+                        <materialDesign:PackIcon Kind="Plus" />
+                    </Button>
+                </Grid>
+
+                <TextBox Grid.Row="1" Margin="16,8" materialDesign:HintAssist.Hint="Tìm kiếm nhân viên..." />
+
+                <DataGrid Grid.Row="2" Margin="16,8" CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tên" Width="*" />
+                        <DataGridTextColumn Header="Chức vụ" Width="150" />
+                        <DataGridTextColumn Header="SĐT" Width="120" />
+                        <DataGridTemplateColumn Header="Trạng thái" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Thao tác" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
+                                            <materialDesign:PackIcon Kind="Pencil" />
+                                        </Button>
+                                        <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
+                                            <materialDesign:PackIcon Kind="Delete" />
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</Window>

@@ -1,0 +1,228 @@
+﻿<Window x:Class="PRN212_PROJECT.View.Cooker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        mc:Ignorable="d"
+        Title="Cooker" Height="1080" Width="1920">
+    <Grid Background="#F5F5F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="Red">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="BẾP - DANH SÁCH MÓN CẦN CHUẨN BỊ" FontSize="24" FontWeight="Bold" 
+              Foreground="White" VerticalAlignment="Center" Margin="20,0" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
+                <ComboBox Width="150" Margin="8,0" materialDesign:HintAssist.Hint="Trạng thái" 
+                 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                 Background="White">
+                    <ComboBoxItem Content="Tất cả" IsSelected="True"/>
+                    <ComboBoxItem Content="Đang chờ"/>
+                    <ComboBoxItem Content="Đang làm"/>
+                    <ComboBoxItem Content="Đã hoàn thành"/>
+                </ComboBox>
+
+                <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" Margin="0,0,8,0"/>
+                        <TextBlock Text="Làm mới"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Pending Orders -->
+            <materialDesign:Card Grid.Column="0" Margin="8" UniformCornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#FFCCCC" Padding="16">
+                        <Grid>
+                            <TextBlock Text="ĐANG CHỜ" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" />
+                            <TextBlock Text="12 món" FontSize="16" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+
+
+                    <!--// bản k có binding để coi minh họa-->
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <!-- Order Item 1 -->
+                            <materialDesign:Card Margin="8" UniformCornerRadius="8">
+                                <Grid Margin="16">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Bàn 05" FontSize="18" FontWeight="Bold" />
+                                        <TextBlock Grid.Column="1" Text="10:25" FontSize="16" />
+                                    </Grid>
+
+                                    <Separator Grid.Row="1" Margin="0,8" />
+
+                                    <StackPanel Grid.Row="2">
+                                        <Grid Margin="0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="2x" FontWeight="Medium" Margin="0,0,16,0" />
+                                            <TextBlock Grid.Column="1" Text="Burger Bò Phô Mai" />
+                                            <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Green">
+                                                <materialDesign:PackIcon Kind="CheckCircle" />
+                                            </Button>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+                    <!--// bản có binding để làm-->
+
+                    <!--<ScrollViewer VerticalScrollBarVisibility="Auto">    
+                    <ItemsControl ItemsSource="{Binding TableOrders}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card Margin="8" UniformCornerRadius="8">
+                                    <Grid Margin="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Table}" FontSize="18" FontWeight="Bold" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Time}" FontSize="16" />
+                                        </Grid>
+
+                                        <Separator Grid.Row="1" Margin="0,8" />
+
+                                        <StackPanel Grid.Row="2">
+                                            <Grid Margin="0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Quantity}" FontWeight="Medium" Margin="0,0,16,0" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Order}" />
+                                                <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Green">
+                                                    <materialDesign:PackIcon Kind="CheckCircle" />
+                                                </Button>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>-->
+
+
+
+
+
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- In Progress Orders -->
+            <materialDesign:Card Grid.Column="1" Margin="8" UniformCornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#FFFFCC" Padding="16">
+                        <Grid>
+                            <TextBlock Text="ĐANG CHUẨN BỊ" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" />
+                            <TextBlock Text="8 món" FontSize="16" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+
+                    <!--+1 bản demo tí cop trên xuống-->
+
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <!-- Order Item 1 -->
+                            <materialDesign:Card Margin="8" UniformCornerRadius="8">
+                                <Grid Margin="16">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Bàn 03" FontSize="18" FontWeight="Bold" />
+                                        <TextBlock Grid.Column="1" Text="10:15 (12')" FontSize="16" Foreground="Orange" />
+                                    </Grid>
+
+                                    <Separator Grid.Row="1" Margin="0,8" />
+
+                                    <StackPanel Grid.Row="2">
+                                        <Grid Margin="0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="2x" FontWeight="Medium" Margin="0,0,16,0" />
+                                            <TextBlock Grid.Column="1" Text="Burger Gà Cay" />
+                                            <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Blue">
+                                                <materialDesign:PackIcon Kind="CheckCircleOutline" />
+                                            </Button>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</Window>

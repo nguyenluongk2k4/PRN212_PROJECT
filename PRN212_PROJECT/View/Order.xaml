@@ -1,0 +1,223 @@
+﻿<Window x:Class="PRN212_PROJECT.View.Order"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        mc:Ignorable="d"
+        Title="Order" Height="1080" Width="1920">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Column 0: Menu Items and Admin Controls -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Admin Controls -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#EEEEEE">
+                <Button Margin="8" Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" Foreground="White">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ReceiptText" Margin="0,0,8,0"/>
+                        <TextBlock Text="Hóa Đơn Mới"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="8" Style="{StaticResource MaterialDesignRaisedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="TableEdit" Margin="0,0,8,0"/>
+                        <TextBlock Text="Quản Lý Bàn"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="8" Style="{StaticResource MaterialDesignRaisedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Cash" Margin="0,0,8,0"/>
+                        <TextBlock Text="Thanh Toán"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!-- Menu Categories -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- ĐỒ ĂN CATEGORY -->
+                    <StackPanel Margin="16,8">
+                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">ĐỒ ĂN</TextBlock>
+                        <WrapPanel Orientation="Horizontal">
+                            <!-- Food Item Example -->
+                            <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="120" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" Background="#FFCCCC"/>
+                                    <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="Burger Bò Phô Mai" FontWeight="Bold"/>
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                        <TextBlock Text="65,000đ" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center"/>
+                                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                       HorizontalAlignment="Right" Background="Red">
+                                            <materialDesign:PackIcon Kind="Plus" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </WrapPanel>
+                    </StackPanel>
+
+                    <!-- THỨC UỐNG CATEGORY -->
+                    <StackPanel Margin="16,8">
+                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">THỨC UỐNG</TextBlock>
+                        <WrapPanel Orientation="Horizontal">
+                            <!-- Drink Item Example -->
+                            <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="120" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" Background="#CCFFFF"/>
+                                    <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="Coca Cola (L)" FontWeight="Bold"/>
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                        <TextBlock Text="25,000đ" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center"/>
+                                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                       HorizontalAlignment="Right" Background="Red">
+                                            <materialDesign:PackIcon Kind="Plus" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </WrapPanel>
+                    </StackPanel>
+
+                    <!-- ĐỒ ĂN VẶT CATEGORY -->
+                    <StackPanel Margin="16,8">
+                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">ĐỒ ĂN VẶT</TextBlock>
+                        <WrapPanel Orientation="Horizontal">
+                            <!-- Snack Item Example -->
+                            <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="120" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" Background="#FFFFCC"/>
+                                    <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="Khoai Tây Chiên (L)" FontWeight="Bold"/>
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                        <TextBlock Text="35,000đ" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center"/>
+                                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                       HorizontalAlignment="Right" Background="Red">
+                                            <materialDesign:PackIcon Kind="Plus" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </WrapPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Column 1: Order Details -->
+        <Grid Grid.Column="1" Background="#F5F5F5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Order Header -->
+            <Border Grid.Row="0" Background="Red" Padding="16">
+                <TextBlock Text="HÓA ĐƠN" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+            </Border>
+
+            <!-- Order Items -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,8">
+                <StackPanel>
+                    <!-- Order Item Example -->
+                    <Grid Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="1x" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="Burger Bò Phô Mai" VerticalAlignment="Center" Margin="8,0"/>
+                        <TextBlock Grid.Column="2" Text="65,000đ" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                        <Button Grid.Column="3" Style="{StaticResource MaterialDesignFlatButton}" Padding="4">
+                            <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
+                        </Button>
+                    </Grid>
+
+                    <Separator Margin="8,0"/>
+
+                    <!-- Second Item -->
+                    <Grid Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="2x" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="Coca Cola (L)" VerticalAlignment="Center" Margin="8,0"/>
+                        <TextBlock Grid.Column="2" Text="50,000đ" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                        <Button Grid.Column="3" Style="{StaticResource MaterialDesignFlatButton}" Padding="4">
+                            <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Total and Payment -->
+            <Grid Grid.Row="2" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Subtotal -->
+                <Grid Grid.Row="0" Margin="16,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Tổng cộng:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="115,000đ" FontWeight="SemiBold" FontSize="16"/>
+                </Grid>
+
+                <!-- Tax -->
+                <Grid Grid.Row="1" Margin="16,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Thuế (10%):" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="11,500đ" FontWeight="SemiBold" FontSize="16"/>
+                </Grid>
+
+                <!-- Payment Button -->
+                <Button Grid.Row="2" Margin="16,16" Height="50" Background="Red" Foreground="White"
+                Style="{StaticResource MaterialDesignRaisedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CashRegister" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Text="THANH TOÁN" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text=" 126,500đ" FontSize="16" FontWeight="Bold" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

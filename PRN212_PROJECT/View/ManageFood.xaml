@@ -1,0 +1,109 @@
+﻿<Window x:Class="PRN212_PROJECT.View.ManageFood"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        mc:Ignorable="d"
+        Title="ManageFood" Height="1080" Width="1920">
+    <Grid Background="#F5F5F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="Red">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
+                <materialDesign:PackIcon Kind="FoodForkDrink" Width="40" Height="40" Foreground="White" Margin="0,0,16,0"/>
+                <TextBlock Text="QUẢN LÝ DANH MỤC" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="20,0">
+                <materialDesign:PackIcon Kind="ArrowLeft" />
+            </Button>
+        </Grid>
+
+        <!-- Main Content -->
+        <materialDesign:Card Grid.Row="1" Margin="16" UniformCornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Background="#FFEBEE">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="DANH SÁCH MÓN ĂN" FontSize="18" FontWeight="Bold" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Green" Margin="0,0,8,0">
+                            <materialDesign:PackIcon Kind="Plus" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Red">
+                            <materialDesign:PackIcon Kind="Delete" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="16,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Tìm kiếm món ăn..." Margin="0,0,16,0" />
+
+                    <ComboBox Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Loại món">
+                        <ComboBoxItem Content="Tất cả" IsSelected="True"/>
+                        <ComboBoxItem Content="Đồ ăn"/>
+                        <ComboBoxItem Content="Thức uống"/>
+                        <ComboBoxItem Content="Đồ ăn vặt"/>
+                    </ComboBox>
+                </Grid>
+
+                <DataGrid Grid.Row="2" Margin="16,8" CanUserAddRows="False" AutoGenerateColumns="False" GridLinesVisibility="All">
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Header="" Width="40" />
+                        <DataGridTextColumn Header="Tên món" Width="*" />
+                        <DataGridTextColumn Header="Loại" Width="100" />
+                        <DataGridTextColumn Header="Giá" Width="100" />
+                        <DataGridTemplateColumn Header="Trạng thái" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Thao tác" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
+                                            <materialDesign:PackIcon Kind="Pencil" />
+                                        </Button>
+                                        <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
+                                            <materialDesign:PackIcon Kind="Delete" />
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</Window>
