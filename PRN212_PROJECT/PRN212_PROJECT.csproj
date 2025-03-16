@@ -9,6 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Images\default.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="MaterialDesignColors" Version="5.2.1" />
 		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
@@ -21,6 +25,10 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Images\default.png" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -10,7 +10,7 @@ namespace PRN212_PROJECT.View_Model
     public class ManageOrderViewModel
     {
         public ManageOrderViewModel() {
-            MessageBox.Show("test");
+            
         }
     }
 }

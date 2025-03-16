@@ -2,4 +2,5 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ViewModel="clr-namespace:PRN212_PROJECT.View_Model">
     <ViewModel:ManageOrderViewModel x:Key="ManageOrderVM"/>
+    <ViewModel:ManageFoodVM x:Key="ManagaFoodVM"/>
 </ResourceDictionary>
