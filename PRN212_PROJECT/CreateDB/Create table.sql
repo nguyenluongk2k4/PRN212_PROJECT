@@ -1,3 +1,4 @@
+
 CREATE TABLE OrderTable (
     orderID INT PRIMARY KEY IDENTITY(1,1),
     customerName NVARCHAR(50),
@@ -12,7 +13,7 @@ CREATE TABLE TypeOfFood (
     TypeName NVARCHAR(50)
 );
 
-CREATE TABLE Food (
+CREATE TABLE Food ( -- da xoa 
     FoodID INT PRIMARY KEY IDENTITY(1,1),
     FoodName NVARCHAR(50),
     FoodType INT FOREIGN KEY REFERENCES TypeOfFood(TypeID),
@@ -20,21 +21,21 @@ CREATE TABLE Food (
     Status INT
 );
 
-CREATE TABLE OrderDetail (
+CREATE TABLE OrderDetail (  --da xoa
     orderDetailID INT PRIMARY KEY IDENTITY(1,1),
     orderID INT FOREIGN KEY REFERENCES OrderTable(orderID),
     FoodID INT FOREIGN KEY REFERENCES Food(FoodID),
     Amount INT
 );
 
-CREATE TABLE Combo (
+CREATE TABLE Combo (  -- da xoa
     ComboID INT PRIMARY KEY IDENTITY(1,1),
     ComboName NVARCHAR(50),
     Status INT,
     Price FLOAT
 );
 
-CREATE TABLE ComboDetail (
+CREATE TABLE ComboDetail ( --da xoa
     ComboDetailID INT PRIMARY KEY IDENTITY(1,1),
     FoodID INT FOREIGN KEY REFERENCES Food(FoodID),
     Amount INT,

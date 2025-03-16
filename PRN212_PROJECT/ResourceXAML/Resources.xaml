@@ -3,4 +3,5 @@
                     xmlns:ViewModel="clr-namespace:PRN212_PROJECT.View_Model">
     <ViewModel:ManageOrderViewModel x:Key="ManageOrderVM"/>
     <ViewModel:ManageFoodVM x:Key="ManagaFoodVM"/>
+    <ViewModel:LoginVM x:Key="LoginVM"/>
 </ResourceDictionary>

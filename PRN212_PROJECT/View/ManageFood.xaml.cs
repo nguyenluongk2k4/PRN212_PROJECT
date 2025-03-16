@@ -41,7 +41,7 @@ namespace PRN212_PROJECT.View
                 double price;
                 bool isPriceValid = double.TryParse(txtPrice.Text.Replace(",", ""), out price);
                 int status = cbStatus.IsChecked==true ? 1:0;
-                string image = img.Source.ToString();
+                string image = UploadedImage.Source.ToString();
 
                 
                 Food f=new Food() { FoodId=id,FoodName=name,FoodType=type,Price=price,Status=status,Image=image};

@@ -8,7 +8,10 @@
         xmlns:domain="clr-namespace:PRN212_PROJECT.Validate"
 mc:Ignorable="d"
 Title="LoginWindow" Height="650" Width="900"
-WindowStyle="SingleBorderWindow">
+WindowStyle="SingleBorderWindow"
+        
+        >
+    
     
     <Window.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -55,29 +58,27 @@ WindowStyle="SingleBorderWindow">
                 <TextBox
                    materialDesign:HintAssist.Hint="Email"
                    Style="{StaticResource MaterialDesignFilledTextBox}"
+                    Name="Email"
                    Margin="0,0,0,10">
-                    <!--<TextBox.Text>
+                   
+                    <TextBox.Text>
                        <Binding
                            Path="Email"
                            UpdateSourceTrigger="PropertyChanged">
-                           <Binding.ValidationRules>
-                               <domain:NotEmptyValidationRule
-                                   ValidatesOnTargetUpdated="True" />
-                           </Binding.ValidationRules>
+                           
                        </Binding>
-                   </TextBox.Text>-->
+                   </TextBox.Text>
                 </TextBox>
 
                 <StackPanel
  Orientation="Vertical"
 >
                     <PasswordBox
-                       Margin="0px 0px 0px 20px"
-   materialDesign:HintAssist.HelperText="Ít nhất 6 kí tự"
-   materialDesign:HintAssist.Hint="Password"
-   materialDesign:PasswordBoxAssist.Password="{Binding Path=Password1Validated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-   Style="{StaticResource MaterialDesignFilledPasswordBox}"
-   />
+                   Name="passwordBox"
+                   Margin="0px 0px 0px 20px"
+                   materialDesign:HintAssist.Hint="Password"
+                   Style="{StaticResource MaterialDesignFilledPasswordBox}"
+                   PasswordChanged="PasswordBox_PasswordChanged"/>
                 </StackPanel>
 
                 <Button
@@ -88,7 +89,10 @@ WindowStyle="SingleBorderWindow">
                    Width="250"
                    Height="40"
                    Margin="0,20,0,10"
-                   HorizontalAlignment="Center" />
+                   HorizontalAlignment="Center"
+                   
+                    Command="{Binding LoginCommand}"
+                    />
 
 
             </StackPanel>

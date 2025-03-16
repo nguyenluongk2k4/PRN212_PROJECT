@@ -172,7 +172,7 @@
                         <StackPanel Margin="0,20,0,25" MinHeight="250">
                             <Image Name="UploadedImage" Width="300" Height="200" Stretch="Uniform" />
                             <TextBox Name="txtImagePath" Visibility="Collapsed" />
-                            <Button Content="Upload Image" Width="120" Height="30" Click="UploadImage_Click" Margin="0,10,0,0"/>
+                            <Button Content="Upload Image" Width="120" Height="30"  Margin="0,10,0,0"/>
                         </StackPanel>
 
                         <!-- Save Button -->

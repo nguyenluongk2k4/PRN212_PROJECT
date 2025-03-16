@@ -22,6 +22,16 @@ namespace PRN212_PROJECT.View
         public Login()
         {
             InitializeComponent();
+            DataContext = new PRN212_PROJECT.View_Model.LoginVM();
+        }
+
+        
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is PRN212_PROJECT.View_Model.LoginVM vm)
+            {
+                vm.Password = ((PasswordBox)sender).Password;
+            }
         }
     }
 }
