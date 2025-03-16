@@ -17,9 +17,9 @@ namespace PRN212_PROJECT.View
     /// <summary>
     /// Interaction logic for Order.xaml
     /// </summary>
-    public partial class Order : Window
+    public partial class OrderFood : Window
     {
-        public Order()
+        public OrderFood()
         {
             InitializeComponent();
         }

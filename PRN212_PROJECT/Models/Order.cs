@@ -19,5 +19,9 @@ public partial class Order
 
     public double? Total { get; set; }
 
+    public string isPaid => IsPaid == true ? "Đã thanh toán" : "Chưa thanh toán";
+
+    public string Shipping => Done == true ? "Đã giao" : "Chưa giao";
+
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

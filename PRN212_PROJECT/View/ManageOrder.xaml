@@ -7,9 +7,9 @@
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
         DataContext="{StaticResource ManageOrderVM}"
-    
+        WindowState="Maximized"
         Title="ManageOrder" Height="1080" Width="1920">
-  
+
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
@@ -29,7 +29,7 @@
                 <TextBlock Text="QUẢN LÝ ĐƠN HÀNG" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
             </StackPanel>
 
-            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="#FF6F00" Margin="20,0">
+            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="#FF6F00" Margin="20,0" Command="{Binding GoBack}">
                 <materialDesign:PackIcon Kind="ArrowLeft" />
             </Button>
         </Grid>
@@ -46,32 +46,112 @@
                     <TextBlock Text="DANH SÁCH ĐƠN HÀNG" FontSize="18" FontWeight="Bold" />
                 </Grid>
 
-                <ListView Grid.Row="1" Margin="16">
-                    <ListViewItem>
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ListView ItemsSource="{Binding orders}" x:Name="Orders" Grid.Column="0" Margin="16">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
 
-                            <Border Grid.Column="0" Width="12" Height="12" CornerRadius="6" Background="Green" Margin="0,0,16,0" />
+                                        <ColumnDefinition Width="2*"/>
 
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Text="Bàn 05 - Order #1058" FontWeight="SemiBold" />
-                                <TextBlock Text="2 món - 126,500đ" FontSize="12" Foreground="Gray" />
-                            </StackPanel>
+                                        <ColumnDefinition Width="3*"/>
 
-                            <TextBlock Grid.Column="2" Text="10:35" Margin="16,0" />
+                                        <ColumnDefinition Width="Auto"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- 🔹 Hiển thị màu trạng thái thanh toán -->
+                                    <Border Grid.Column="0" Width="12" Height="12" CornerRadius="6" 
+                        
+                        Margin="0,0,16,0"/>
+
+                                    <!-- 🔹 Thông tin đơn hàng -->
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="{Binding Date}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Total, StringFormat='{}{0:N0} đ'}" FontSize="12" Foreground="Gray" />
+                                    </StackPanel>
+
+                                    <!-- 🔹 Thông tin khách hàng -->
+                                    <StackPanel Margin="0px 0px 20px 0px" Grid.Column="1">
+                                        <TextBlock Text="{Binding OrderId, StringFormat='Mã đơn: {0}'}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding CustomerName}" FontSize="12" Foreground="Gray" />
+
+                                    </StackPanel>
+
+                                    <!-- 🔹 Trạng thái thanh toán -->
+                                    <TextBlock Grid.Column="3" Text="{Binding isPaid}" 
+                           Margin="16,0" FontWeight="Bold" Foreground="Red"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <materialDesign:Card Grid.Column="1" Margin="16" Padding="16">
+                        <StackPanel>
+                            <TextBlock Text="CHI TIẾT ĐƠN HÀNG" FontSize="18" FontWeight="Bold" />
+
+                            <!-- Grid chứa thông tin đơn hàng -->
+                            <Grid Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <!-- 🔹 Tiêu đề cột -->
+                                <TextBlock Grid.Column="0" Grid.Row="0" Text="Mã Hóa đơn:" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="0" Grid.Row="1" Text="Tên khách hàng:" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="0" Grid.Row="2" Text="Địa chỉ:" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="0" Grid.Row="3" Text="Thời gian đặt:" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="0" Grid.Row="4" Text="Tình trạng giao hàng:" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="0" Grid.Row="5" Text="Trạng thái thanh toán:" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="0" Grid.Row="6" Text="Tổng hóa đơn:" FontWeight="SemiBold" />
+
+                                <!-- 🔹 Dữ liệu đơn hàng -->
+                                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ElementName=Orders, Path=SelectedItem.OrderId}" />
+                                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ElementName=Orders, Path=SelectedItem.CustomerName}" />
+                                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding ElementName=Orders, Path=SelectedItem.Address}" />
+                                <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding ElementName=Orders, Path=SelectedItem.Date}" />
+                                <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding ElementName=Orders, Path=SelectedItem.Shipping}" />
+                                <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding ElementName=Orders, Path=SelectedItem.isPaid}" />
+                                <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding ElementName=Orders, Path=SelectedItem.Total}" />
+                            </Grid>
+
+                            <!-- 🔹 Danh sách món ăn -->
+                            <ListView Margin="0,16,0,0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding ItemName}" FontWeight="SemiBold" Width="150" />
+                                            <TextBlock Text="{Binding Quantity}" FontSize="14" Foreground="Gray" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                            <!-- 🔹 Nút đóng -->
+                            <Button Content="Đóng" HorizontalAlignment="Right" Margin="0,16,0,0"/>
+                        </StackPanel>
+                    </materialDesign:Card>
 
 
-                        </Grid>
-                    </ListViewItem>
-
-
-                </ListView>
+                </Grid>
             </Grid>
         </materialDesign:Card>
+
+
     </Grid>
 </Window>

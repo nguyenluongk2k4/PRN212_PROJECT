@@ -22,6 +22,7 @@ namespace PRN212_PROJECT.View
         public AdminDashBoard()
         {
             InitializeComponent();
+            DataContext = new PRN212_PROJECT.View_Model.AdminDashBoardVM();
         }
     }
 }

@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         xmlns:domain="clr-namespace:PRN212_PROJECT.Validate"
+        WindowState="Maximized"
 mc:Ignorable="d"
 Title="LoginWindow" Height="650" Width="900"
 WindowStyle="SingleBorderWindow"

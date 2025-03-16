@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="AdminDashBoard" Height="1080" Width="1920">
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
@@ -57,7 +58,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#FF6F00" Foreground="White">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#FF6F00" Foreground="White" Command="{Binding GoOrder}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="Receipt" Width="48" Height="48" HorizontalAlignment="Center" />
                             <TextBlock Text="Quản lý Đơn hàng" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
