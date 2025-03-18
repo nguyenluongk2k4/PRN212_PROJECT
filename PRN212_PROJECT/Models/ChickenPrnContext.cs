@@ -6,9 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace PRN212_PROJECT.Models;
 
 public partial class ChickenPrnContext : DbContext
-{
-    public static ChickenPrnContext Ins=new ChickenPrnContext();
-
+{   public static ChickenPrnContext Ins=new ChickenPrnContext();
     public ChickenPrnContext()
     {
         if (Ins == null)
@@ -36,6 +34,7 @@ public partial class ChickenPrnContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
         if (!optionsBuilder.IsConfigured) { optionsBuilder.UseSqlServer(config.GetConnectionString("MyCnn")); }

@@ -10,6 +10,7 @@ public partial class Food
     public string FoodName { get; set; } = null!;
 
     public int? FoodType { get; set; }
+    //public string TypeName { get; set; }
 
     public double Price { get; set; }
 
@@ -22,4 +23,5 @@ public partial class Food
     public virtual TypeOfFood? FoodTypeNavigation { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
 }

@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
+using System;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using PRN212_PROJECT.Models;
 using PRN212_PROJECT.View_Model;
 
 namespace PRN212_PROJECT.View
 {
-    /// <summary>
-    /// Interaction logic for ManageFood.xaml
-    /// </summary>
     public partial class ManageFood : Window
     {
         public ManageFood()
@@ -27,39 +13,38 @@ namespace PRN212_PROJECT.View
             InitializeComponent();
         }
 
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private void UpLoadImg_Click(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as ManageFoodVM;
-            if (vm != null)
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                // Retrieve values from form fields
-                String Id_String=lbID.Content.ToString();
-                int id=int.Parse(Id_String);
-                string name = txtName.Text;
-                string typeName = cbxType.SelectedItem as string;
-                int type=ChickenPrnContext.Ins.TypeOfFoods.FirstOrDefault(x=>x.TypeName.Equals(typeName)).TypeId;
-                double price;
-                bool isPriceValid = double.TryParse(txtPrice.Text.Replace(",", ""), out price);
-                int status = cbStatus.IsChecked==true ? 1:0;
-                string image = img.Source.ToString();
+                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string sourcePath = openFileDialog.FileName;
+                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", ".."));
+                string imageFolder = Path.Combine(projectRoot, "images");
+                string fileName = Path.GetFileNameWithoutExtension(sourcePath);
+                string extension = Path.GetExtension(sourcePath);
+                string uniqueFileName = $"{fileName}_{Guid.NewGuid().ToString("N")}{extension}"; // Unique filename
+                string destPath = Path.Combine(imageFolder, uniqueFileName);
 
-                
-                Food f=new Food() { FoodId=id,FoodName=name,FoodType=type,Price=price,Status=status,Image=image};
-
-                if (!isPriceValid)
+                try
                 {
-                    MessageBox.Show("Giá không hợp lệ. Vui lòng nhập số hợp lệ.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Directory.CreateDirectory(imageFolder);
+                    File.Copy(sourcePath, destPath, false); // Don’t overwrite, use unique name
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show($"Error uploading file: {ex.Message}");
                     return;
                 }
 
-                // Pass the values to the view model
-                vm.UpdateFood(f);
+                if (DataContext is ManageFoodVM vm)
+                {
+                    vm.FormFoodImagePath = destPath;
+                }
             }
-        }
-
-        private void btnClear_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
