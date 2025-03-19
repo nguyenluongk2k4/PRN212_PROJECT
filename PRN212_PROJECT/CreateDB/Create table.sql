@@ -1,3 +1,4 @@
+create database ChickenPRN
 CREATE TABLE OrderTable (
     orderID INT PRIMARY KEY IDENTITY(1,1),
     customerName NVARCHAR(50),
@@ -17,6 +18,7 @@ CREATE TABLE Food (
     FoodName NVARCHAR(50),
     FoodType INT FOREIGN KEY REFERENCES TypeOfFood(TypeID),
     Price FLOAT,
+	[Table] int,
     Status INT
 );
 
