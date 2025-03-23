@@ -16,14 +16,14 @@ using PRN212_PROJECT.View_Model;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for Cooker.xaml
+    /// Interaction logic for AddNewFoodType.xaml
     /// </summary>
-    public partial class Cooker : Window
+    public partial class AddNewFoodType : Window
     {
-        public Cooker()
+        public AddNewFoodType()
         {
             InitializeComponent();
-     
+            DataContext = new AddNewFoodTypeVM();
         }
     }
 }

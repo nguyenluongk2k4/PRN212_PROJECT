@@ -1,0 +1,94 @@
+﻿<Window x:Class="PRN212_PROJECT.View.AddNewFoodType"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{StaticResource AddNewFoodTypeVM}"
+        mc:Ignorable="d"
+        Title="AddNewFoodType" Height="600" Width="800">
+    <Grid Background="#CE70F4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"  Height="300" HorizontalAlignment="Center" Margin="0,50,0,0">
+            <Border BorderBrush="White" BorderThickness="2" CornerRadius="5" Background="White">
+                <StackPanel Margin="10">
+                    <Label Content="Thêm loại đồ ăn mới" 
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0,10,0,20"/>
+                    <TextBox  Margin="5,40"
+                        x:Name="NameTextBox"
+                        materialDesign:HintAssist.Hint="Tên loại" Text="{Binding Name ,UpdateSourceTrigger=PropertyChanged}"/>
+
+
+                    <Button
+                        Content="Submit"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="MaterialDesignFlatSecondaryMidBgButton"
+                        Background="#CE70F4"
+                        BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,20,0,0"  Command="{Binding AddFoodType}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <StackPanel Grid.Column="1"  HorizontalAlignment="Center" Margin="0,50,50,0">
+            <Border BorderBrush="White" BorderThickness="2" CornerRadius="5" Background="White">
+                <StackPanel Margin="10">
+                    <Label Content="Các Loại Hiện Có" 
+                    HorizontalAlignment="Center"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Margin="0,10,0,20"/>
+                    <DataGrid 
+    AutoGenerateColumns="False"
+    IsReadOnly="True"
+    Margin="0,0,0,20"
+    ItemsSource="{Binding FoodTypes}" 
+    SelectedItem="{Binding SelectedType}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" 
+                           Width="*"
+                           Binding="{Binding TypeName}"/>
+                        </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="LightGray"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+
+                    <TextBox  Margin="10,40"
+     
+     materialDesign:HintAssist.Hint="Điền Tên Mới Tại Đây" Text="{Binding SelectedType.TypeName ,UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button
+                 Content="Xóa"
+                 Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                 ToolTip="MaterialDesignFlatSecondaryMidBgButton"
+                 Background="#5daa5b"
+                 BorderBrush="#CE70F4"
+                 Foreground="White"
+                 Margin="0,20,0,0"  Command="{Binding DeleteFoodType}"/>
+                    <Button
+                 Content="Sửa"
+                 Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                 ToolTip="MaterialDesignFlatSecondaryMidBgButton"
+                 Background="#ff9100"
+                 BorderBrush="#CE70F4"
+                 Foreground="White"
+                 Margin="0,20,0,0"  Command="{Binding UpdateFoodType}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

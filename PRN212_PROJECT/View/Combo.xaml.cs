@@ -11,19 +11,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using PRN212_PROJECT.View_Model;
 
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for Cooker.xaml
+    /// Interaction logic for Combo.xaml
     /// </summary>
-    public partial class Cooker : Window
+    public partial class Combo : Window
     {
-        public Cooker()
+        public Combo()
         {
             InitializeComponent();
-     
         }
     }
 }

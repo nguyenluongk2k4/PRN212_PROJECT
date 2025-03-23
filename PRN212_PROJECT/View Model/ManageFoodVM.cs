@@ -22,6 +22,20 @@ namespace PRN212_PROJECT.View_Model
             }
         }
 
+        private ObservableCollection<Food> _allFoods = new(); // Store the full list
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText)); // Fixed: Use nameof(SearchText)
+                SearchByName(); // Trigger filtering on every text change
+            }
+        }
+
         private ObservableCollection<string> _typeList = new();
         public ObservableCollection<string> TypeList
         {
@@ -47,7 +61,7 @@ namespace PRN212_PROJECT.View_Model
                     {
                         FormFoodName = _selectedFoodItem.FoodName;
                         FormFoodTypeName = _selectedFoodItem.FoodTypeNavigation?.TypeName;
-                        FormFoodPrice = _selectedFoodItem.Price;
+                        FormFoodPrice =(Double) _selectedFoodItem.Price;
                         FormFoodStatus = _selectedFoodItem.Status == 1;
                         FormFoodImagePath = _selectedFoodItem.Image;
                     }
@@ -157,13 +171,31 @@ namespace PRN212_PROJECT.View_Model
                 }
             }
 
-            FoodList = new ObservableCollection<Food>(list);
+            _allFoods = new ObservableCollection<Food>(list); // Store full list
+            FoodList = new ObservableCollection<Food>(list); // Displayed list
         }
 
         private void LoadTypeList()
         {
             var list = ChickenPrnContext.Ins.TypeOfFoods.Select(x => x.TypeName).ToList();
             TypeList = new ObservableCollection<string>(list);
+        }
+
+        // Search by name
+        private void SearchByName()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                FoodList = new ObservableCollection<Food>(_allFoods); // Show all if search is empty
+            }
+            else
+            {
+                var filteredList = _allFoods
+                    .Where(food => food.FoodName != null &&
+                                   food.FoodName.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                FoodList = new ObservableCollection<Food>(filteredList);
+            }
         }
 
         // Add Part
@@ -238,6 +270,7 @@ namespace PRN212_PROJECT.View_Model
         private bool CanUpdateFood(object parameter)
         {
             return !string.IsNullOrEmpty(FormFoodName) &&
+                   ChickenPrnContext.Ins.Foods.Any(x => x.FoodName == FormFoodName) &&
                    !string.IsNullOrEmpty(FormFoodTypeName) &&
                    FormFoodPrice > 0 &&
                    !string.IsNullOrEmpty(FormFoodImagePath);
@@ -255,9 +288,7 @@ namespace PRN212_PROJECT.View_Model
             FormFoodPrice = 0;
             FormFoodStatus = false;
             FormFoodImagePath = null;
-            SelectedFoodItem = null; 
+            SelectedFoodItem = null;
         }
     }
-
-  
 }

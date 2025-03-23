@@ -46,5 +46,11 @@ namespace PRN212_PROJECT.View
                 }
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewFoodType addNewFoodTypeScreen=new AddNewFoodType();
+            addNewFoodTypeScreen.Show();
+        }
     }
 }
