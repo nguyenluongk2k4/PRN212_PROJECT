@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PRN212_PROJECT.Models;
 
-public partial class OrderDetail
+public partial class OrderDetailFood
 {
     public int OrderDetailId { get; set; }
 
@@ -11,11 +11,9 @@ public partial class OrderDetail
 
     public int? FoodId { get; set; }
 
-    public int Amount { get; set; }
-
-    public double TotalCost { get; set; }
+    public int? Amount { get; set; }
 
     public virtual Food? Food { get; set; }
 
-    public virtual Order? Order { get; set; }
+    public virtual OrderTable? Order { get; set; }
 }

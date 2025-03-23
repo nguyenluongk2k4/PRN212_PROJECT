@@ -8,9 +8,7 @@
 		<UseWPF>true</UseWPF>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <None Remove="Images\default.png" />
-	</ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="MaterialDesignColors" Version="5.2.1" />
@@ -28,7 +26,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Images\default.png" />
+		<Resource Include="images\default.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="images\**\*">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<!-- Do not copy to bin -->
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

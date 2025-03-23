@@ -7,17 +7,22 @@
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         xmlns:BaseVM="clr-namespace:PRN212_PROJECT.View_Model"
         mc:Ignorable="d"
-        DataContext="{StaticResource ManagaFoodVM}"
-        Title="ManageFood" Height="1080" Width="1920">
+        WindowState="Maximized"
+        Title="ManageFood"
+        Height="1080"
+        Width="1920"
+        DataContext="{DynamicResource ManageFoodVM}">
     <Window.Resources>
-        <BaseVM:BaseViewModel x:Key="ImagePathConverter"/>
-        <BaseVM:ManageFoodVM x:Key="StatusToBoolConverter"/>
+        <BaseVM:ManageFoodVM x:Key="ManageFoodVM" />
+        <BaseVM:StatusToBoolConverter x:Key="StatusConverter"/>
+        <BaseVM:ImagePathConverter x:Key="ImagePathConverter"/>
     </Window.Resources>
+
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="487*" />
-            <RowDefinition Height="477*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="9*" />
+           
         </Grid.RowDefinitions>
 
         <!-- Header -->
@@ -42,9 +47,7 @@
         <materialDesign:Card Grid.Row="1" Margin="16,16,16,16" UniformCornerRadius="8" Grid.RowSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <!-- Left column: 2/3 for Food List -->
                     <ColumnDefinition Width="2*" />
-                    <!-- Right column: 1/3 for Form -->
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
@@ -66,12 +69,20 @@
                         <TextBlock Grid.Column="0" Text="DANH SÁCH MÓN ĂN" FontSize="18" FontWeight="Bold" Margin="8,4" />
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,4">
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Green" Margin="0,0,8,0">
-                                <materialDesign:PackIcon Kind="Plus" />
-                            </Button>
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Red">
-                                <materialDesign:PackIcon Kind="Delete" />
-                            </Button>
+                            <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+            Background="Green" 
+            Foreground="White" 
+            Content="Thêm loại đồ ăn" 
+            Margin="0,0,8,0" 
+            Click="Button_Click"
+            Height="30"
+            Padding="8,0"/>
+                            <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+            Background="Red" 
+            Foreground="White" 
+            Content="Xem combo"
+            Height="30"
+            Padding="8,0"/>
                         </StackPanel>
                     </Grid>
 
@@ -82,7 +93,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Tìm kiếm món ăn..." Margin="0,0,16,0" />
+                        <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Tìm kiếm món ăn..." Margin="0,0,16,0"  Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}"/>
 
                         <ComboBox Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Loại món">
                             <ComboBoxItem Content="Tất cả" IsSelected="True"/>
@@ -93,40 +104,27 @@
                     </Grid>
 
                     <!-- DataGrid -->
+                    <!-- DataGrid -->
+                    <!-- DataGrid -->
                     <DataGrid x:Name="ListFood" Grid.Row="2" Margin="16,8" CanUserAddRows="False" AutoGenerateColumns="False" 
-                      GridLinesVisibility="All" ItemsSource="{Binding FoodList}" SelectedItem="{Binding SelectedFood}" >
+          GridLinesVisibility="All" ItemsSource="{Binding FoodList}" SelectedItem="{Binding SelectedFoodItem, Mode=TwoWay}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Width="50" Binding="{Binding ID, Mode=OneWay}" />
-                            <DataGridTemplateColumn Header="Ảnh" Width="200">
+                            <DataGridTextColumn Header="ID" Width="0.08*" Binding="{Binding FoodId, Mode=OneWay}" />
+                            <DataGridTemplateColumn Header="Ảnh" Width="0.22*" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Source="{Binding Image, Converter={StaticResource ImagePathConverter}}" 
-                                       Width="100" Height="100" Stretch="Uniform" />
+                           Stretch="Uniform" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Tên món" Width="100" Binding="{Binding Name, Mode=OneWay}" />
-                            <DataGridTextColumn Header="Loại" Width="100" Binding="{Binding Type, Mode=OneWay}" />
-                            <DataGridTextColumn Header="Giá" Width="100" Binding="{Binding Price, Mode=OneWay, StringFormat={}{0:N0}}" />
-
-                            <DataGridTemplateColumn Header="Trạng Thái" Width="100">
+                            <DataGridTextColumn Header="Tên món" Width="0.28*" Binding="{Binding FoodName, Mode=OneWay}" />
+                            <DataGridTextColumn Header="Loại" Width="0.17*" Binding="{Binding FoodTypeNavigation.TypeName, Mode=OneWay}" />
+                            <DataGridTextColumn Header="Giá" Width="0.14*" Binding="{Binding Price, StringFormat={}{0:N0}, Mode=OneWay}" />
+                            <DataGridTemplateColumn Header="Trạng Thái" Width="0.11*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Status ,Mode=OneWay}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Thao tác" Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
-                                                <materialDesign:PackIcon Kind="Pencil" />
-                                            </Button>
-                                            <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
-                                                <materialDesign:PackIcon Kind="Delete" />
-                                            </Button>
-                                        </StackPanel>
+                                        <CheckBox IsChecked="{Binding Status, Converter={StaticResource StatusConverter}, Mode=OneWay}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -134,56 +132,47 @@
                     </DataGrid>
                 </Grid>
 
-                <materialDesign:Card Grid.Column="1" Margin="16" UniformCornerRadius="8">
-                    <StackPanel Margin="16">
-                        <TextBlock Text="CHỈNH SỬA MÓN ĂN" FontSize="18" FontWeight="Bold" Margin="0,0,0,16" />
+                <!-- Right Column: Food Form -->
+                <materialDesign:Card Grid.Column="1" Margin="8" UniformCornerRadius="8">
+                    <StackPanel Margin="8">
+                        <TextBlock Text="QUẢN LÝ MÓN ĂN" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+                        <Label Content="{Binding SelectedFoodItem.FoodId, Mode=OneWay}" Margin="0,0,0,8" />
 
-                        <!--ID-->
-                        <Label Name="lbID" Content="{Binding ElementName=ListFood, Path=SelectedItem.ID, Mode=OneWay}" />
+                        <TextBox x:Name="txtFoodName" materialDesign:HintAssist.Hint="Tên món" 
+                 Text="{Binding FormFoodName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 Margin="0,0,0,12" />
 
-                        <!-- Name -->
-                        <TextBox Name="txtName" materialDesign:HintAssist.Hint="Tên món" 
-                 Text="{Binding ElementName=ListFood, Path=SelectedItem.Name, Mode=OneWay}" 
-                 Margin="0,0,0,25" />
-
-                        <!-- Type -->
-                        <ComboBox Name="cbxType" materialDesign:HintAssist.Hint="Loại món" 
+                        <ComboBox x:Name="cbxType" materialDesign:HintAssist.Hint="Loại món" 
                   ItemsSource="{Binding TypeList}" 
-                  SelectedItem="{Binding ElementName=ListFood, Path=SelectedItem.Type, Mode=OneWay}" 
-                  Margin="0,20,0,16">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                  SelectedItem="{Binding FormFoodTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                  Margin="0,12,0,12" />
 
-                        <!-- Price -->
-                        <TextBox Name="txtPrice" materialDesign:HintAssist.Hint="Giá" 
-                 Text="{Binding ElementName=ListFood, Path=SelectedItem.Price, Mode=OneWay, StringFormat={}{0:N0}}" 
-                 Margin="0,20,0,25" />
+                        <TextBox x:Name="txtPrice" materialDesign:HintAssist.Hint="Giá" 
+                 Text="{Binding FormFoodPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}" 
+                 Margin="0,12,0,12" />
 
-                        <!-- Status -->
-                        <CheckBox Name="cbStatus" Content="Kích hoạt" 
-                  IsChecked="{Binding ElementName=ListFood, Path=SelectedItem.Status, Mode=OneWay}" 
-                  Margin="0,20,0,25" />
+                        <CheckBox x:Name="cbStatus" Content="Kích hoạt" 
+                  IsChecked="{Binding FormFoodStatus, Mode=TwoWay}" 
+                  Margin="0,12,0,12" />
 
-                        <!-- Image Upload and Preview -->
-                        <StackPanel Margin="0,20,0,25" MinHeight="250">
-                            <Image Name="UploadedImage" Width="300" Height="200" Stretch="Uniform" />
-                            <TextBox Name="txtImagePath" Visibility="Collapsed" />
-                            <Button Content="Upload Image" Width="120" Height="30"  Margin="0,10,0,0"/>
+                        <StackPanel Margin="0,12,0,12" MinHeight="180">
+                            <Image Name="UploadedImage" Width="250" Height="150" Stretch="Uniform" 
+                   Source="{Binding FormFoodImagePath, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}" />
+                            <Button Content="Upload Image" Width="200" Height="25" Click="UpLoadImg_Click" Margin="0,8,0,0"/>
                         </StackPanel>
 
-                        <!-- Save Button -->
-                        <Button Style="{StaticResource MaterialDesignRaisedButton}" 
-                Content="LƯU" 
-                Background="Green" Foreground="White" Margin="0,20,0,8" Name="btnUpdate" Click="btnUpdate_Click"/>
-
-                        <!-- Cancel Button -->
-                        <Button Style="{StaticResource MaterialDesignRaisedButton}" 
-                Content="HỦY" 
-                Background="Red" Foreground="White" Name="btnClear" Click="btnClear_Click"/>
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Content="Thêm"
+                Background="Green" Foreground="White" 
+                Command="{Binding AddCommand}" 
+                Margin="0,12,0,8" />
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Content="Sửa"
+                Background="Green" Foreground="White" 
+                Command="{Binding UpdateCommand}" 
+                Margin="0,8,0,8" />
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Content="Hủy"
+                Background="Red" Foreground="White" 
+                Command="{Binding ClearFormCommand}" 
+                Margin="0,8,0,0" />
                     </StackPanel>
                 </materialDesign:Card>
             </Grid>

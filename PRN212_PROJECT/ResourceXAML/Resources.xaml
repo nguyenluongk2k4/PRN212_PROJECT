@@ -6,4 +6,6 @@
     <ViewModel:LoginVM x:Key="LoginVM"/>
     <ViewModel:AdminDashBoardVM x:Key="AdminDashBoardVM"/>
     <ViewModel:ManageOrderVM x:Key="ManageOrderVM"/>
+    <ViewModel:AddNewFoodTypeVM x:Key="AddNewFoodTypeVM"/>
+    <ViewModel:ComboManagerVM x:Key="ComboVM"/>
 </ResourceDictionary>

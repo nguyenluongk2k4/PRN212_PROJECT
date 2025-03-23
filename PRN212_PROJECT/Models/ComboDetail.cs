@@ -9,7 +9,7 @@ public partial class ComboDetail
 
     public int? FoodId { get; set; }
 
-    public int Amount { get; set; }
+    public int? Amount { get; set; }
 
     public int? ComboId { get; set; }
 
