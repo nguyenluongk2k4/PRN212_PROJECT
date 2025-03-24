@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
+        
         Title="Cooker" Height="1080" Width="1920">
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
