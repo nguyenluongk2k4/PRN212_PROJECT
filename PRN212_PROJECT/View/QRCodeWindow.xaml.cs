@@ -11,24 +11,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Media.Imaging;
 
 namespace PRN212_PROJECT.View
 {
-    /// <summary>
-    /// Interaction logic for Order.xaml
-    /// </summary>
-<<<<<<<< HEAD:PRN212_PROJECT/View/OrderFood.xaml.cs
-    public partial class OrderFood : Window
+    public partial class QRCodeWindow : Window
     {
-        public OrderFood()
-========
-    public partial class OrderManager : Window
-    {
-        public OrderManager()
->>>>>>>> thanh:PRN212_PROJECT/View/OrderManager.xaml.cs
+        public QRCodeWindow(BitmapSource qrCodeImage)
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.FoodOrder();
+            QRCodeImage.Source = qrCodeImage;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

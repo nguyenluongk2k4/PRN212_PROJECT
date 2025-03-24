@@ -18,4 +18,5 @@ public partial class OrderDetailCombo
     public virtual Combo? Combo { get; set; }
 
     public virtual OrderTable? Order { get; set; }
+    public double TotalPrice => (Price ?? 0) * (Amount ?? 0);
 }

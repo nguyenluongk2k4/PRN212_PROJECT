@@ -11,24 +11,19 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PRN212_PROJECT.View_Model;
 
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for Order.xaml
+    /// Interaction logic for CustomerOrderScreen.xaml
     /// </summary>
-<<<<<<<< HEAD:PRN212_PROJECT/View/OrderFood.xaml.cs
-    public partial class OrderFood : Window
+    public partial class CustomerOrderScreen : Window
     {
-        public OrderFood()
-========
-    public partial class OrderManager : Window
-    {
-        public OrderManager()
->>>>>>>> thanh:PRN212_PROJECT/View/OrderManager.xaml.cs
+        public CustomerOrderScreen()
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.FoodOrder();
+            DataContext = new CustomerOrderVM();
         }
     }
 }

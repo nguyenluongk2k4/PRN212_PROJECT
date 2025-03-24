@@ -4,6 +4,7 @@
   xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:PRN212_PROJECT"
              StartupUri="View/Login.xaml">
+             StartupUri="View/CustomerOrderScreen.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

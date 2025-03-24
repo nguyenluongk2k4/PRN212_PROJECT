@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for Combo.xaml
+    /// Interaction logic for SelectFoodScreen.xaml
     /// </summary>
-    public partial class Combo : Window
+    public partial class SelectFoodScreen : Window
     {
-        public Combo()
+        public SelectFoodScreen()
         {
             InitializeComponent();
         }

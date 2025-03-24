@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
@@ -31,8 +32,8 @@ namespace PRN212_PROJECT.View_Model
             set
             {
                 _searchText = value;
-                OnPropertyChanged(nameof(SearchText)); // Fixed: Use nameof(SearchText)
-                SearchByName(); // Trigger filtering on every text change
+                OnPropertyChanged(nameof(SearchText));
+                SearchByName();
             }
         }
 
@@ -61,7 +62,7 @@ namespace PRN212_PROJECT.View_Model
                     {
                         FormFoodName = _selectedFoodItem.FoodName;
                         FormFoodTypeName = _selectedFoodItem.FoodTypeNavigation?.TypeName;
-                        FormFoodPrice =(Double) _selectedFoodItem.Price;
+                        FormFoodPrice = (double)_selectedFoodItem.Price;
                         FormFoodStatus = _selectedFoodItem.Status == 1;
                         FormFoodImagePath = _selectedFoodItem.Image;
                     }
@@ -151,7 +152,7 @@ namespace PRN212_PROJECT.View_Model
             AddCommand = new RelayCommand(AddFoodExecute, CanAddFood);
             UpdateCommand = new RelayCommand(UpdateFoodExecute, CanUpdateFood);
             ClearFormCommand = new RelayCommand(ClearFormExecute, _ => true);
-            ClearForm(); // Initialize form
+            ClearForm();
         }
 
         private void LoadFoodList()
@@ -171,8 +172,8 @@ namespace PRN212_PROJECT.View_Model
                 }
             }
 
-            _allFoods = new ObservableCollection<Food>(list); // Store full list
-            FoodList = new ObservableCollection<Food>(list); // Displayed list
+            _allFoods = new ObservableCollection<Food>(list);
+            FoodList = new ObservableCollection<Food>(list);
         }
 
         private void LoadTypeList()
@@ -181,12 +182,11 @@ namespace PRN212_PROJECT.View_Model
             TypeList = new ObservableCollection<string>(list);
         }
 
-        // Search by name
         private void SearchByName()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                FoodList = new ObservableCollection<Food>(_allFoods); // Show all if search is empty
+                FoodList = new ObservableCollection<Food>(_allFoods);
             }
             else
             {
@@ -198,11 +198,27 @@ namespace PRN212_PROJECT.View_Model
             }
         }
 
+        // Validation for special characters
+        private bool IsValidFoodName(string foodName)
+        {
+            if (string.IsNullOrEmpty(foodName))
+                return false;
+
+            // Allow only letters, numbers, and spaces
+            return Regex.IsMatch(foodName, @"^[a-zA-Z0-9\s]+$");
+        }
+
         // Add Part
         private void AddFoodExecute(object parameter)
         {
             if (CanAddFood(parameter))
             {
+                if (!IsValidFoodName(FormFoodName))
+                {
+                    MessageBox.Show("Food name must not contain special characters. Only letters, numbers, and spaces are allowed.");
+                    return;
+                }
+
                 var newFood = new Food
                 {
                     FoodName = FormFoodName,
@@ -238,6 +254,12 @@ namespace PRN212_PROJECT.View_Model
         {
             if (CanUpdateFood(parameter))
             {
+                if (!IsValidFoodName(FormFoodName))
+                {
+                    MessageBox.Show("Food name must not contain special characters. Only letters, numbers, and spaces are allowed.");
+                    return;
+                }
+
                 var existingFood = ChickenPrnContext.Ins.Foods
                     .FirstOrDefault(x => x.FoodId == SelectedFoodItem.FoodId);
 

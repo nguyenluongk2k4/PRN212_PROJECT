@@ -11,4 +11,5 @@
     <ViewModel:ManageProfitVM x:Key="ManageProfit"/>
     <ViewModel:FoodOrder x:Key="FoodOrder"/>
     <ViewModel:CustomerInfoVM x:Key="CustomerInfo"/>
+    <ViewModel:CustomerOrderVM x:Key="CustomerOrderVM"/>
 </ResourceDictionary>

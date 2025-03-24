@@ -18,4 +18,5 @@ public partial class OrderDetailFood
     public virtual Food? Food { get; set; }
 
     public virtual OrderTable? Order { get; set; }
+    public double TotalPrice => (Price ?? 0) * (Amount ?? 0);
 }
