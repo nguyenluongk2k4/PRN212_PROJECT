@@ -5,4 +5,5 @@
     <ViewModel:ManageFoodVM x:Key="ManagaFoodVM"/>
     <ViewModel:AddNewFoodTypeVM x:Key="AddNewFoodTypeVM"/>
     <ViewModel:ComboManagerVM x:Key="ComboVM"/>
+    <ViewModel:CustomerOrderVM x:Key="CustomerOrderVM"/>
 </ResourceDictionary>

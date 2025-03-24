@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for Combo.xaml
+    /// Interaction logic for Order.xaml
     /// </summary>
-    public partial class Combo : Window
+    public partial class OrderManager : Window
     {
-        public Combo()
+        public OrderManager()
         {
             InitializeComponent();
         }

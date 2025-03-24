@@ -1,0 +1,179 @@
+﻿<Window x:Class="PRN212_PROJECT.View.Combo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+
+        mc:Ignorable="d"
+        DataContext="{StaticResource ComboVM}"
+       WindowState="Maximized"
+        Title="Combo" Height="700" Width="800">
+    <Grid Background="#CE70F4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" Margin="20,50,20,0">
+            <Border BorderBrush="White" BorderThickness="2" CornerRadius="5" Background="White">
+                <StackPanel Margin="10">
+                    <Label Content="Combo Hiện có" 
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0,10,0,20"/>
+                    <DataGrid 
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        Margin="0,0,0,20"
+                        ItemsSource="{Binding Combo, UpdateSourceTrigger=PropertyChanged}" 
+                        SelectedItem="{Binding SelectedCombo, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" 
+                                                Width="*"
+                                                Binding="{Binding ComboName}"/>
+                            <DataGridTextColumn Header="Price" 
+                                                Width="*"
+                                                Binding="{Binding Price, StringFormat={}{0:N0}}"/>
+                        </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="LightGray"/>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="0">
+                                        <Setter Property="Opacity" Value="0.5"/>
+                                        <Setter Property="ToolTip" Value="Combo đã bị khóa"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                    <TextBox Margin="10,20,10,10"
+                             materialDesign:HintAssist.Hint="Điền Tên Mới Tại Đây" 
+                             Text="{Binding NewComboName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="NewComboPriceTextBox"
+                             Margin="10,10,10,20"
+                             materialDesign:HintAssist.Hint="Điền Giá Combo"
+                             Text="{Binding NewComboPrice, UpdateSourceTrigger=PropertyChanged}"
+                             PreviewTextInput="PriceTextBox_PreviewTextInput"
+                             TextChanged="PriceTextBox_TextChanged"/>
+                    <Button
+                        Content="Thêm mới"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="Thêm combo mới"
+                        Background="#4CAF50" 
+                        BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10" 
+                        Command="{Binding AddNewCombo}"/>
+                        <Button
+                        Content="Xóa Combo"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="Xóa combo đã chọn"
+                        Background="#F44336" 
+                            BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10" 
+                        Command="{Binding DeleteCombo}"/>
+                    <Button
+                        Content="{Binding LockButtonText}"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="{Binding LockButtonToolTip}"
+                        Background="#FF9800"
+                        BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10" 
+                        Command="{Binding LockComboCommand}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="20,50,50,0">
+            <Border BorderBrush="White" BorderThickness="2" CornerRadius="5" Background="White">
+                <StackPanel Margin="10">
+                    <Label Content="Các Loại Hiện Có" 
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0,10,0,20"/>
+                    <Label Content="{Binding SelectedCombo.ComboName}" 
+                           HorizontalAlignment="Left"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="10,10,0,20"/>
+                    <DataGrid 
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        Margin="0,0,0,20"
+                        ItemsSource="{Binding ListComboFood, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedComboDetail, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" 
+                                                Width="*"
+                                                Binding="{Binding Food.FoodName}"/>
+                            <DataGridTextColumn Header="Amount" 
+                                                Width="*"
+                                                Binding="{Binding Amount}"/>
+                        </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="LightGray"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                    <TextBox Margin="10,10,10,10"
+                             materialDesign:HintAssist.Hint="Đổi Tên Combo"
+                             Text="{Binding EditComboName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button
+                        Content="Đổi Tên Combo"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="Đổi tên combo đã chọn"
+                        Background="#2196F3" 
+                        BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10"
+                        Command="{Binding ChangeComboNameCommand}"/>
+                    <TextBox x:Name="EditComboPriceTextBox"
+                             Margin="10,10,10,10"
+                             materialDesign:HintAssist.Hint="Đổi Giá Combo"
+                             Text="{Binding EditComboPrice, UpdateSourceTrigger=PropertyChanged}"
+                             PreviewTextInput="PriceTextBox_PreviewTextInput"
+                             TextChanged="PriceTextBox_TextChanged"/>
+                    <Button
+                        Content="Cập Nhật Giá"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="Cập nhật giá combo"
+                        Background="#9C27B0"
+                            BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10"
+                        Command="{Binding UpdateComboPriceCommand}"/>
+                            <Button
+                        Content="Giảm Số Lượng"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="Giảm số lượng thành phần"
+                        Background="#E91E63" 
+                                BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10"
+                        Command="{Binding DecreaseAmountCommand}"/>
+                                <Button
+                        Content="Thêm Thành Phần mới"
+                        Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}"
+                        ToolTip="Thêm thành phần mới vào combo"
+                        Background="#FFC107" 
+                                    BorderBrush="#CE70F4"
+                        Foreground="White"
+                        Margin="0,10,0,10"
+                        Click="Button_Click"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

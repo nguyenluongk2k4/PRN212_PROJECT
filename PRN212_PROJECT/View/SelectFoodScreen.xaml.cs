@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for Order.xaml
+    /// Interaction logic for SelectFoodScreen.xaml
     /// </summary>
-    public partial class Order : Window
+    public partial class SelectFoodScreen : Window
     {
-        public Order()
+        public SelectFoodScreen()
         {
             InitializeComponent();
         }
