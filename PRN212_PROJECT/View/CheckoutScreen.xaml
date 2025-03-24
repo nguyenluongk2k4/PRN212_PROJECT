@@ -9,58 +9,115 @@
         mc:Ignorable="d"
         Title="CheckoutScreen" Height="600" Width="800">
     <Window.Resources>
+        <BaseVM:TotalPriceConverter x:Key="TotalPriceConverter"/>
+        <BaseVM:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BaseVM:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
+        <BaseVM:PaymentStatusToColorConverter x:Key="PaymentStatusToColorConverter"/>
         <!-- Data Template for OrderDetailFood in Cart -->
         <DataTemplate x:Key="OrderDetailFoodTemplate">
             <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Text="{Binding Food.FoodName}" Width="150"/>
-                <TextBlock Text="{Binding Amount}" Width="50" TextAlignment="Center"/>
-                <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:N0}đ}" Width="100" TextAlignment="Right"/>
+                <TextBlock Text="{Binding Food.FoodName, FallbackValue='Món không xác định'}" Width="150"/>
+                <TextBlock Text="{Binding Amount, FallbackValue='0'}" Width="50" TextAlignment="Center"/>
+                <TextBlock Width="100" TextAlignment="Right">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource TotalPriceConverter}" StringFormat="{}{0:N0}đ">
+                            <Binding Path="Price" FallbackValue="0"/>
+                            <Binding Path="Amount" FallbackValue="0"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
         </DataTemplate>
         <!-- Data Template for OrderDetailCombo in Cart -->
         <DataTemplate x:Key="OrderDetailComboTemplate">
             <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Text="{Binding Combo.ComboName}" Width="150"/>
-                <TextBlock Text="{Binding Amount}" Width="50" TextAlignment="Center"/>
-                <TextBlock Text="{Binding TotalPrice, StringFormat={}{0:N0}đ}" Width="100" TextAlignment="Right"/>
+                <TextBlock Text="{Binding Combo.ComboName, FallbackValue='Combo không xác định'}" Width="150"/>
+                <TextBlock Text="{Binding Amount, FallbackValue='0'}" Width="50" TextAlignment="Center"/>
+                <TextBlock Width="100" TextAlignment="Right">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource TotalPriceConverter}" StringFormat="{}{0:N0}đ">
+                            <Binding Path="Price" FallbackValue="0"/>
+                            <Binding Path="Amount" FallbackValue="0"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- Header -->
         <TextBlock Grid.Row="0" Text="Xác Nhận Đơn Hàng" FontSize="20" FontWeight="Bold" Margin="10"/>
 
-        <StackPanel Grid.Row="1" Margin="10">
-            <TextBox materialDesign:HintAssist.Hint="Tên khách hàng" Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-            <TextBox materialDesign:HintAssist.Hint="Địa chỉ" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-            <CheckBox Content="Giao hàng" IsChecked="{Binding Shipping}" Margin="0,0,0,10"/>
+        <!-- Order Input Form (Visible Before Confirmation) -->
+        <StackPanel Grid.Row="1" Visibility="{Binding IsOrderConfirmed, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}">
+            <StackPanel Margin="10">
+                <TextBox materialDesign:HintAssist.Hint="Tên khách hàng" Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+            </StackPanel>
+
+            <ListBox Margin="10">
+                <ListBox.ItemsSource>
+                    <CompositeCollection>
+                        <CollectionContainer Collection="{Binding OrderDetailFoods}"/>
+                        <CollectionContainer Collection="{Binding OrderDetailCombos}"/>
+                    </CompositeCollection>
+                </ListBox.ItemsSource>
+                <ListBox.ItemTemplateSelector>
+                    <BaseVM:CartItemTemplateSelector
+                        FoodTemplate="{StaticResource OrderDetailFoodTemplate}"
+                        ComboTemplate="{StaticResource OrderDetailComboTemplate}"/>
+                </ListBox.ItemTemplateSelector>
+            </ListBox>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBlock Text="{Binding TotalPrice, StringFormat='Tổng: {0:N0}đ'}" FontSize="14" FontWeight="Bold" Margin="0,0,20,0" VerticalAlignment="Center"/>
+                <Button Content="Xác Nhận" Background="Green" Foreground="White" Padding="10,5" Margin="0,0,10,0"
+                        Command="{Binding ConfirmOrderCommand}"/>
+                <Button Content="Hủy" Background="Red" Foreground="White" Padding="10,5"
+                        Command="{Binding CancelCommand}"/>
+            </StackPanel>
         </StackPanel>
 
-        <ListBox Grid.Row="2" Margin="10">
-            <ListBox.ItemsSource>
-                <CompositeCollection>
-                    <CollectionContainer Collection="{Binding OrderDetailFoods}"/>
-                    <CollectionContainer Collection="{Binding OrderDetailCombos}"/>
-                </CompositeCollection>
-            </ListBox.ItemsSource>
-            <ListBox.ItemTemplateSelector>
-                <BaseVM:CartItemTemplateSelector
-                    FoodTemplate="{StaticResource OrderDetailFoodTemplate}"
-                    ComboTemplate="{StaticResource OrderDetailComboTemplate}"/>
-            </ListBox.ItemTemplateSelector>
-        </ListBox>
+        <!-- QR Code and Checkout Table (Visible After Confirmation) -->
+        <StackPanel Grid.Row="1" Visibility="{Binding IsOrderConfirmed, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}">
+            <TextBlock Text="Đơn Hàng Đã Được Xác Nhận" FontSize="16" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <TextBlock Text="{Binding TotalPrice, StringFormat='Tổng: {0:N0}đ'}" FontSize="14" FontWeight="Bold" Margin="0,0,20,0" VerticalAlignment="Center"/>
-            <Button Content="Xác Nhận" Background="Green" Foreground="White" Padding="10,5" Margin="0,0,10,0"
-                    Command="{Binding ConfirmOrderCommand}"/>
-            <Button Content="Hủy" Background="Red" Foreground="White" Padding="10,5"
+            <!-- Customer Information -->
+            <StackPanel Margin="10">
+                <TextBlock Text="{Binding CustomerName, StringFormat='Tên khách hàng: {0}'}" FontSize="14" Margin="0,0,0,5"/>
+                <TextBlock Text="Địa chỉ: Giao tại cửa hàng" FontSize="14" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding PaymentStatus}" FontSize="14" FontWeight="Bold" Margin="0,0,0,5" Foreground="{Binding PaymentStatus, Converter={StaticResource PaymentStatusToColorConverter}}"/>
+            </StackPanel>
+
+            <!-- Checkout Table -->
+            <ListBox Margin="10">
+                <ListBox.ItemsSource>
+                    <CompositeCollection>
+                        <CollectionContainer Collection="{Binding OrderDetailFoods}"/>
+                        <CollectionContainer Collection="{Binding OrderDetailCombos}"/>
+                    </CompositeCollection>
+                </ListBox.ItemsSource>
+                <ListBox.ItemTemplateSelector>
+                    <BaseVM:CartItemTemplateSelector
+                        FoodTemplate="{StaticResource OrderDetailFoodTemplate}"
+                        ComboTemplate="{StaticResource OrderDetailComboTemplate}"/>
+                </ListBox.ItemTemplateSelector>
+            </ListBox>
+
+            <TextBlock Text="{Binding TotalPrice, StringFormat='Tổng: {0:N0}đ'}" FontSize="14" FontWeight="Bold" Margin="10" HorizontalAlignment="Right"/>
+
+            <!-- QR Code for Payment -->
+            <StackPanel HorizontalAlignment="Center" Margin="10">
+                <TextBlock Text="Quét mã QR để thanh toán" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <Image x:Name="QRCodeImage" Source="{Binding QRCodeImage}" Stretch="Uniform" Width="200" Height="200"/>
+            </StackPanel>
+
+            <!-- Close Button -->
+            <Button Content="Đóng" Width="100" Height="30" HorizontalAlignment="Center" Margin="10"
                     Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>

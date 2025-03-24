@@ -103,6 +103,42 @@ namespace PRN212_PROJECT.View_Model
             throw new NotImplementedException();
         }
     }
+    public class BooleanToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool isTrue && parameter is string options)
+            {
+                var parts = options.Split('|');
+                if (parts.Length == 2)
+                {
+                    return isTrue ? parts[0] : parts[1];
+                }
+            }
+            return value.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class TimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DateTime dateTime)
+            {
+                return dateTime.ToString("HH:mm");
+            }
+            return value?.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
 

@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        xmlns:BaseVM="clr-namespace:PRN212_PROJECT.View_Model"
         mc:Ignorable="d"
-        
-        Title="Cooker" Height="1080" Width="1920">
+        Title="Cooker" Height="1080" Width="1920"
+        WindowState="Maximized">
+    <Window.Resources>
+        <!-- Converter to format time -->
+        <BaseVM:TimeConverter x:Key="TimeConverter"/>
+        <BaseVM:TimeElapsedConverter x:Key="TimeElapsedConverter"/>
+    </Window.Resources>
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -23,19 +29,20 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="BẾP - DANH SÁCH MÓN CẦN CHUẨN BỊ" FontSize="24" FontWeight="Bold" 
-              Foreground="White" VerticalAlignment="Center" Margin="20,0" />
+                       Foreground="White" VerticalAlignment="Center" Margin="20,0" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
                 <ComboBox Width="150" Margin="8,0" materialDesign:HintAssist.Hint="Trạng thái" 
-                 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-                 Background="White">
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                          Background="White" 
+                          SelectedItem="{Binding SelectedStatus}">
                     <ComboBoxItem Content="Tất cả" IsSelected="True"/>
                     <ComboBoxItem Content="Đang chờ"/>
                     <ComboBoxItem Content="Đang làm"/>
-                    <ComboBoxItem Content="Đã hoàn thành"/>
                 </ComboBox>
 
-                <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="8,0">
+                <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="8,0"
+                        Command="{Binding RefreshCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" Margin="0,0,8,0"/>
                         <TextBlock Text="Làm mới"/>
@@ -57,110 +64,95 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Background="#FFCCCC" Padding="16">
                         <Grid>
                             <TextBlock Text="ĐANG CHỜ" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" />
-                            <TextBlock Text="12 món" FontSize="16" HorizontalAlignment="Right" />
+                            <TextBlock Text="{Binding CommingOrder.Count, StringFormat={}{0} đơn}" FontSize="16" HorizontalAlignment="Right" />
                         </Grid>
                     </Border>
 
-
-                    <!--// bản k có binding để coi minh họa-->
-
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <!-- Order Item 1 -->
-                            <materialDesign:Card Margin="8" UniformCornerRadius="8">
-                                <Grid Margin="16">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <Grid Grid.Row="0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Bàn 05" FontSize="18" FontWeight="Bold" />
-                                        <TextBlock Grid.Column="1" Text="10:25" FontSize="16" />
-                                    </Grid>
-
-                                    <Separator Grid.Row="1" Margin="0,8" />
-
-                                    <StackPanel Grid.Row="2">
-                                        <Grid Margin="0,4">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="2x" FontWeight="Medium" Margin="0,0,16,0" />
-                                            <TextBlock Grid.Column="1" Text="Burger Bò Phô Mai" />
-                                            <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Green">
-                                                <materialDesign:PackIcon Kind="CheckCircle" />
-                                            </Button>
-                                        </Grid>
-                                    </StackPanel>
-                                </Grid>
-                            </materialDesign:Card>
-                        </StackPanel>
-                    </ScrollViewer>
-
-
-                    <!--// bản có binding để làm-->
-
-                    <!--<ScrollViewer VerticalScrollBarVisibility="Auto">    
-                    <ItemsControl ItemsSource="{Binding TableOrders}">
-                        <ItemsControl.ItemTemplate>
+                    <ListBox Grid.Row="1" ItemsSource="{Binding CommingOrder}" 
+                             SelectedItem="{Binding SelectedPendingOrder}" 
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             HorizontalAlignment="Stretch">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <materialDesign:Card Margin="8" UniformCornerRadius="8">
-                                    <Grid Margin="16">
+                                <materialDesign:Card Margin="8" UniformCornerRadius="8" HorizontalAlignment="Stretch">
+                                    <Grid Margin="16" HorizontalAlignment="Stretch">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
 
-                                        <Grid Grid.Row="0">
+                                        <Grid Grid.Row="0" HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="{Binding Table}" FontSize="18" FontWeight="Bold" />
-                                            <TextBlock Grid.Column="1" Text="{Binding Time}" FontSize="16" />
+                                            <TextBlock Grid.Column="0" Text="{Binding CustomerName, StringFormat='Khách hàng: {0}'}" FontSize="18" FontWeight="Bold" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Date, Converter={StaticResource TimeConverter}}" FontSize="16" />
                                         </Grid>
 
                                         <Separator Grid.Row="1" Margin="0,8" />
 
                                         <StackPanel Grid.Row="2">
-                                            <Grid Margin="0,4">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Text="{Binding Quantity}" FontWeight="Medium" Margin="0,0,16,0" />
-                                                <TextBlock Grid.Column="1" Text="{Binding Order}" />
-                                                <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Green">
-                                                    <materialDesign:PackIcon Kind="CheckCircle" />
-                                                </Button>
-                                            </Grid>
+                                            <!-- Order Detail Foods -->
+                                            <ItemsControl ItemsSource="{Binding OrderDetailFoods}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Margin="0,4" HorizontalAlignment="Stretch">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Amount, StringFormat={}{0}x}" FontWeight="Medium" Margin="0,0,16,0" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding Food.FoodName, FallbackValue='Món không xác định'}" />
+                                                            <materialDesign:PackIcon Grid.Column="2" Kind="CheckCircle" Foreground="Green" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <!-- Order Detail Combos -->
+                                            <ItemsControl ItemsSource="{Binding OrderDetailCombos}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Margin="0,4" HorizontalAlignment="Stretch">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Amount, StringFormat={}{0}x}" FontWeight="Medium" Margin="0,0,16,0" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding Combo.ComboName, FallbackValue='Combo không xác định'}" />
+                                                            <materialDesign:PackIcon Grid.Column="2" Kind="CheckCircle" Foreground="Green" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                         </StackPanel>
                                     </Grid>
                                 </materialDesign:Card>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>-->
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-
-
-
-
+                    <!-- Button to Start Preparing -->
+                    <Button Grid.Row="2" Content="Bắt đầu chuẩn bị" 
+                            Style="{StaticResource MaterialDesignRaisedButton}" 
+                            Background="Green" Foreground="White" 
+                            Margin="16" 
+                            Command="{Binding StartPreparingCommand}"/>
                 </Grid>
             </materialDesign:Card>
 
@@ -170,58 +162,95 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Background="#FFFFCC" Padding="16">
                         <Grid>
                             <TextBlock Text="ĐANG CHUẨN BỊ" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" />
-                            <TextBlock Text="8 món" FontSize="16" HorizontalAlignment="Right" />
+                            <TextBlock Text="{Binding InProgressOrders.Count, StringFormat={}{0} đơn}" FontSize="16" HorizontalAlignment="Right" />
                         </Grid>
                     </Border>
 
-                    <!--+1 bản demo tí cop trên xuống-->
+                    <ListBox Grid.Row="1" ItemsSource="{Binding InProgressOrders}" 
+                             SelectedItem="{Binding SelectedInProgressOrder}" 
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             HorizontalAlignment="Stretch">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card Margin="8" UniformCornerRadius="8" HorizontalAlignment="Stretch">
+                                    <Grid Margin="16" HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
-
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <!-- Order Item 1 -->
-                            <materialDesign:Card Margin="8" UniformCornerRadius="8">
-                                <Grid Margin="16">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <Grid Grid.Row="0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Bàn 03" FontSize="18" FontWeight="Bold" />
-                                        <TextBlock Grid.Column="1" Text="10:15 (12')" FontSize="16" Foreground="Orange" />
-                                    </Grid>
-
-                                    <Separator Grid.Row="1" Margin="0,8" />
-
-                                    <StackPanel Grid.Row="2">
-                                        <Grid Margin="0,4">
+                                        <Grid Grid.Row="0" HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="2x" FontWeight="Medium" Margin="0,0,16,0" />
-                                            <TextBlock Grid.Column="1" Text="Burger Gà Cay" />
-                                            <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Blue">
-                                                <materialDesign:PackIcon Kind="CheckCircleOutline" />
-                                            </Button>
+                                            <TextBlock Grid.Column="0" Text="{Binding CustomerName, StringFormat='Khách hàng: {0}'}" FontSize="18" FontWeight="Bold" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Date, Converter={StaticResource TimeElapsedConverter}}" FontSize="16" Foreground="Orange" />
                                         </Grid>
-                                    </StackPanel>
-                                </Grid>
-                            </materialDesign:Card>
-                        </StackPanel>
-                    </ScrollViewer>
+
+                                        <Separator Grid.Row="1" Margin="0,8" />
+
+                                        <StackPanel Grid.Row="2">
+                                            <!-- Order Detail Foods -->
+                                            <ItemsControl ItemsSource="{Binding OrderDetailFoods}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Margin="0,4" HorizontalAlignment="Stretch">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Amount, StringFormat={}{0}x}" FontWeight="Medium" Margin="0,0,16,0" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding Food.FoodName, FallbackValue='Món không xác định'}" />
+                                                            <materialDesign:PackIcon Grid.Column="2" Kind="CheckCircleOutline" Foreground="Blue" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <!-- Order Detail Combos -->
+                                            <ItemsControl ItemsSource="{Binding OrderDetailCombos}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Margin="0,4" HorizontalAlignment="Stretch">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Amount, StringFormat={}{0}x}" FontWeight="Medium" Margin="0,0,16,0" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding Combo.ComboName, FallbackValue='Combo không xác định'}" />
+                                                            <materialDesign:PackIcon Grid.Column="2" Kind="CheckCircleOutline" Foreground="Blue" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Grid>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Button to Mark as Done -->
+                    <Button Grid.Row="2" Content="Đánh dấu hoàn thành" 
+                            Style="{StaticResource MaterialDesignRaisedButton}" 
+                            Background="Blue" Foreground="White" 
+                            Margin="16" 
+                            Command="{Binding MarkAsDoneCommand}"/>
                 </Grid>
             </materialDesign:Card>
         </Grid>

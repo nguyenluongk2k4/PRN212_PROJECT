@@ -114,9 +114,6 @@ namespace PRN212_PROJECT.View_Model
                         // Generate QR code for payment
                         var qrCodeImage = GeneratePaymentQRCode(order.OrderId, TotalPrice);
 
-                        // Show the QR code window
-                        var qrCodeWindow = new PRN212_PROJECT.View.QRCodeWindow(qrCodeImage);
-                        qrCodeWindow.ShowDialog();
 
                         // Close the checkout screen
                         Application.Current.Windows.OfType<CheckoutScreen>().FirstOrDefault()?.Close();
@@ -139,8 +136,6 @@ namespace PRN212_PROJECT.View_Model
         private BitmapSource GeneratePaymentQRCode(int orderId, double totalPrice)
         {
             // VietQR format: https://vietqr.io/standards/
-            // We'll use a simplified version for this example
-            // Replace these with your actual bank account details
             string bankId = "MBBANK"; // Example: MB Bank
             string accountNumber = "1234567890"; // Your bank account number
             string accountName = "Food Store Name"; // Your account name
