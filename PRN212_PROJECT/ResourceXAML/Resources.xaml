@@ -12,4 +12,5 @@
     <ViewModel:FoodOrder x:Key="FoodOrder"/>
     <ViewModel:CustomerInfoVM x:Key="CustomerInfo"/>
     <ViewModel:CustomerOrderVM x:Key="CustomerOrderVM"/>
+    <ViewModel:CookerVM x:Key="CookerVM"/>
 </ResourceDictionary>

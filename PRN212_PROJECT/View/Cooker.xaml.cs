@@ -23,7 +23,9 @@ namespace PRN212_PROJECT.View
         public Cooker()
         {
             InitializeComponent();
-     
+            DataContext = new CookerVM();
+            WindowState = WindowState.Maximized;
+
         }
     }
 }

@@ -18,11 +18,11 @@ namespace PRN212_PROJECT.View
     /// <summary>
     /// Interaction logic for Combo.xaml
     /// </summary>
-    public partial class Combo : Window
+    public partial class ComboScreen : Window
     {
         private bool _isUpdating;
 
-        public Combo()
+        public ComboScreen()
         {
             InitializeComponent();
         }

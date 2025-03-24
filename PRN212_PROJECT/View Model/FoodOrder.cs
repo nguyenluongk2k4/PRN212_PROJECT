@@ -236,7 +236,7 @@ namespace PRN212_PROJECT.View_Model
         {
             CustomerInfoForm customerInfoForm = new CustomerInfoForm();
             customerInfoForm.Show();
-            Application.Current.Windows.OfType<OrderFood>().FirstOrDefault()?.Close();
+            Application.Current.Windows.OfType<OrderedFood>().FirstOrDefault()?.Close();
         }
 
         private void ExecuteAddFood(object parameter)
