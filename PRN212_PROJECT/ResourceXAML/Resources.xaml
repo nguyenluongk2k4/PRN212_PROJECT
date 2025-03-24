@@ -8,4 +8,7 @@
     <ViewModel:ManageOrderVM x:Key="ManageOrderVM"/>
     <ViewModel:AddNewFoodTypeVM x:Key="AddNewFoodTypeVM"/>
     <ViewModel:ComboManagerVM x:Key="ComboVM"/>
+    <ViewModel:ManageProfitVM x:Key="ManageProfit"/>
+    <ViewModel:FoodOrder x:Key="FoodOrder"/>
+    <ViewModel:CustomerInfoVM x:Key="CustomerInfo"/>
 </ResourceDictionary>

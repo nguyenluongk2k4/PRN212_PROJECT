@@ -15,19 +15,14 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for ManageOrder.xaml
+    /// Interaction logic for CustomerInfoForm.xaml
     /// </summary>
-    public partial class ManageOrder : Window
+    public partial class CustomerInfoForm : Window
     {
-        public ManageOrder()
+        public CustomerInfoForm()
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.ManageOrderVM();
-        }
-
-        private void Orders_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            DataContext = new PRN212_PROJECT.View_Model.FoodOrder();
         }
     }
 }

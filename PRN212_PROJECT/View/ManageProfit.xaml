@@ -4,9 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="ManageProfit" Height="1080" Width="1920">
+    
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
@@ -26,7 +29,8 @@
                 <TextBlock Text="DOANH THU" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
             </StackPanel>
 
-            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="#2E7D32" Margin="20,0">
+            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="#2E7D32" Margin="20,0"
+                    Command="{Binding BackCommand}">
                 <materialDesign:PackIcon Kind="ArrowLeft" />
             </Button>
         </Grid>
@@ -41,33 +45,63 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Background="#E8F5E9">
-                    <TextBlock Text="THỐNG KÊ DOANH THU" FontSize="18" FontWeight="Bold" />
+                    <TextBlock Text="THỐNG KÊ DOANH THU" FontSize="18" FontWeight="Bold" Margin="16,8" />
                 </Grid>
 
                 <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="16,8">
                     <materialDesign:Card Width="200" Height="120" Margin="8" Background="#E8F5E9">
                         <StackPanel VerticalAlignment="Center" Margin="16">
                             <TextBlock Text="Hôm nay" FontSize="14" HorizontalAlignment="Center" />
-                            <TextBlock Text="4.6M" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
-                            <TextBlock Text="+8% so với hôm qua" FontSize="12" Foreground="Green" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding TodayRevenue}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding TodayRevenuePercentage}" FontSize="12" HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Green" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TodayRevenuePercentage}" Value="Negative">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </StackPanel>
                     </materialDesign:Card>
 
                     <materialDesign:Card Width="200" Height="120" Margin="8" Background="#E8F5E9">
                         <StackPanel VerticalAlignment="Center" Margin="16">
                             <TextBlock Text="Tuần này" FontSize="14" HorizontalAlignment="Center" />
-                            <TextBlock Text="32.5M" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
-                            <TextBlock Text="+12% so với tuần trước" FontSize="12" Foreground="Green" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding ThisWeekRevenue}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding ThisWeekRevenuePercentage}" FontSize="12" HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Green" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ThisWeekRevenuePercentage}" Value="Negative">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </StackPanel>
                     </materialDesign:Card>
                 </WrapPanel>
 
                 <Grid Grid.Row="2" Margin="16,8">
                     <TextBlock Text="BIỂU ĐỒ DOANH THU" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
-                    <!-- Placeholder cho biểu đồ -->
-                    <Border Background="#E8F5E9" Height="300" CornerRadius="8">
-                        <TextBlock Text="Biểu đồ doanh thu (sẽ được thêm bằng code-behind)" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    </Border>
+                    <!-- Biểu đồ doanh thu (Column Chart) -->
+                    <lvc:CartesianChart Height="400" LegendLocation="Right">
+                        <lvc:CartesianChart.Series>
+                            <lvc:ColumnSeries Title="Doanh thu (triệu)" Values="{Binding RevenueValues}" Fill="#2E7D32" />
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Labels="{Binding Labels}" LabelsRotation="45" />
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Doanh thu (triệu)" LabelFormatter="{Binding Formatter}" />
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
                 </Grid>
             </Grid>
         </materialDesign:Card>

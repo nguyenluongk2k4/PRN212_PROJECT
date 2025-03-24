@@ -13,6 +13,8 @@ public partial class OrderDetailCombo
 
     public int? Amount { get; set; }
 
+    public double? Price { get; set; }
+
     public virtual Combo? Combo { get; set; }
 
     public virtual OrderTable? Order { get; set; }

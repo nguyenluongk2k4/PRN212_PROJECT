@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="Order" Height="1080" Width="1920">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -43,87 +44,220 @@
             </StackPanel>
 
             <!-- Menu Categories -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <!-- ĐỒ ĂN CATEGORY -->
-                    <StackPanel Margin="16,8">
-                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">ĐỒ ĂN</TextBlock>
-                        <WrapPanel Orientation="Horizontal">
-                            <!-- Food Item Example -->
-                            <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="120" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" Background="#FFCCCC"/>
-                                    <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="Burger Bò Phô Mai" FontWeight="Bold"/>
-                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
-                                        <TextBlock Text="65,000đ" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center"/>
-                                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
-                                       HorizontalAlignment="Right" Background="Red">
-                                            <materialDesign:PackIcon Kind="Plus" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </WrapPanel>
-                    </StackPanel>
+            <materialDesign:Card Grid.Row="1" Margin="16" UniformCornerRadius="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <!-- Danh sách món ăn thuộc loại 4 -->
+                        <StackPanel Margin="16,8">
+                            <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold" Text="{Binding FoodType4}" />
+                            <ItemsControl x:Name="FoodItemsControl" ItemsSource="{Binding FoodListType4}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="120" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Image Grid.Row="0" Source="{Binding Image, FallbackValue='https://play-lh.googleusercontent.com/b05r0xXUOjQBRZUc-SQMh9rExBx3hJkP35av2bnyEo9GVF4GeX5LXV6hL4GdqU8d'}" Stretch="Fill">
+                                                    <Image.Clip>
+                                                        <RectangleGeometry Rect="0,0,180,120" RadiusX="8" RadiusY="8" />
+                                                    </Image.Clip>
+                                                </Image>
+                                                <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="{Binding FoodName}" FontWeight="Bold" />
+                                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ}" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" />
+                                                    <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                                        HorizontalAlignment="Right" Background="Red"
+                                                        Command="{Binding DataContext.AddFoodCommand, ElementName=FoodItemsControl}"
+                                                        CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="Plus" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="Không có món ăn nào trong loại này" Margin="8" Foreground="Gray" FontStyle="Italic">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FoodListType4.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                        <!-- Danh sách món ăn thuộc loại 1 -->
+                        <StackPanel Margin="16,8">
+                            <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold" Text="{Binding FoodType1}" />
+                            <ItemsControl x:Name="FoodItemsControl1" ItemsSource="{Binding FoodListType1}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="120" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Image Grid.Row="0" Source="{Binding Image, FallbackValue='https://play-lh.googleusercontent.com/b05r0xXUOjQBRZUc-SQMh9rExBx3hJkP35av2bnyEo9GVF4GeX5LXV6hL4GdqU8d'}" Stretch="Fill">
+                                                    <Image.Clip>
+                                                        <RectangleGeometry Rect="0,0,180,120" RadiusX="8" RadiusY="8" />
+                                                    </Image.Clip>
+                                                </Image>
+                                                <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="{Binding FoodName}" FontWeight="Bold" />
+                                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ}" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" />
+                                                    <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                HorizontalAlignment="Right" Background="Red"
+                                Command="{Binding DataContext.AddFoodCommand, ElementName=FoodItemsControl1}"
+                                CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="Plus" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="Không có món ăn nào trong loại này" Margin="8" Foreground="Gray" FontStyle="Italic">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FoodListType4.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
 
-                    <!-- THỨC UỐNG CATEGORY -->
-                    <StackPanel Margin="16,8">
-                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">THỨC UỐNG</TextBlock>
-                        <WrapPanel Orientation="Horizontal">
-                            <!-- Drink Item Example -->
-                            <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="120" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" Background="#CCFFFF"/>
-                                    <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="Coca Cola (L)" FontWeight="Bold"/>
-                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
-                                        <TextBlock Text="25,000đ" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center"/>
-                                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
-                                       HorizontalAlignment="Right" Background="Red">
-                                            <materialDesign:PackIcon Kind="Plus" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </WrapPanel>
-                    </StackPanel>
+                        <!-- Danh sách món ăn thuộc loại 3 -->
+                        <StackPanel Margin="16,8">
+                            <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold" Text="{Binding FoodType3}" />
+                            <ItemsControl x:Name="FoodItemsControl3" ItemsSource="{Binding FoodListType3}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="120" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Image Grid.Row="0" Source="{Binding Image, FallbackValue='https://play-lh.googleusercontent.com/b05r0xXUOjQBRZUc-SQMh9rExBx3hJkP35av2bnyEo9GVF4GeX5LXV6hL4GdqU8d'}" Stretch="Fill">
+                                                    <Image.Clip>
+                                                        <RectangleGeometry Rect="0,0,180,120" RadiusX="8" RadiusY="8" />
+                                                    </Image.Clip>
+                                                </Image>
+                                                <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="{Binding FoodName}" FontWeight="Bold" />
+                                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ}" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" />
+                                                    <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                HorizontalAlignment="Right" Background="Red"
+                                Command="{Binding DataContext.AddFoodCommand, ElementName=FoodItemsControl3}"
+                                CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="Plus" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="Không có món ăn nào trong loại này" Margin="8" Foreground="Gray" FontStyle="Italic">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FoodListType4.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
 
-                    <!-- ĐỒ ĂN VẶT CATEGORY -->
-                    <StackPanel Margin="16,8">
-                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">ĐỒ ĂN VẶT</TextBlock>
-                        <WrapPanel Orientation="Horizontal">
-                            <!-- Snack Item Example -->
-                            <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="120" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Border Grid.Row="0" Background="#FFFFCC"/>
-                                    <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="Khoai Tây Chiên (L)" FontWeight="Bold"/>
-                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
-                                        <TextBlock Text="35,000đ" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center"/>
-                                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
-                                       HorizontalAlignment="Right" Background="Red">
-                                            <materialDesign:PackIcon Kind="Plus" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </WrapPanel>
+
+                        <!-- Danh sách món ăn thuộc loại 6 -->
+                        <StackPanel Margin="16,8">
+                            <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold" Text="{Binding FoodType6}" />
+                            <ItemsControl x:Name="FoodItemsControl6" ItemsSource="{Binding FoodListType6}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="180" Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="120" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Image Grid.Row="0" Source="{Binding Image, FallbackValue='https://play-lh.googleusercontent.com/b05r0xXUOjQBRZUc-SQMh9rExBx3hJkP35av2bnyEo9GVF4GeX5LXV6hL4GdqU8d'}" Stretch="Fill">
+                                                    <Image.Clip>
+                                                        <RectangleGeometry Rect="0,0,180,120" RadiusX="8" RadiusY="8" />
+                                                    </Image.Clip>
+                                                </Image>
+                                                <TextBlock Grid.Row="1" Margin="8,8,8,0" Text="{Binding FoodName}" FontWeight="Bold" />
+                                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ}" FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" />
+                                                    <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                HorizontalAlignment="Right" Background="Red"
+                                Command="{Binding DataContext.AddFoodCommand, ElementName=FoodItemsControl6}"
+                                CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="Plus" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="Không có món ăn nào trong loại này" Margin="8" Foreground="Gray" FontStyle="Italic">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FoodListType4.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+
                     </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
+                </ScrollViewer>
+            </materialDesign:Card>
         </Grid>
 
         <!-- Column 1: Order Details -->
@@ -142,41 +276,29 @@
             <!-- Order Items -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,8">
                 <StackPanel>
-                    <!-- Order Item Example -->
-                    <Grid Margin="8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" Text="1x" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
-                        <TextBlock Grid.Column="1" Text="Burger Bò Phô Mai" VerticalAlignment="Center" Margin="8,0"/>
-                        <TextBlock Grid.Column="2" Text="65,000đ" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
-                        <Button Grid.Column="3" Style="{StaticResource MaterialDesignFlatButton}" Padding="4">
-                            <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
-                        </Button>
-                    </Grid>
-
-                    <Separator Margin="8,0"/>
-
-                    <!-- Second Item -->
-                    <Grid Margin="8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" Text="2x" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
-                        <TextBlock Grid.Column="1" Text="Coca Cola (L)" VerticalAlignment="Center" Margin="8,0"/>
-                        <TextBlock Grid.Column="2" Text="50,000đ" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
-                        <Button Grid.Column="3" Style="{StaticResource MaterialDesignFlatButton}" Padding="4">
-                            <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
-                        </Button>
-                    </Grid>
+                    <ItemsControl ItemsSource="{Binding OrderItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Quantity, StringFormat={}{0}x}" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Food.FoodName}" VerticalAlignment="Center" Margin="8,0"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding TotalPrice, StringFormat={}{0:N0}đ}" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                                    <Button Grid.Column="3" Style="{StaticResource MaterialDesignFlatButton}" Padding="4"
+                                            Command="{Binding DataContext.RemoveFoodCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                            CommandParameter="{Binding}">
+                                        <materialDesign:PackIcon Kind="Close" Foreground="Red"/>
+                                    </Button>
+                                </Grid>
+                                
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </ScrollViewer>
 
@@ -195,7 +317,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Tổng cộng:" FontSize="16"/>
-                    <TextBlock Grid.Column="1" Text="115,000đ" FontWeight="SemiBold" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Subtotal, StringFormat={}{0:N0}đ}" FontWeight="SemiBold" FontSize="16"/>
                 </Grid>
 
                 <!-- Tax -->
@@ -205,16 +327,16 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Thuế (10%):" FontSize="16"/>
-                    <TextBlock Grid.Column="1" Text="11,500đ" FontWeight="SemiBold" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Tax, StringFormat={}{0:N0}đ}" FontWeight="SemiBold" FontSize="16"/>
                 </Grid>
 
                 <!-- Payment Button -->
                 <Button Grid.Row="2" Margin="16,16" Height="50" Background="Red" Foreground="White"
-                Style="{StaticResource MaterialDesignRaisedButton}">
+                        Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding GoCash}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="CashRegister" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
                         <TextBlock Text="THANH TOÁN" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text=" 126,500đ" FontSize="16" FontWeight="Bold" Margin="8,0,0,0"/>
+                        <TextBlock Text="{Binding Total, StringFormat={} {0:N0}đ}" FontSize="16" FontWeight="Bold" Margin="8,0,0,0"/>
                     </StackPanel>
                 </Button>
             </Grid>

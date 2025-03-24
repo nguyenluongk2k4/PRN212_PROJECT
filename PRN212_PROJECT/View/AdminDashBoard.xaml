@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         Title="AdminDashBoard" Height="1080" Width="1920">
+
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
@@ -31,10 +32,10 @@
                 <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Account" Margin="0,0,8,0"/>
-                        <TextBlock Text="Admin"/>
+                        <TextBlock Text="{Binding AdminName}"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="8,0">
+                <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="8,0" Command="{Binding LogoutCommand}">
                     <materialDesign:PackIcon Kind="Logout" />
                 </Button>
             </StackPanel>
@@ -50,7 +51,7 @@
             <!-- Quick Access Panel -->
             <materialDesign:Card Grid.Row="0" Margin="8" UniformCornerRadius="8" Padding="16">
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" Foreground="White">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" Foreground="White" Command="{Binding GoCategoryCommand}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="FoodForkDrink" Width="48" Height="48" HorizontalAlignment="Center" />
                             <TextBlock Text="Quản lý Danh mục" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
@@ -58,7 +59,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#FF6F00" Foreground="White" Command="{Binding GoOrder}">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#FF6F00" Foreground="White" Command="{Binding GoOrderCommand}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="Receipt" Width="48" Height="48" HorizontalAlignment="Center" />
                             <TextBlock Text="Quản lý Đơn hàng" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
@@ -66,7 +67,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#2E7D32" Foreground="White">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#2E7D32" Foreground="White" Command="{Binding GoRevenueCommand}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="ChartLine" Width="48" Height="48" HorizontalAlignment="Center" />
                             <TextBlock Text="Doanh thu" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
@@ -74,7 +75,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#0277BD" Foreground="White">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#0277BD" Foreground="White" Command="{Binding GoStaffCommand}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="AccountMultiple" Width="48" Height="48" HorizontalAlignment="Center" />
                             <TextBlock Text="Nhân viên" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
@@ -91,79 +92,28 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Food Management -->
+                <!-- Top 5 món ăn bán chạy -->
                 <materialDesign:Card Grid.Column="0" Margin="8" UniformCornerRadius="8">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
                         <Grid Grid.Row="0" Background="#FFEBEE">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0" Text="DANH SÁCH MÓN ĂN" FontSize="18" FontWeight="Bold" />
-
-                            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Green" Margin="0,0,8,0">
-                                    <materialDesign:PackIcon Kind="Plus" />
-                                </Button>
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Red">
-                                    <materialDesign:PackIcon Kind="Delete" />
-                                </Button>
-                            </StackPanel>
+                            <TextBlock Text="TOP 5 MÓN ĂN BÁN CHẠY" FontSize="18" FontWeight="Bold" />
                         </Grid>
 
-                        <Grid Grid.Row="1" Margin="16,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Tìm kiếm..." Margin="0,0,16,0" />
-
-                            <ComboBox Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Loại món">
-                                <ComboBoxItem Content="Tất cả" IsSelected="True"/>
-                                <ComboBoxItem Content="Đồ ăn"/>
-                                <ComboBoxItem Content="Thức uống"/>
-                                <ComboBoxItem Content="Đồ ăn vặt"/>
-                            </ComboBox>
-                        </Grid>
-
-                        <DataGrid Grid.Row="2" Margin="16,8"
-                          CanUserAddRows="False"
-                          AutoGenerateColumns="False"
-                          GridLinesVisibility="All">
+                        <DataGrid Grid.Row="1" Margin="16,8"
+                                  ItemsSource="{Binding TopSellingFoods}"
+                                  CanUserAddRows="False"
+                                  AutoGenerateColumns="False"
+                                  GridLinesVisibility="All"
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Header="" Width="40" />
-                                <DataGridTextColumn Header="Tên món" Width="*" />
-                                <DataGridTextColumn Header="Loại" Width="100" />
-                                <DataGridTextColumn Header="Giá" Width="100" />
-                                <DataGridTemplateColumn Header="Trạng thái" Width="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Thao tác" Width="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
-                                                    <materialDesign:PackIcon Kind="Pencil" />
-                                                </Button>
-                                                <Button Style="{StaticResource MaterialDesignIconButton}" Padding="2">
-                                                    <materialDesign:PackIcon Kind="Delete" />
-                                                </Button>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Tên món" Width="*" Binding="{Binding FoodName}" />
+                                <DataGridTextColumn Header="Loại" Width="100" Binding="{Binding TypeName}" />
+                                <DataGridTextColumn Header="Số lượng" Width="100" Binding="{Binding OrderCount}" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -186,24 +136,24 @@
                             <materialDesign:Card Width="130" Height="90" Margin="4" UniformCornerRadius="8" Background="#E8F5E9">
                                 <StackPanel VerticalAlignment="Center" Margin="8">
                                     <TextBlock Text="Đơn hôm nay" FontSize="12" HorizontalAlignment="Center" />
-                                    <TextBlock Text="46" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" />
-                                    <TextBlock Text="+12% so với HQ" FontSize="10" Foreground="Green" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding TodayOrders}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding TodayOrdersPercentage}" FontSize="10" Foreground="Green" HorizontalAlignment="Center" />
                                 </StackPanel>
                             </materialDesign:Card>
 
                             <materialDesign:Card Width="130" Height="90" Margin="4" UniformCornerRadius="8" Background="#FFF3E0">
                                 <StackPanel VerticalAlignment="Center" Margin="8">
                                     <TextBlock Text="Doanh thu" FontSize="12" HorizontalAlignment="Center" />
-                                    <TextBlock Text="4.6M" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" />
-                                    <TextBlock Text="+8% so với HQ" FontSize="10" Foreground="Green" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding Revenue}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding RevenuePercentage}" FontSize="10" Foreground="Green" HorizontalAlignment="Center" />
                                 </StackPanel>
                             </materialDesign:Card>
 
                             <materialDesign:Card Width="130" Height="90" Margin="4" UniformCornerRadius="8" Background="#E1F5FE">
                                 <StackPanel VerticalAlignment="Center" Margin="8">
                                     <TextBlock Text="Món bán chạy" FontSize="12" HorizontalAlignment="Center" />
-                                    <TextBlock Text="Burger" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
-                                    <TextBlock Text="78 đơn" FontSize="10" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding TopSellingFood.FoodName}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding TopSellingFood.OrderCount, StringFormat={}{0} đơn}" FontSize="10" HorizontalAlignment="Center" />
                                 </StackPanel>
                             </materialDesign:Card>
                         </WrapPanel>
@@ -216,44 +166,39 @@
 
                             <TextBlock Grid.Row="0" Text="ĐƠN HÀNG GẦN ĐÂY" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
 
-                            <ListView Grid.Row="1">
-                                <ListViewItem>
-                                    <Grid Width="400">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                            <ListView Grid.Row="1" ItemsSource="{Binding RecentOrders}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="400">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                        <Border Grid.Column="0" Width="12" Height="12" CornerRadius="6" Background="Green" Margin="0,0,16,0" />
+                                            <Border Grid.Column="0" Width="12" Height="12" CornerRadius="6" Background="Green" Margin="0,0,16,0" />
 
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Bàn 05 - Order #1058" FontWeight="SemiBold" />
-                                            <TextBlock Text="2 món - 126,500đ" FontSize="12" Foreground="Gray" />
-                                        </StackPanel>
+                                            <StackPanel Grid.Column="1">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition></ColumnDefinition>
+                                                        <ColumnDefinition></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition></RowDefinition>
+                                                        <RowDefinition></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding OrderId, StringFormat=Order #{0}}" FontWeight="SemiBold" />
+                                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding CustomerName}" FontWeight="SemiBold" />
+                                                    <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Total, StringFormat={}{0:N0}đ}" FontSize="12" Foreground="Gray" />
+                                                </Grid>
+                                                
+                                            </StackPanel>
 
-                                        <TextBlock Grid.Column="2" Text="10:35" />
-                                    </Grid>
-                                </ListViewItem>
-
-                                <ListViewItem>
-                                    <Grid Width="400">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Border Grid.Column="0" Width="12" Height="12" CornerRadius="6" Background="Orange" Margin="0,0,16,0" />
-
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Bàn 12 - Order #1057" FontWeight="SemiBold" />
-                                            <TextBlock Text="4 món - 245,000đ" FontSize="12" Foreground="Gray" />
-                                        </StackPanel>
-
-                                        <TextBlock Grid.Column="2" Text="10:22" />
-                                    </Grid>
-                                </ListViewItem>
+                                            <TextBlock Grid.Column="2" Text="{Binding Date, StringFormat=HH:mm}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </Grid>
                     </Grid>
