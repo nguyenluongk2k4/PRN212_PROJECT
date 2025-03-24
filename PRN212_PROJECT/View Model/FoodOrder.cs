@@ -419,7 +419,7 @@ namespace PRN212_PROJECT.View_Model
             OrderItems.Clear();
             UpdateOrderCalculations();
             Thread.Sleep(1000);
-            OrderFood od = new OrderFood();
+            OrderedFood od = new OrderedFood();
             od.Show();
             Application.Current.Windows.OfType<CustomerInfoForm>().FirstOrDefault()?.Close();
         }
@@ -460,9 +460,9 @@ namespace PRN212_PROJECT.View_Model
 
             // 5. Hiển thị thông báo thành công và reset đơn hàng
             MessageBox.Show("Đã lưu thông tin khách hàng và hóa đơn thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-
+            Reset();
             // Tự động mở OrderFood và đóng CustomerInfoForm
-            OrderFood od = new OrderFood();
+            OrderedFood od = new OrderedFood();
             od.Show();
             Application.Current.Windows.OfType<CustomerInfoForm>().FirstOrDefault()?.Close();
 

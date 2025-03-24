@@ -17,18 +17,13 @@ namespace PRN212_PROJECT.View
     /// <summary>
     /// Interaction logic for Order.xaml
     /// </summary>
-<<<<<<<< HEAD:PRN212_PROJECT/View/OrderFood.xaml.cs
-    public partial class OrderFood : Window
-    {
-        public OrderFood()
-========
+
     public partial class OrderManager : Window
     {
         public OrderManager()
->>>>>>>> thanh:PRN212_PROJECT/View/OrderManager.xaml.cs
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.FoodOrder();
         }
-    }
+            }
+    
 }
