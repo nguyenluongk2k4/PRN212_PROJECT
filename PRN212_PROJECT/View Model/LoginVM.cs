@@ -1,4 +1,5 @@
-﻿using PRN212_PROJECT.View;
+﻿using PRN212_PROJECT.Models;
+using PRN212_PROJECT.View;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ namespace PRN212_PROJECT.View_Model
     {
         private string _email;
         private string _password;
+        public static Account Account { get; private set; }
 
         public string Email
         {
@@ -48,21 +50,49 @@ namespace PRN212_PROJECT.View_Model
 
             public void Execute(object parameter)
             {
-                if (_vm.Email == "admin" && _vm.Password == "123456")
+                var account = ChickenPrnContext.Ins.Accounts
+                    .Where(x => x.Username == _vm.Email && x.Password == _vm.Password)
+                    .FirstOrDefault();
+
+                if (account != null)
                 {
                     MessageBox.Show("Login Successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    AdminDashBoard a = new AdminDashBoard();
 
-                    a.Show();
+                    Window dashboard = null;
 
-                    Application.Current.Windows[0]?.Close();
+                    switch (account.RoleId)
+                    {
+                        case 1:
+                            dashboard = new AdminDashBoard();
+                            break;
+                        case 2:
+                            dashboard = new AdminDashBoard();
+                            break;
+                        case 3:
+                            dashboard = new Cooker();
+                            break;
+                        case 4:
+                            dashboard = new CustomerOrderScreen();
+                            break;
+                        default:
+                            MessageBox.Show("Unknown Role", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                    }
 
+                    if (dashboard != null)
+                    {
+                        dashboard.Show();
+
+                        
+                        Application.Current.Windows[0]?.Close();
+                    }
                 }
                 else
                 {
                     MessageBox.Show("Invalid Email or Password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+
 
             public event EventHandler CanExecuteChanged
             {

@@ -13,21 +13,13 @@ public partial class OrderTable
 
     public bool? IsPaid { get; set; }
 
-    public string? Address { get; set; }
-
-    public bool? Shipping {  get; set; }
-    public string isPaid
-    {
-        get => IsPaid.HasValue ? (IsPaid.Value ? "Đã thanh toán" : "Chưa thanh toán") : "Không xác định";
-    }
-    public string shipping
-    {
-        get => Shipping == true ? "Đã giao" : "Chưa giao";
-    }
-
     public bool? Done { get; set; }
 
     public double? Total { get; set; }
+
+    public string? Address { get; set; }
+
+    public bool? Shipping { get; set; }
 
     public virtual ICollection<OrderDetailCombo> OrderDetailCombos { get; set; } = new List<OrderDetailCombo>();
 
