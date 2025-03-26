@@ -135,7 +135,7 @@ namespace PRN212_PROJECT.View_Model
 
         private BitmapSource GeneratePaymentQRCode(int orderId, double totalPrice)
         {
-            // VietQR format: https://vietqr.io/standards/
+           
             string bankId = "MBBANK"; // Example: MB Bank
             string accountNumber = "1234567890"; // Your bank account number
             string accountName = "Food Store Name"; // Your account name
@@ -145,9 +145,7 @@ namespace PRN212_PROJECT.View_Model
             // VietQR URL format
             var qrContent = $"https://img.vietqr.io/image/{bankId}-{accountNumber}-compact2.png?amount={amount}&addInfo={Uri.EscapeDataString(description)}&accountName={Uri.EscapeDataString(accountName)}";
 
-            // Alternatively, you can use a custom format if your bank provides a specific QR code format
-            // For example, a raw string format:
-            // var qrContent = $"BANKID:{bankId}|ACCOUNT:{accountNumber}|AMOUNT:{amount}|DESC:{description}";
+
 
             // Generate QR code
             using (var qrGenerator = new QRCodeGenerator())
