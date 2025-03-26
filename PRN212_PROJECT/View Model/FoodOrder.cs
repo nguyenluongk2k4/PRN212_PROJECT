@@ -434,8 +434,8 @@ namespace PRN212_PROJECT.View_Model
                 Address = CustomerAddressInput,
                 Date = DateTime.Now,
                 IsPaid = true,
-                Shipping = true,
-                Done = true,
+                Shipping = false,
+                Done = false,
                 Total = _total,
             };
             ChickenPrnContext.Ins.OrderTables.Add(order);

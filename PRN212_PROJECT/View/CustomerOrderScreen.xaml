@@ -7,7 +7,8 @@
         xmlns:BaseVM="clr-namespace:PRN212_PROJECT.View_Model"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="CustomerOrderScreen" Height="450" Width="800">
+        WindowState="Maximized"
+        Title="CustomerOrderScreen" Height="1920" Width="1080">
     <Window.Resources>
         <BaseVM:ManageFoodVM x:Key="ManageFoodVM" />
         <BaseVM:StatusToBoolConverter x:Key="StatusConverter"/>
