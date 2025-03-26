@@ -4,105 +4,85 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
-        xmlns:BaseVM="clr-namespace:PRN212_PROJECT.View_Model"
+        xmlns:vm="clr-namespace:PRN212_PROJECT.View_Model"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="CustomerOrderScreen" Height="1920" Width="1080">
+        Title="Customer Order" Height="1920" Width="1080">
     <Window.Resources>
-        <BaseVM:ManageFoodVM x:Key="ManageFoodVM" />
-        <BaseVM:StatusToBoolConverter x:Key="StatusConverter"/>
-        <BaseVM:ImagePathConverter x:Key="ImagePathConverter"/>
-        <BaseVM:WidthConverterForFourItems x:Key="WidthConverterForFourItems"/>
-        <BaseVM:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <BaseVM:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
-        <BaseVM:TotalPriceConverter x:Key="TotalPriceConverter"/>
+        <!-- Converters -->
+        <vm:WidthConverterForFourItems x:Key="WidthConverterForFourItems"/>
+        <vm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <vm:TotalPriceConverter x:Key="TotalPriceConverter"/>
+
         <!-- Data Template for Food -->
         <DataTemplate x:Key="FoodTemplate">
             <Border Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource WidthConverterForFourItems}}"
-                    Margin="10" Padding="10" Background="#F0F0F0" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                    Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="120"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!-- Food Image -->
-                    <Image Grid.Row="0" Source="{Binding Image, Converter={StaticResource ImagePathConverter}}" 
-                           Height="100" Stretch="Uniform" Margin="0,0,0,10"/>
-                    <!-- Food Name and Price -->
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <StackPanel>
-                            <TextBlock Text="{Binding FoodName, FallbackValue='Tên món không xác định'}" FontWeight="Bold" FontSize="14"/>
-                            <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ, FallbackValue='0đ'}" FontSize="12" Foreground="Gray"/>
-                        </StackPanel>
-                        <!-- Add to Cart Button with Icon -->
-                        <Button Width="50" Margin="15,0,0,0"
-                                Content="+"
-                                Command="{Binding DataContext.AddFoodToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedButton"/>
+                    <!-- Food Image Placeholder -->
+                    <Border Grid.Row="0" Background="#FFCCCC"/>
+                    <TextBlock Grid.Row="1" Text="{Binding FoodName, FallbackValue='Tên món không xác định'}" 
+                               Margin="8,8,8,0" FontWeight="Bold" FontSize="14"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ, FallbackValue='0đ'}" 
+                                   FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" FontSize="12"/>
+                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                Background="Red" Command="{Binding DataContext.AddFoodToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                            <materialDesign:PackIcon Kind="Plus"/>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
         </DataTemplate>
+
         <!-- Data Template for Combo -->
         <DataTemplate x:Key="ComboTemplate">
             <Border Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource WidthConverterForFourItems}}"
-                    Margin="10" Padding="10" Background="#F0F0F0" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                    Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="120"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!-- Combo Name -->
-                    <TextBlock Grid.Row="0" Text="{Binding ComboName, FallbackValue='Tên combo không xác định'}" FontWeight="Bold" FontSize="14" Margin="0,0,0,5"/>
-                    <!-- Combo Details -->
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding ComboDetails}" Margin="0,0,0,10">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Food.FoodName, FallbackValue='Món không xác định'}" FontSize="12"/>
-                                    <TextBlock Text=" x " FontSize="12"/>
-                                    <TextBlock Text="{Binding Amount, FallbackValue='0'}" FontSize="12"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <!-- Combo Price and Add Button -->
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ, FallbackValue='0đ'}" FontSize="12" Foreground="Gray"/>
-                        <Button Width="50" Margin="15,0,0,0"
-                                Content="+"
-                                Command="{Binding DataContext.AddComboToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedButton"/>
+                    <!-- Combo Image Placeholder -->
+                    <Border Grid.Row="0" Background="#CCFFFF"/>
+                    <TextBlock Grid.Row="1" Text="{Binding ComboName, FallbackValue='Tên combo không xác định'}" 
+                               Margin="8,8,8,0" FontWeight="Bold" FontSize="14"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ, FallbackValue='0đ'}" 
+                                   FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" FontSize="12"/>
+                        <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                                Background="Red" Command="{Binding DataContext.AddComboToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                            <materialDesign:PackIcon Kind="Plus"/>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
         </DataTemplate>
-        <!-- Data Template for OrderDetailFood in Cart -->
+
         <!-- Data Template for OrderDetailFood in Cart -->
         <DataTemplate x:Key="OrderDetailFoodTemplate">
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Text="{Binding Food.FoodName, FallbackValue='Món không xác định'}" Width="100"/>
-                <TextBlock Text="{Binding Amount, FallbackValue='0'}" Width="30" TextAlignment="Center"/>
-                <Button  Background="Green" Width="50" Margin="15,0,0,0"
-                 Content="+"
-                 Command="{Binding DataContext.IncrementFoodQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-             CommandParameter="{Binding}"
-                 Style="{StaticResource MaterialDesignRaisedButton}"
-                 ToolTip="Resource name: MaterialDesignRaisedButton"/>
-           
-                <Button Background="Red" Width="50" Margin="15,0,0,0"
-    Content="-"
-     Command="{Binding DataContext.DecrementFoodQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-  CommandParameter="{Binding}"
-    Style="{StaticResource MaterialDesignRaisedButton}"
-    ToolTip="Resource name: MaterialDesignRaisedButton"/>
-                <TextBlock Width="60" TextAlignment="Right">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Amount, StringFormat={}{0}x, FallbackValue='0x'}" 
+                           VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                <TextBlock Grid.Column="1" Text="{Binding Food.FoodName, FallbackValue='Món không xác định'}" 
+                           VerticalAlignment="Center" Margin="8,0"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource TotalPriceConverter}" StringFormat="{}{0:N0}đ">
                             <Binding Path="Price" FallbackValue="0"/>
@@ -110,29 +90,35 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-            </StackPanel>
+                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Green" Margin="4,0"
+                            Command="{Binding DataContext.IncrementFoodQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Red" Margin="4,0"
+                            Command="{Binding DataContext.DecrementFoodQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}">
+                        <materialDesign:PackIcon Kind="Minus"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
 
         <!-- Data Template for OrderDetailCombo in Cart -->
         <DataTemplate x:Key="OrderDetailComboTemplate">
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Text="{Binding Combo.ComboName, FallbackValue='Combo không xác định'}" Width="100"/>
-                <TextBlock Text="{Binding Amount, FallbackValue='0'}" Width="30" TextAlignment="Center"/>
-             
-
-                <Button Content="+" Background="Green" Width="50" Margin="15,0,0,0"
-    Command="{Binding DataContext.IncrementComboQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-  CommandParameter="{Binding}"
-    Style="{StaticResource MaterialDesignRaisedButton}"
-    ToolTip="Resource name: MaterialDesignRaisedButton"/>
-
-                <Button Content="-" Background="Red" Width="50" Margin="15,0,0,0"
-    Command="{Binding DataContext.DecrementComboQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-  CommandParameter="{Binding}"
-  Style="{StaticResource MaterialDesignRaisedButton}"
-  ToolTip="Resource name: MaterialDesignRaisedButton"/>
-
-                <TextBlock Width="60" TextAlignment="Right">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Amount, StringFormat={}{0}x, FallbackValue='0x'}" 
+                           VerticalAlignment="Center" Margin="8,0" FontWeight="Medium"/>
+                <TextBlock Grid.Column="1" Text="{Binding Combo.ComboName, FallbackValue='Combo không xác định'}" 
+                           VerticalAlignment="Center" Margin="8,0"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="8,0" FontWeight="Medium">
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource TotalPriceConverter}" StringFormat="{}{0:N0}đ">
                             <Binding Path="Price" FallbackValue="0"/>
@@ -140,93 +126,134 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-            </StackPanel>
+                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Green" Margin="4,0"
+                            Command="{Binding DataContext.IncrementComboQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Red" Margin="4,0"
+                            Command="{Binding DataContext.DecrementComboQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}">
+                        <materialDesign:PackIcon Kind="Minus"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
     </Window.Resources>
-    <Grid Margin="10">
+    <Grid Margin="16">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left Side: Food/Combo List -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" MinHeight="50"/>
+                <RowDefinition Height="80"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <!-- Type of Food Buttons and Toggle Button -->
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <ItemsControl Grid.Column="0" ItemsSource="{Binding FoodTypes}" HorizontalAlignment="Center" 
-                              Visibility="{Binding IsShowingFoods, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="10,5">
-                                <Button Content="{Binding TypeName}"
-                                        Command="{Binding DataContext.SelectFoodTypeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}"
-                                        Padding="10,5" Background="#FF6200EE" Foreground="White" BorderBrush="Gray" BorderThickness="1"/>
-                                <TextBlock Text="{Binding Foods.Count}" 
-                                           Background="Red" Foreground="White" 
-                                           Padding="5,2" Margin="5,0,0,0" 
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Button Grid.Column="1" Content="{Binding IsShowingFoods, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Xem Combo|Xem Món Ăn'}"
-                        Command="{Binding ToggleDisplayCommand}"
-                        Background="Red" Foreground="White" Padding="10,5" Margin="10,0"/>
-            </Grid>
-            <!-- Food/Combo Items -->
-            <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Background="White">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding DisplayItems}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplateSelector>
-                            <BaseVM:DisplayItemTemplateSelector
-                                FoodTemplate="{StaticResource FoodTemplate}"
-                                ComboTemplate="{StaticResource ComboTemplate}"/>
-                        </ItemsControl.ItemTemplateSelector>
-                    </ItemsControl>
-                </ScrollViewer>
+            <!-- Header with Toggle Button -->
+            <Border Grid.Row="0" Background="#EEEEEE">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="16">
+                    <Button Content="Xem Combo / Món Ăn" Command="{Binding ToggleDisplayCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" Foreground="White" Margin="8">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="SwapHorizontal" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </StackPanel>
             </Border>
+            <!-- Food/Combo Items -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,8">
+                <StackPanel>
+                    <!-- Food Category -->
+                    <StackPanel Margin="16,8" Visibility="{Binding IsShowingFoods, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">ĐỒ ĂN</TextBlock>
+                        <ItemsControl ItemsSource="{Binding DisplayItems}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FoodTemplate}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                    <!-- Combo Category -->
+                    <StackPanel Margin="16,8" Visibility="{Binding IsShowingFoods, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}">
+                        <TextBlock Margin="8" FontSize="20" Foreground="Red" FontWeight="Bold">COMBO</TextBlock>
+                        <ItemsControl ItemsSource="{Binding DisplayItems}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ComboTemplate}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <!-- Right Side: Cart -->
-        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Background="White" Margin="10,0,0,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="Giỏ Hàng" FontSize="16" FontWeight="Bold" Margin="10"/>
-                <ListBox Grid.Row="1" Margin="10" ItemsSource="{Binding CartItems}">
-                    <ListBox.ItemTemplateSelector>
-                        <BaseVM:CartItemTemplateSelector
+        <Grid Grid.Column="1" Background="#F5F5F5" Margin="8,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!-- Cart Header -->
+            <Border Grid.Row="0" Background="Red" Margin="0,0,0,8">
+                <TextBlock Text="GIỎ HÀNG" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="16"/>
+            </Border>
+            <!-- Cart Items -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,8">
+                <ItemsControl ItemsSource="{Binding CartItems}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <vm:CartItemTemplateSelector
                             FoodTemplate="{StaticResource OrderDetailFoodTemplate}"
                             ComboTemplate="{StaticResource OrderDetailComboTemplate}"/>
-                    </ListBox.ItemTemplateSelector>
-                </ListBox>
-                <TextBlock Grid.Row="2" Text="{Binding TotalPrice, StringFormat='Tổng: {0:N0}đ'}" FontSize="14" FontWeight="Bold" Margin="10" HorizontalAlignment="Right"/>
-                <Button Grid.Row="3" Content="Thanh Toán" Background="Green" Foreground="White" Margin="10"
-                        Command="{Binding CheckoutCommand}"/>
-            </Grid>
-        </Border>
+                    </ItemsControl.ItemTemplateSelector>
+                </ItemsControl>
+            </ScrollViewer>
+            <!-- Total and Checkout -->
+            <Border Grid.Row="2" Background="White" Margin="0,8,0,0">
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Tổng cộng:" FontSize="16"/>
+                        <TextBlock Grid.Column="1" Text="{Binding TotalPrice, StringFormat={}{0:N0}đ}" FontWeight="SemiBold" FontSize="16"/>
+                    </Grid>
+                    <Button Grid.Row="1" Margin="0,16,0,0" Height="50" Background="Red" Foreground="White"
+                            Command="{Binding CheckoutCommand}" Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CashRegister" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="THANH TOÁN" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding TotalPrice, StringFormat=' {0:N0}đ'}" FontSize="16" FontWeight="Bold" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

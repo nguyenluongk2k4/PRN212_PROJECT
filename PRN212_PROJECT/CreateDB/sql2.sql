@@ -1,4 +1,46 @@
-﻿CREATE TABLE Role(
+﻿CREATE TABLE Supplier (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    PhoneNumber VARCHAR(11),
+    Address NVARCHAR(250),
+    Email VARCHAR(50)
+);
+
+CREATE TABLE SupplierOrder (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    SupplierId INT NOT NULL,
+    OrderDate DATE,
+    DeliverDate DATE,
+    Status INT,
+    IsPaid BIT,
+    Total DECIMAL(18,2), 
+    FOREIGN KEY (SupplierId) REFERENCES Supplier(Id)
+);
+create table Feedback(
+ id int identity(1,1) primary key,
+ rate int,
+ Content nvarchar(max)
+)
+
+CREATE TABLE SupplierOrderDetail (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    SupplierOrderId INT NOT NULL,
+    ProductName NVARCHAR(100),
+    Amount INT,
+    UnitPrice FLOAT,
+    FOREIGN KEY (SupplierOrderId) REFERENCES SupplierOrder(Id)
+);
+
+CREATE TABLE Expenditure (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100),
+    SupplierOrderId INT NULL,
+    FOREIGN KEY (SupplierOrderId) REFERENCES SupplierOrder(Id)
+);
+alter table OrderTable
+add PhoneNumber varchar(11)
+
+CREATE TABLE Role(
 role_id INT,
 role_name NVARCHAR(255),
 PRIMARY KEY(role_id)

@@ -161,7 +161,7 @@ namespace PRN212_PROJECT.View_Model
                 .Include(x => x.FoodTypeNavigation)
                 .ToList();
 
-            string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", ".."));
+            string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..",".."));
             string imageFolder = Path.Combine(projectRoot, "images");
 
             foreach (var food in list)
@@ -205,7 +205,7 @@ namespace PRN212_PROJECT.View_Model
                 return false;
 
             // Allow only letters, numbers, and spaces
-            return Regex.IsMatch(foodName, @"^[a-zA-Z0-9\s]+$");
+            return Regex.IsMatch(foodName, @"^[a-zA-Z0-9\s,\p{L}]+$");
         }
 
         // Add Part

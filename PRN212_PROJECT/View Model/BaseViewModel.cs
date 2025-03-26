@@ -3,9 +3,11 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using PRN212_PROJECT.Models;
 
 namespace PRN212_PROJECT.View_Model
 {
@@ -64,7 +66,7 @@ namespace PRN212_PROJECT.View_Model
                     return null;
 
                 string imagePath = value.ToString();
-                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", ".."));
+                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..",".."));
                 string fullPath = Path.Combine(projectRoot, "images", Path.GetFileName(imagePath));
 
                 if (File.Exists(fullPath))
@@ -137,6 +139,81 @@ namespace PRN212_PROJECT.View_Model
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+    public class BooleanToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is bool isVisible)
+            {
+                bool invert = parameter as string == "False";
+                return (isVisible != invert) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is Visibility visibility)
+            {
+                bool invert = parameter as string == "False";
+                return (visibility == Visibility.Visible) != invert;
+            }
+            return false;
+        }
+    }
+
+    // Template selector for cart items (Food or Combo)
+    public class CartItemTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate FoodTemplate { get; set; }
+        public DataTemplate ComboTemplate { get; set; }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is OrderDetailFood)
+                return FoodTemplate;
+            if (item is OrderDetailCombo)
+                return ComboTemplate;
+            return null;
+        }
+    }
+    public class WidthConverterForFourItems : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is double scrollViewerWidth)
+            {
+                double itemWidth = (scrollViewerWidth - (4 * 25)) / 4; // 25px margin between 4 items
+                return Math.Max(itemWidth, 0); // Ensure non-negative width
+            }
+            return 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException(); // Not needed for one-way binding
+        }
+    }
+    public class PaymentStatusToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is string status)
+            {
+                if (status.Contains("Thành công"))
+                    return "Green";
+                if (status.Contains("Thất bại"))
+                    return "Red";
+                return "Orange"; // For "Đang chờ thanh toán..." or other statuses
+            }
+            return "Black"; // Default color
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException(); // Not needed for one-way binding
         }
     }
 

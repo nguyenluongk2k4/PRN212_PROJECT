@@ -7,6 +7,7 @@ using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using PRN212_PROJECT.Models;
 using PRN212_PROJECT.View;
+using Timer = System.Timers.Timer;
 
 namespace PRN212_PROJECT.View_Model
 {

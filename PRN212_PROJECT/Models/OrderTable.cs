@@ -21,6 +21,8 @@ public partial class OrderTable
 
     public bool? Shipping { get; set; }
 
+    public string? PhoneNumber { get; set; }
+
     public virtual ICollection<OrderDetailCombo> OrderDetailCombos { get; set; } = new List<OrderDetailCombo>();
 
     public virtual ICollection<OrderDetailFood> OrderDetailFoods { get; set; } = new List<OrderDetailFood>();

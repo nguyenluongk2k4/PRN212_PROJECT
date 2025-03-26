@@ -22,7 +22,7 @@ namespace PRN212_PROJECT.View
             if (openFileDialog.ShowDialog() == true)
             {
                 string sourcePath = openFileDialog.FileName;
-                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", ".."));
+                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..",".."));
                 string imageFolder = Path.Combine(projectRoot, "images");
                 string fileName = Path.GetFileNameWithoutExtension(sourcePath);
                 string extension = Path.GetExtension(sourcePath);
@@ -51,6 +51,12 @@ namespace PRN212_PROJECT.View
         {
             AddNewFoodType addNewFoodTypeScreen=new AddNewFoodType();
             addNewFoodTypeScreen.Show();
+        }
+
+        private void btnShowCombo_Click(object sender, RoutedEventArgs e)
+        {
+            ComboScreen cb = new ComboScreen();
+            cb.Show();
         }
     }
 }

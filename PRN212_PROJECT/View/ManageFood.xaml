@@ -76,12 +76,12 @@
                                     Click="Button_Click"
                                     Height="30"
                                     Padding="8,0"/>
-                            <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+                            <Button Name="btnShowCombo" Style="{StaticResource MaterialDesignRaisedButton}" 
                                     Background="Red" 
                                     Foreground="White" 
                                     Content="Xem combo"
                                     Height="30"
-                                    Padding="8,0"/>
+                                    Padding="8,0" Click="btnShowCombo_Click"/>
                         </StackPanel>
                     </Grid>
 
