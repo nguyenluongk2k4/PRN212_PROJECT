@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PRN212_PROJECT.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,15 +16,14 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for AdminDashBoard.xaml
+    /// Interaction logic for RoleManagement.xaml
     /// </summary>
-    public partial class AdminDashBoard : Window
+    public partial class RoleManagement : Window
     {
-        public AdminDashBoard()
+        public RoleManagement()
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.AdminDashBoardVM();
-            
+            DataContext = new PRN212_PROJECT.View_Model.RoleManagementVM();
         }
     }
 }

@@ -15,8 +15,17 @@ namespace PRN212_PROJECT.View_Model
         public static string username { get; set; }
         public static List<string> Permissions { get; set; } = new List<string>();
 
+        public static void Clear()
+        {
+            account_id = 0;
+            full_name = string.Empty;
+            role_id = 0;
+            username = string.Empty;
+            Permissions.Clear();
+        }
         public static bool HasPermission(string permission)
         {
+            
             return Permissions.Contains(permission);
         }
         public static List<string> GetPermissionsByUsername(string username)
@@ -88,7 +97,7 @@ namespace PRN212_PROJECT.View_Model
                     AccountLogin.full_name = account.Fullname;
                     AccountLogin.role_id = account.RoleId ?? 0;
                     AccountLogin.username = account.Username;
-
+                    AccountLogin.Permissions = GetPermissionsByUsername(account.Username);
                     MessageBox.Show("Login Successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     Window dashboard = null;
@@ -105,7 +114,7 @@ namespace PRN212_PROJECT.View_Model
                             dashboard = new Cooker();
                             break;
                         case 4:
-                            dashboard = new CustomerOrderScreen();
+                            dashboard = new FeedBackOderder();
                             break;
                         default:
                             MessageBox.Show("Unknown Role", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -124,6 +133,15 @@ namespace PRN212_PROJECT.View_Model
                 {
                     MessageBox.Show("Invalid Email or Password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+            private List<string> GetPermissionsByUsername(string username)
+            {
+                var user = ChickenPrnContext.Ins.Accounts
+                    .Include(u => u.Role)
+                    .ThenInclude(r => r.Permissions)
+                    .FirstOrDefault(u => u.Username == username);
+
+                return user?.Role?.Permissions.Select(p => p.PermissionName).ToList() ?? new List<string>();
             }
 
 

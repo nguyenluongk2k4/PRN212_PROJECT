@@ -14,4 +14,5 @@
     <ViewModel:CustomerOrderVM x:Key="CustomerOrderVM"/>
     <ViewModel:CookerVM x:Key="CookerVM"/>
     <ViewModel:AddNewExpentitureVM x:Key="AddNewExpenditureVM"/>
+    <ViewModel:FeedBackVM x:Key="FeedBackVM"/>
 </ResourceDictionary>

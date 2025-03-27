@@ -151,6 +151,9 @@ public partial class ChickenPrnContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Rate).HasColumnName("rate");
+            entity.Property(e => e.TimeFeedback)
+                .HasColumnType("datetime")
+                .HasColumnName("time_feedback");
         });
 
         modelBuilder.Entity<Food>(entity =>

@@ -39,6 +39,11 @@
 			<!-- Do not copy to bin -->
 		</None>
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="View Model\FeedBackVM.cs">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Compile>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="appsettings.json">

@@ -59,6 +59,7 @@
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
                         <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ, FallbackValue='0đ'}" 
                                    FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" FontSize="12"/>
+                        
                         <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
                                 Background="Red" Command="{Binding DataContext.AddComboToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}">

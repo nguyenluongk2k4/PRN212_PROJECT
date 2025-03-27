@@ -13,8 +13,6 @@ public partial class SupplierOrder
 
     public DateOnly? DeliverDate { get; set; }
 
-    public int? Status { get; set; }
-
     public bool? IsPaid { get; set; }
 
     public decimal? Total { get; set; }
