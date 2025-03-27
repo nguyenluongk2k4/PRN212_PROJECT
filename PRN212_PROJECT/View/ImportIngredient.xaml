@@ -3,10 +3,124 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
-        Title="ImportIngredient" Height="450" Width="800">
+        Title="ImportIngredient" Height="1080" Width="1920">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Thanh điều hướng -->
+        <materialDesign:ColorZone Mode="PrimaryMid" Grid.Row="0" Padding="16" Background="#2196F3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="btnBack" 
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Foreground="White"
+                            ToolTip="Quay lại"
+                            Margin="0,0,16,0">
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
+                    </Button>
+
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FoodVariant" Width="30" Height="30" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Text="Import Nguyên Liệu" 
+                                   FontSize="20" 
+                                   Foreground="White" 
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+
+        <!-- Nội dung chính -->
+        <Grid Grid.Row="1" Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" 
+                       Text="Chọn Phương Thức Import" 
+                       FontSize="22" 
+                       FontWeight="Medium" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,32"/>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Import từ Excel -->
+                <Border Grid.Column="0" 
+                        BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                        BorderThickness="1" 
+                        CornerRadius="16"
+                        Margin="16"
+                        x:Name="btnExcelImport"
+                        Background="{DynamicResource MaterialDesignBackground}"
+                        >
+                    <StackPanel Orientation="Vertical" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Margin="32">
+                        <materialDesign:PackIcon Kind="FileExcel" 
+                                                 Width="100" 
+                                                 Height="100" 
+                                                 HorizontalAlignment="Center"
+                                                 Foreground="#217346"/>
+                        <TextBlock Text="Import từ Excel" 
+                                   FontSize="18" 
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,16,0,8"/>
+                        <TextBlock Text="Nhập nguyên liệu bằng cách tải file Excel" 
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Nhập tay -->
+                <Border Grid.Column="1" 
+                        BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                        BorderThickness="1" 
+                        CornerRadius="16"
+                        Margin="16"
+                        x:Name="btnManualImport"
+                        Background="{DynamicResource MaterialDesignBackground}"
+                        >
+                    <StackPanel Orientation="Vertical" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Margin="32">
+                        <materialDesign:PackIcon Kind="FormTextbox" 
+                                                 Width="100" 
+                                                 Height="100" 
+                                                 HorizontalAlignment="Center"
+                                                 Foreground="#FF5722"/>
+                        <TextBlock Text="Nhập Thủ Công" 
+                                   FontSize="18" 
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,16,0,8"/>
+                        <TextBlock Text="Nhập từng nguyên liệu một cách thủ công" 
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
