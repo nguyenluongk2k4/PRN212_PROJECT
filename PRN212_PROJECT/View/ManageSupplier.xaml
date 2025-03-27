@@ -6,133 +6,157 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
-        Title="ManageSupplier" Height="1080" Width="1920"
-        WindowState="Maximized">
-   
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        Title="Manage Supplier" 
+        Height="1080" 
+        Width="1920"
+        WindowState="Maximized"
+        DataContext="{StaticResource ManageSupplierVM}">
 
-            <!-- Thanh điều hướng -->
-            <materialDesign:ColorZone Mode="PrimaryMid" Grid.Row="0" Padding="16">
-                <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Warehouse" Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Text="Quản lý Nhà Cung Cấp" FontSize="20" VerticalAlignment="Center"/>
-                </StackPanel>
-            </materialDesign:ColorZone>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <!-- Nội dung chính -->
-            <Grid Grid.Row="1" Margin="16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
+        <!-- Navigation Bar -->
+        <materialDesign:ColorZone Mode="PrimaryMid" Grid.Row="0" Padding="16">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Warehouse" Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="Quản lý Nhà Cung Cấp" FontSize="20" VerticalAlignment="Center"/>
+            </StackPanel>
+        </materialDesign:ColorZone>
 
-                <!-- Danh sách nhà cung cấp -->
-                <Border Grid.Column="0" 
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Supplier List -->
+            <Border Grid.Column="0" 
                     Margin="0,0,16,0" 
                     BorderBrush="{DynamicResource MaterialDesignDivider}" 
                     BorderThickness="1" 
                     CornerRadius="8">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <!-- Tiêu đề và nút thêm -->
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="16">
-                            <TextBlock Text="Danh sách Nhà Cung Cấp" 
-                                   FontSize="18" 
-                                   FontWeight="Medium" 
-                                   VerticalAlignment="Center"/>
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                    <!-- Header and Add Button -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="16">
+                        <TextBlock Text="Danh sách Nhà Cung Cấp" 
+                                 FontSize="18" 
+                                 FontWeight="Medium" 
+                                 VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 Margin="16,0,0,0"
                                 Background="{DynamicResource PrimaryHueMidBrush}"
-                                ToolTip="Thêm nhà cung cấp mới">
-                                <materialDesign:PackIcon Kind="Plus" Width="24" Height="24"/>
-                            </Button>
-                        </StackPanel>
+                                ToolTip="Thêm nhà cung cấp mới"
+                                Command="{Binding AddNewSupplier}">
+                            <materialDesign:PackIcon Kind="Plus" Width="24" Height="24"/>
+                        </Button>
+                    </StackPanel>
 
-                        <!-- DataGrid hiển thị danh sách nhà cung cấp -->
-                        <DataGrid Grid.Row="1" 
-                              Margin="16"
-                              materialDesign:DataGridAssist.CellPadding="8"
-                              materialDesign:DataGridAssist.ColumnHeaderPadding="8"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Mã NCC" Binding="{Binding MaNhaCungCap}"/>
-                                <DataGridTextColumn Header="Tên Nhà Cung Cấp" Binding="{Binding TenNhaCungCap}"/>
-                                <DataGridTextColumn Header="Số Điện Thoại" Binding="{Binding SoDienThoai}"/>
-                                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
-                                <DataGridTemplateColumn Header="Thao Tác">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button Style="{StaticResource MaterialDesignIconButton}"
+                    <!-- Suppliers DataGrid -->
+                    <DataGrid Grid.Row="1" 
+                            Margin="16"
+                            materialDesign:DataGridAssist.CellPadding="8"
+                            materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                            AutoGenerateColumns="False"
+                            IsReadOnly="True" 
+                            ItemsSource="{Binding Suppliers}"
+                            SelectedItem="{Binding SelectedSupplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tên Nhà Cung Cấp" 
+                                              Binding="{Binding Name}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Số Điện Thoại" 
+                                              Binding="{Binding PhoneNumber}" 
+                                              Width="150"/>
+                            <DataGridTextColumn Header="Địa Chỉ" 
+                                              Binding="{Binding Address}" 
+                                              Width="*"/>
+                            <DataGridTextColumn Header="Email" 
+                                              Binding="{Binding Email}" 
+                                              Width="*"/>
+                            <DataGridTemplateColumn Header="Thao Tác" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     ToolTip="Chỉnh sửa"
+                                                    Command="{Binding UpdateSupplier}"
                                                     Margin="0,0,8,0">
-                                                    <materialDesign:PackIcon Kind="Pencil" />
-                                                </Button>
-                                                <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                <materialDesign:PackIcon Kind="Pencil" />
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     ToolTip="Xóa"
+                                                    Command="{Binding DeleteSupplier}"
                                                     Foreground="{DynamicResource MaterialDesignValidationErrorBrush}">
-                                                    <materialDesign:PackIcon Kind="Delete" />
-                                                </Button>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </Border>
+                                                <materialDesign:PackIcon Kind="Delete" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
 
-                <!-- Chi tiết nhà cung cấp -->
-                <Border Grid.Column="1" 
+            <!-- Supplier Details -->
+            <Border Grid.Column="1" 
                     BorderBrush="{DynamicResource MaterialDesignDivider}" 
                     BorderThickness="1" 
                     CornerRadius="8"
                     Padding="16">
-                    <StackPanel>
-                        <TextBlock Text="Chi Tiết Nhà Cung Cấp" 
-                               FontSize="18" 
-                               FontWeight="Medium" 
-                               Margin="0,0,0,16"/>
+                <StackPanel>
+                    <TextBlock Text="Chi Tiết Nhà Cung Cấp" 
+                             FontSize="18" 
+                             FontWeight="Medium" 
+                             Margin="0,0,0,20"/>
 
-                        <TextBox materialDesign:HintAssist.Hint="Mã Nhà Cung Cấp"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Margin="0,0,0,16"/>
+                    <TextBox materialDesign:HintAssist.Hint="Tên Nhà Cung Cấp"
+                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                           Margin="0,0,0,16" 
+                           Text="{Binding NewSupplierName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-                        <TextBox materialDesign:HintAssist.Hint="Tên Nhà Cung Cấp"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Margin="0,0,0,16"/>
+                    <TextBox materialDesign:HintAssist.Hint="Số Điện Thoại"
+                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                           Margin="0,0,0,16" 
+                           Text="{Binding NewSupplierPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                           MaxLength="10"/>
 
-                        <TextBox materialDesign:HintAssist.Hint="Địa Chỉ"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Margin="0,0,0,16"/>
+                    <TextBox materialDesign:HintAssist.Hint="Địa Chỉ"
+                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                           Margin="0,0,0,16" 
+                           Text="{Binding NewSupplierAddress, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-                        <TextBox materialDesign:HintAssist.Hint="Số Điện Thoại"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Margin="0,0,0,16"/>
+                    <TextBox materialDesign:HintAssist.Hint="Email"
+                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                           Margin="0,0,0,24" 
+                           Text="{Binding NewSupplierEmail, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-                        <TextBox materialDesign:HintAssist.Hint="Email"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal" 
+                              HorizontalAlignment="Right">
+                        <Button Content="Hủy" 
+                              Style="{StaticResource MaterialDesignOutlinedButton}"
+                              Margin="0,0,8,0"
+                              Command="{Binding Cancel}"
+                              Width="100"/>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-                            <Button Content="Hủy" 
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Margin="0,0,8,0"/>
-                            <Button Content="Lưu" 
-                                Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        </StackPanel>
+                        <Button Content="Thêm" 
+                              Style="{StaticResource MaterialDesignRaisedButton}"
+                              Margin="0,0,8,0"
+                              Command="{Binding AddNewSupplier}"
+                              Width="100"/>
                     </StackPanel>
-                </Border>
-            </Grid>
+                </StackPanel>
+            </Border>
         </Grid>
-    </Window>
-
+    </Grid>
+</Window>
