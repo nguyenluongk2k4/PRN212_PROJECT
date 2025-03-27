@@ -21,6 +21,18 @@ namespace PRN212_PROJECT.View_Model
 
     public class AdminDashBoardVM : BaseViewModel
     {
+        private List<string> _hasPermission;
+
+        public List<string> HasPermission
+        {
+            get => _hasPermission;
+            set
+            {
+                _hasPermission = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Properties cho Header
         private string _adminName;
         public string AdminName

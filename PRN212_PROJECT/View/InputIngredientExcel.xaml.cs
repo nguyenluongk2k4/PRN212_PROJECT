@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PRN212_PROJECT.View_Model
+namespace PRN212_PROJECT.View
 {
     /// <summary>
     /// Interaction logic for InputIngredientExcel.xaml

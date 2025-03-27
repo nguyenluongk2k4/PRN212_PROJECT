@@ -49,37 +49,75 @@
             </Grid.RowDefinitions>
 
             <!-- Quick Access Panel -->
-            <materialDesign:Card Grid.Row="0" Margin="8" UniformCornerRadius="8" Padding="16">
+            <materialDesign:Card Margin="8" UniformCornerRadius="8" Padding="16">
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" Foreground="White" Command="{Binding GoCategoryCommand}">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#2E7D32" Foreground="White" Command="{Binding GoStatisticsCommand}"
+                    Visibility="{Binding HasPermission[ViewStatistics], Converter={StaticResource BoolToVis}}">
                         <StackPanel>
-                            <materialDesign:PackIcon Kind="FoodForkDrink" Width="48" Height="48" HorizontalAlignment="Center" />
-                            <TextBlock Text="Quản lý Danh mục" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
-                            <TextBlock Text="Món ăn, thức uống" FontSize="12" TextAlignment="Center" />
+                            <materialDesign:PackIcon Kind="ChartLine" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Thống kê" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Báo cáo doanh thu" FontSize="12" TextAlignment="Center" />
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#FF6F00" Foreground="White" Command="{Binding GoOrderCommand}">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#FF6F00" Foreground="White" Command="{Binding GoOrderManagementCommand}"
+                    Visibility="{Binding HasPermission[ManageOrders], Converter={StaticResource BoolToVis}}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="Receipt" Width="48" Height="48" HorizontalAlignment="Center" />
-                            <TextBlock Text="Quản lý Đơn hàng" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Quản lý Order" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
                             <TextBlock Text="Kiểm tra, duyệt đơn" FontSize="12" TextAlignment="Center" />
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#2E7D32" Foreground="White" Command="{Binding GoRevenueCommand}">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#0277BD" Foreground="White" Command="{Binding GoRoleManagementCommand}"
+                    Visibility="{Binding HasPermission[ManageRoles], Converter={StaticResource BoolToVis}}">
                         <StackPanel>
-                            <materialDesign:PackIcon Kind="ChartLine" Width="48" Height="48" HorizontalAlignment="Center" />
-                            <TextBlock Text="Doanh thu" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
-                            <TextBlock Text="Thống kê, báo cáo" FontSize="12" TextAlignment="Center" />
+                            <materialDesign:PackIcon Kind="AccountKey" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Quản lý Role" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Phân quyền người dùng" FontSize="12" TextAlignment="Center" />
                         </StackPanel>
                     </Button>
 
-                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" Background="#0277BD" Foreground="White" Command="{Binding GoStaffCommand}">
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#8E24AA" Foreground="White" Command="{Binding GoFeedbackManagementCommand}"
+                    Visibility="{Binding HasPermission[ManageFeedback], Converter={StaticResource BoolToVis}}">
                         <StackPanel>
-                            <materialDesign:PackIcon Kind="AccountMultiple" Width="48" Height="48" HorizontalAlignment="Center" />
-                            <TextBlock Text="Nhân viên" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
-                            <TextBlock Text="Quản lý nhân sự" FontSize="12" TextAlignment="Center" />
+                            <materialDesign:PackIcon Kind="CommentMultiple" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Quản lý Feedback" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Xem phản hồi khách" FontSize="12" TextAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#D81B60" Foreground="White" Command="{Binding GoImportGoodsCommand}"
+                    Visibility="{Binding HasPermission[ImportGoods], Converter={StaticResource BoolToVis}}">
+                        <StackPanel>
+                            <materialDesign:PackIcon Kind="TruckDelivery" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Nhập hàng" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Quản lý hàng nhập" FontSize="12" TextAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#FBC02D" Foreground="White" Command="{Binding GoCreateOrderCommand}"
+                    Visibility="{Binding HasPermission[CreateOrder], Converter={StaticResource BoolToVis}}">
+                        <StackPanel>
+                            <materialDesign:PackIcon Kind="CartPlus" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Tạo Order" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Tạo đơn hàng mới" FontSize="12" TextAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#0288D1" Foreground="White" Command="{Binding GoComboAndFoodCommand}"
+                    Visibility="{Binding HasPermission[ManageComboAndFood], Converter={StaticResource BoolToVis}}">
+                        <StackPanel>
+                            <materialDesign:PackIcon Kind="FoodForkDrink" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Quản lý Combo và Food" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Món ăn, combo" FontSize="12" TextAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </WrapPanel>

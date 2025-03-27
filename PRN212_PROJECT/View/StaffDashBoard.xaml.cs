@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PRN212_PROJECT.View_Model
+namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for InputIngredientForm.xaml
+    /// Interaction logic for StaffDashBoard.xaml
     /// </summary>
-    public partial class InputIngredientForm : Window
+    public partial class StaffDashBoard : Window
     {
-        public InputIngredientForm()
+        public StaffDashBoard()
         {
             InitializeComponent();
         }
