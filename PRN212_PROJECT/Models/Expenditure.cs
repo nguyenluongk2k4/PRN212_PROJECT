@@ -9,6 +9,10 @@ public partial class Expenditure
 
     public string? Name { get; set; }
 
+    public string? Executor { get; set; }
+
+    public decimal? Cost { get; set; }
+
     public int? SupplierOrderId { get; set; }
 
     public virtual SupplierOrder? SupplierOrder { get; set; }

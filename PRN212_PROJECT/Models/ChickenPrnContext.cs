@@ -7,7 +7,7 @@ namespace PRN212_PROJECT.Models;
 
 public partial class ChickenPrnContext : DbContext
 {
-    public static ChickenPrnContext Ins = new ChickenPrnContext();
+    public static ChickenPrnContext Ins=new ChickenPrnContext();
     public ChickenPrnContext()
     {
         if (Ins == null)
@@ -110,15 +110,17 @@ public partial class ChickenPrnContext : DbContext
 
         modelBuilder.Entity<Expenditure>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Expendit__3214EC0794A8E3A5");
+            entity.HasKey(e => e.Id).HasName("PK__Expendit__3214EC076AB677CC");
 
             entity.ToTable("Expenditure");
 
+            entity.Property(e => e.Cost).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Executor).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(100);
 
             entity.HasOne(d => d.SupplierOrder).WithMany(p => p.Expenditures)
                 .HasForeignKey(d => d.SupplierOrderId)
-                .HasConstraintName("FK__Expenditu__Suppl__6477ECF3");
+                .HasConstraintName("FK__Expenditu__Suppl__6FE99F9F");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
