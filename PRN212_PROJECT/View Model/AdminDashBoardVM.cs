@@ -3,9 +3,8 @@ using PRN212_PROJECT.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics; 
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,7 +20,77 @@ namespace PRN212_PROJECT.View_Model
 
     public class AdminDashBoardVM : BaseViewModel
     {
-        // Properties cho Header
+        private List<string> _permissions;
+
+        public List<string> Permissions
+        {
+            get => _permissions;
+            set
+            {
+                _permissions = value;
+                OnPropertyChanged();
+                
+                InitializeHasPermission();
+                OnPropertyChanged(nameof(HasPermission));
+            }
+        }
+
+        private Dictionary<string, bool> _hasPermission;
+        public Dictionary<string, bool> HasPermission
+        {
+            get => _hasPermission;
+            private set
+            {
+                _hasPermission = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void InitializeHasPermission()
+        {
+            _hasPermission = new Dictionary<string, bool>();
+            try
+            {
+                
+                var permissionsToCheck = ChickenPrnContext.Ins?.Permissions?.Select(x => x.PermissionName).ToList() ?? new List<string>();
+
+                if (!permissionsToCheck.Any())
+                {
+                    Debug.WriteLine("Không tìm thấy permissions trong ChickenPrnContext.Ins.Permissions.");
+                }
+                else
+                {
+                    Debug.WriteLine("Permissions từ ChickenPrnContext: " + string.Join(", ", permissionsToCheck));
+                }
+
+                
+
+                foreach (var permission in permissionsToCheck)
+                {
+                    try
+                    {
+                        bool hasPermission = false;
+                        if (permissionsToCheck.Contains(permission))
+                        {
+                            hasPermission = AccountLogin.HasPermission(permission);
+                        }
+                        _hasPermission[permission] = hasPermission;
+                        Debug.WriteLine($"Permission {permission}: {hasPermission}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Lỗi khi kiểm tra permission {permission}: {ex.Message}");
+                        _hasPermission[permission] = false; // Nếu có lỗi, mặc định là false
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Lỗi khi load permissions: {ex.Message}");
+                
+            }
+        }
+
         private string _adminName;
         public string AdminName
         {
@@ -34,14 +103,15 @@ namespace PRN212_PROJECT.View_Model
         }
 
         public ICommand LogoutCommand { get; }
-
-        // Properties và Commands cho Quick Access Panel
         public ICommand GoOrderCommand { get; }
         public ICommand GoCategoryCommand { get; }
         public ICommand GoRevenueCommand { get; }
         public ICommand GoStaffCommand { get; }
+        public ICommand GoRoleManagementCommand { get; }
+        public ICommand GoFeedbackManagementCommand { get; }
+        public ICommand GoImportGoodsCommand { get; }
+        public ICommand GoCreateOrderCommand { get; }
 
-        // Properties cho Top 5 món ăn bán chạy
         private ObservableCollection<TopFoodItem> _topSellingFoods;
         public ObservableCollection<TopFoodItem> TopSellingFoods
         {
@@ -53,13 +123,13 @@ namespace PRN212_PROJECT.View_Model
             }
         }
 
-        // Properties cho Dashboard/Stats
         private int _todayOrders;
         private string _todayOrdersPercentage;
         private string _revenue;
         private string _revenuePercentage;
         private TopFoodItem _topSellingFood;
         private ObservableCollection<OrderTable> _recentOrders;
+        private ObservableCollection<Feedback> _recentFeeBacks;
 
         public int TodayOrders
         {
@@ -120,6 +190,14 @@ namespace PRN212_PROJECT.View_Model
                 OnPropertyChanged();
             }
         }
+        public ObservableCollection<Feedback> RecentFeedBack { 
+            get => _recentFeeBacks;
+            set
+            {
+                _recentFeeBacks = value;
+                OnPropertyChanged();
+            }
+        }
 
         public AdminDashBoardVM()
         {
@@ -129,22 +207,35 @@ namespace PRN212_PROJECT.View_Model
                 return;
             }
 
-            // Khởi tạo dữ liệu cho Header
-            AdminName = "Admin";
+            if (AccountLogin.Permissions == null)
+            {
+                MessageBox.Show("AccountLogin.Permissions is null!");
+                Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
+                new Login().Show();
+                return;
+            }
 
-            // Khởi tạo dữ liệu cho Top 5 món ăn bán chạy
+            
+
+            AdminName = AccountLogin.full_name;
+
+            // Khởi tạo HasPermission ngay trong constructor
+            InitializeHasPermission();
+
             LoadTopSellingFoods();
-
-            // Khởi tạo dữ liệu cho Dashboard/Stats
             LoadStats();
             LoadRecentOrders();
+            LoadRecentFeedBack();
 
-            // Khởi tạo Commands
             LogoutCommand = new RelayCommand(ExecuteLogout);
             GoOrderCommand = new RelayCommand(ExecuteGoOrder);
             GoCategoryCommand = new RelayCommand(ExecuteGoCategory);
             GoRevenueCommand = new RelayCommand(ExecuteGoRevenue);
             GoStaffCommand = new RelayCommand(ExecuteGoStaff);
+            GoRoleManagementCommand = new RelayCommand(ExecuteGoRoleManagement);
+            GoFeedbackManagementCommand = new RelayCommand(ExecuteGoFeedbackManagement);
+            GoImportGoodsCommand = new RelayCommand(ExecuteGoImportGoods);
+            GoCreateOrderCommand = new RelayCommand(ExecuteGoCreateOrder);
         }
 
         private void LoadTopSellingFoods()
@@ -178,13 +269,10 @@ namespace PRN212_PROJECT.View_Model
 
                 TopSellingFoods = topFoods.Any()
                     ? new ObservableCollection<TopFoodItem>(topFoods)
-                    : new ObservableCollection<TopFoodItem> { new TopFoodItem
+                    : new ObservableCollection<TopFoodItem>
                     {
-                        FoodId = 0,
-                        FoodName = "Không có dữ liệu",
-                        TypeName = "N/A",
-                        OrderCount = 0
-                    }};
+                        new TopFoodItem { FoodId = 0, FoodName = "Không có dữ liệu", TypeName = "N/A", OrderCount = 0 }
+                    };
             }
             catch (Exception ex)
             {
@@ -197,12 +285,10 @@ namespace PRN212_PROJECT.View_Model
         {
             try
             {
-                // Đơn hôm nay
                 var today = DateTime.Today;
                 TodayOrders = ChickenPrnContext.Ins.OrderTables
                     .Count(o => o.Date.HasValue && o.Date.Value.Date == today);
 
-                // Phần trăm so với hôm qua
                 var yesterday = today.AddDays(-1);
                 var yesterdayOrders = ChickenPrnContext.Ins.OrderTables
                     .Count(o => o.Date.HasValue && o.Date.Value.Date == yesterday);
@@ -210,21 +296,18 @@ namespace PRN212_PROJECT.View_Model
                     ? $"{((TodayOrders - yesterdayOrders) * 100.0 / yesterdayOrders):F0}% so với HQ"
                     : "N/A";
 
-                // Doanh thu hôm nay
                 var todayRevenue = ChickenPrnContext.Ins.OrderTables
                     .Where(o => o.Date.HasValue && o.Date.Value.Date == today)
-                    .Sum(o => o.Total);
+                    .Sum(o => o.Total ?? 0);
                 Revenue = $"{todayRevenue / 1000000:F1}M";
 
-                // Phần trăm doanh thu so với hôm qua
                 var yesterdayRevenue = ChickenPrnContext.Ins.OrderTables
                     .Where(o => o.Date.HasValue && o.Date.Value.Date == yesterday)
-                    .Sum(o => o.Total);
+                    .Sum(o => o.Total ?? 0);
                 RevenuePercentage = yesterdayRevenue > 0
                     ? $"{((todayRevenue - yesterdayRevenue) * 100.0 / yesterdayRevenue):F0}% so với HQ"
                     : "N/A";
 
-                // Top 5 món bán chạy
                 var topSelling = ChickenPrnContext.Ins.OrderTables
                     .Join(ChickenPrnContext.Ins.OrderDetailFoods,
                           ot => ot.OrderId,
@@ -247,8 +330,7 @@ namespace PRN212_PROJECT.View_Model
                         OrderCount = g.Count()
                     })
                     .OrderByDescending(x => x.OrderCount)
-                    .Take(1).FirstOrDefault();
-                    ;
+                    .FirstOrDefault();
 
                 TopSellingFood = topSelling ?? new TopFoodItem
                 {
@@ -265,13 +347,7 @@ namespace PRN212_PROJECT.View_Model
                 TodayOrdersPercentage = "N/A";
                 Revenue = "0M";
                 RevenuePercentage = "N/A";
-                TopSellingFood = new TopFoodItem
-                {
-                    FoodId = 0,
-                    FoodName = "Không có dữ liệu",
-                    TypeName = "N/A",
-                    OrderCount = 0
-                };
+                TopSellingFood = new TopFoodItem { FoodId = 0, FoodName = "Không có dữ liệu", TypeName = "N/A", OrderCount = 0 };
             }
         }
 
@@ -291,9 +367,26 @@ namespace PRN212_PROJECT.View_Model
                 RecentOrders = new ObservableCollection<OrderTable>();
             }
         }
+        private void LoadRecentFeedBack()
+        {
+            try
+            {
+                RecentFeedBack = new ObservableCollection<Feedback>(
+                    ChickenPrnContext.Ins.Feedbacks
+                        .OrderByDescending(o => o.TimeFeedback)
+                        .Take(5)
+                        .ToList());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi load đơn hàng gần đây: {ex.Message}");
+                RecentFeedBack = new ObservableCollection<Feedback>();
+            }
+        }
 
         private void ExecuteLogout(object parameter)
         {
+            AccountLogin.Clear();
             Login loginWindow = new Login();
             loginWindow.Show();
             Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
@@ -310,7 +403,7 @@ namespace PRN212_PROJECT.View_Model
         {
             ManageFood manageFood = new ManageFood();
             manageFood.Show();
-            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault().Close();
+            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
         }
 
         private void ExecuteGoRevenue(object parameter)
@@ -323,6 +416,32 @@ namespace PRN212_PROJECT.View_Model
         private void ExecuteGoStaff(object parameter)
         {
             MessageBox.Show("Chức năng Nhân viên chưa được triển khai.");
+        }
+
+        private void ExecuteGoRoleManagement(object parameter)
+        {
+            RoleManagement fb = new RoleManagement();
+            fb.Show();
+            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
+        }
+
+        private void ExecuteGoFeedbackManagement(object parameter)
+        {
+            FeedbackList fb = new FeedbackList();
+            fb.Show();
+            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
+        }
+
+        private void ExecuteGoImportGoods(object parameter)
+        {
+            MessageBox.Show("Admin đang làm");
+        }
+
+        private void ExecuteGoCreateOrder(object parameter)
+        {
+            OrderedFood fb = new OrderedFood();
+            fb.Show();
+            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
         }
     }
 

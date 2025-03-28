@@ -1,4 +1,5 @@
-﻿using PRN212_PROJECT.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PRN212_PROJECT.Models;
 using PRN212_PROJECT.View;
 using System;
 using System.Windows;
@@ -6,12 +7,48 @@ using System.Windows.Input;
 
 namespace PRN212_PROJECT.View_Model
 {
+    public class AccountLogin()
+    {
+        public static int account_id {  get; set; }
+        public static string full_name { get; set; }
+        public static int role_id { get; set; }
+        public static string username { get; set; }
+        public static List<string> Permissions { get; set; } = new List<string>();
+
+        public static void Clear()
+        {
+            account_id = 0;
+            full_name = string.Empty;
+            role_id = 0;
+            username = string.Empty;
+            Permissions.Clear();
+        }
+        public static bool HasPermission(string permission)
+        {
+            
+            return Permissions.Contains(permission);
+        }
+        public static List<string> GetPermissionsByUsername(string username)
+        {
+            var user = ChickenPrnContext.Ins.Accounts
+                .Include(u => u.Role)           // Load Role của User
+                .ThenInclude(r => r.Permissions) // Load Permissions của Role
+                .FirstOrDefault(u => u.Username == username);
+
+            if (user == null || user.Role == null)
+                return new List<string>();
+
+            return user.Role.Permissions.Select(p => p.PermissionName).ToList();
+        }
+
+    }
+
     public class LoginVM : BaseViewModel
     {
         private string _email;
         private string _password;
         public static Account Account { get; private set; }
-
+        
         public string Email
         {
             get => _email;
@@ -53,9 +90,14 @@ namespace PRN212_PROJECT.View_Model
                 var account = ChickenPrnContext.Ins.Accounts
                     .Where(x => x.Username == _vm.Email && x.Password == _vm.Password)
                     .FirstOrDefault();
-
+                
                 if (account != null)
                 {
+                    AccountLogin.account_id = account.AccountId;
+                    AccountLogin.full_name = account.Fullname;
+                    AccountLogin.role_id = account.RoleId ?? 0;
+                    AccountLogin.username = account.Username;
+                    AccountLogin.Permissions = GetPermissionsByUsername(account.Username);
                     MessageBox.Show("Login Successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     Window dashboard = null;
@@ -72,7 +114,7 @@ namespace PRN212_PROJECT.View_Model
                             dashboard = new Cooker();
                             break;
                         case 4:
-                            dashboard = new CustomerOrderScreen();
+                            dashboard = new FeedBackOderder();
                             break;
                         default:
                             MessageBox.Show("Unknown Role", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -91,6 +133,15 @@ namespace PRN212_PROJECT.View_Model
                 {
                     MessageBox.Show("Invalid Email or Password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+            private List<string> GetPermissionsByUsername(string username)
+            {
+                var user = ChickenPrnContext.Ins.Accounts
+                    .Include(u => u.Role)
+                    .ThenInclude(r => r.Permissions)
+                    .FirstOrDefault(u => u.Username == username);
+
+                return user?.Role?.Permissions.Select(p => p.PermissionName).ToList() ?? new List<string>();
             }
 
 

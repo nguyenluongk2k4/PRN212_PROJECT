@@ -15,15 +15,14 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for AdminDashBoard.xaml
+    /// Interaction logic for FeedBackOderder.xaml
     /// </summary>
-    public partial class AdminDashBoard : Window
+    public partial class FeedBackOderder : Window
     {
-        public AdminDashBoard()
+        public FeedBackOderder()
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.AdminDashBoardVM();
-            
+            DataContext = new PRN212_PROJECT.View_Model.FeedBackVM();
         }
     }
 }

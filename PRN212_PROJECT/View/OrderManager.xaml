@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="Order" Height="1080" Width="1920">
     <Grid>
         <Grid.ColumnDefinitions>

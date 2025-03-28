@@ -17,4 +17,5 @@
     <ViewModel:ManageSupplierVM x:Key="ManageSupplierVM"/>
     <ViewModel:ImportIngredientExcelVM x:Key="ImportExcelVM"/>
     <ViewModel:ImportIngredientVM x:Key="ImportIngredientVM"/>
+    <ViewModel:FeedBackVM x:Key="FeedBackVM"/>
 </ResourceDictionary>

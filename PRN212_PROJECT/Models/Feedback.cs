@@ -10,4 +10,6 @@ public partial class Feedback
     public int? Rate { get; set; }
 
     public string? Content { get; set; }
+
+    public DateTime? TimeFeedback { get; set; }
 }

@@ -15,15 +15,14 @@ using System.Windows.Shapes;
 namespace PRN212_PROJECT.View
 {
     /// <summary>
-    /// Interaction logic for AdminDashBoard.xaml
+    /// Interaction logic for FeedbackForm.xaml
     /// </summary>
-    public partial class AdminDashBoard : Window
+    public partial class FeedbackForm : Window
     {
-        public AdminDashBoard()
+        public FeedbackForm()
         {
             InitializeComponent();
-            DataContext = new PRN212_PROJECT.View_Model.AdminDashBoardVM();
-            
+            DataContext = new PRN212_PROJECT.View_Model.FeedBackVM();
         }
     }
 }

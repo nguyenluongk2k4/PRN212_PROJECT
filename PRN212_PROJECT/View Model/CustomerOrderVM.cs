@@ -154,6 +154,8 @@ namespace PRN212_PROJECT.View_Model
         public RelayCommand ConfirmOrderCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
 
+        
+
         public CustomerOrderVM()
         {
             if (ChickenPrnContext.Ins == null)
