@@ -25,5 +25,12 @@ namespace PRN212_PROJECT.View
             InitializeComponent();
             DataContext = new CustomerOrderVM();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            FeedBackOderder feedBackOderder= new FeedBackOderder();
+            feedBackOderder.Show();
+            this.Close();
+        }
     }
 }
