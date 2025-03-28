@@ -407,7 +407,7 @@ namespace PRN212_PROJECT.View_Model
 
         private void LoadFoodList()
         {
-            var listFood = ChickenPrnContext.Ins.Foods.Include(f => f.FoodTypeNavigation).ToList();
+            var listFood = ChickenPrnContext.Ins.Foods.Include(f => f.FoodTypeNavigation).Where(x=>x.Status==1).ToList();
             if (SelectedType != null)
                 listFood = listFood.Where(f => f.FoodTypeNavigation?.TypeId == SelectedType.TypeId).ToList();
             FoodItems = new ObservableCollection<Food>(listFood);
@@ -417,7 +417,7 @@ namespace PRN212_PROJECT.View_Model
         private void LoadCombos()
         {
             Combos = new ObservableCollection<Combo>(ChickenPrnContext.Ins.Combos
-                .Include(c => c.ComboDetails).ThenInclude(cd => cd.Food).ToList());
+                .Include(c => c.ComboDetails).ThenInclude(cd => cd.Food).Where(x=>x.Status==1).ToList());
         }
 
         private void UpdateDisplayItems()

@@ -275,7 +275,7 @@ namespace PRN212_PROJECT.View_Model
 
         public void loadFoodType4()
         {
-            _foodListType4 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 4));
+            _foodListType4 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 4 &&x.Status==1));
         }
 
         public void loadNameType4()
@@ -285,7 +285,7 @@ namespace PRN212_PROJECT.View_Model
             
         }public void loadFoodType1()
         {
-            _foodListType1 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 1));
+            _foodListType1 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 1 && x.Status == 1));
         }
 
         public void loadNameType1()
@@ -295,7 +295,7 @@ namespace PRN212_PROJECT.View_Model
             
         }public void loadFoodType3()
         {
-            _foodListType3 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 3));
+            _foodListType3 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 3 && x.Status == 1));
         }
 
         public void loadNameType3()
@@ -305,7 +305,7 @@ namespace PRN212_PROJECT.View_Model
             
         }public void loadFoodType6()
         {
-            _foodListType6 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 6));
+            _foodListType6 = new ObservableCollection<Food>(ChickenPrnContext.Ins.Foods.Where(x=> x.FoodType == 6 && x.Status == 1));
         }
 
         public void loadNameType6()

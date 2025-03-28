@@ -279,7 +279,23 @@ namespace PRN212_PROJECT.View_Model
                 return null; // For null values
             }
         }
+    public class IndexToLabelConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int index && parameter is string[] labels && index >= 0 && index < labels.Length)
+            {
+                return labels[index];
+            }
+            return "Unknown";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
+}
 
 
 

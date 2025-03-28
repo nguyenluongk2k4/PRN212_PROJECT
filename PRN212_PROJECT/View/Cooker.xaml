@@ -48,6 +48,14 @@
                         <TextBlock Text="Làm mới"/>
                     </StackPanel>
                 </Button>
+                <Button x:Name="btnBack" 
+Style="{StaticResource MaterialDesignIconButton}"
+Foreground="White"
+ToolTip="Quay lại"
+Margin="0,0,16,0"
+ Click="btnBack_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
+                </Button>
             </StackPanel>
         </Grid>
 

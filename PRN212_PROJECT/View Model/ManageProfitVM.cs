@@ -11,7 +11,6 @@ using System.Windows.Input;
 
 namespace PRN212_PROJECT.View_Model
 {
-    // Models for filter options
     public class PeriodOption
     {
         public string DisplayName { get; set; }
@@ -36,47 +35,13 @@ namespace PRN212_PROJECT.View_Model
         private string _monthlyGrowthRate;
         private string _monthlyProfitMargin;
 
-        public string TodayRevenue
-        {
-            get => _todayRevenue;
-            set { _todayRevenue = value; OnPropertyChanged(); }
-        }
-
-        public string TodayRevenuePercentage
-        {
-            get => _todayRevenuePercentage;
-            set { _todayRevenuePercentage = value; OnPropertyChanged(); }
-        }
-
-        public string ThisWeekRevenue
-        {
-            get => _thisWeekRevenue;
-            set { _thisWeekRevenue = value; OnPropertyChanged(); }
-        }
-
-        public string ThisWeekRevenuePercentage
-        {
-            get => _thisWeekRevenuePercentage;
-            set { _thisWeekRevenuePercentage = value; OnPropertyChanged(); }
-        }
-
-        public string IncomeOutcomeRatio
-        {
-            get => _incomeOutcomeRatio;
-            set { _incomeOutcomeRatio = value; OnPropertyChanged(); }
-        }
-
-        public string MonthlyGrowthRate
-        {
-            get => _monthlyGrowthRate;
-            set { _monthlyGrowthRate = value; OnPropertyChanged(); }
-        }
-
-        public string MonthlyProfitMargin
-        {
-            get => _monthlyProfitMargin;
-            set { _monthlyProfitMargin = value; OnPropertyChanged(); }
-        }
+        public string TodayRevenue { get => _todayRevenue; set { _todayRevenue = value; OnPropertyChanged(); } }
+        public string TodayRevenuePercentage { get => _todayRevenuePercentage; set { _todayRevenuePercentage = value; OnPropertyChanged(); } }
+        public string ThisWeekRevenue { get => _thisWeekRevenue; set { _thisWeekRevenue = value; OnPropertyChanged(); } }
+        public string ThisWeekRevenuePercentage { get => _thisWeekRevenuePercentage; set { _thisWeekRevenuePercentage = value; OnPropertyChanged(); } }
+        public string IncomeOutcomeRatio { get => _incomeOutcomeRatio; set { _incomeOutcomeRatio = value; OnPropertyChanged(); } }
+        public string MonthlyGrowthRate { get => _monthlyGrowthRate; set { _monthlyGrowthRate = value; OnPropertyChanged(); } }
+        public string MonthlyProfitMargin { get => _monthlyProfitMargin; set { _monthlyProfitMargin = value; OnPropertyChanged(); } }
         #endregion
 
         #region Filter Properties
@@ -85,38 +50,17 @@ namespace PRN212_PROJECT.View_Model
         private ObservableCollection<TimeOption> _timeOptions;
         private TimeOption _selectedTimeOption;
 
-        public ObservableCollection<PeriodOption> PeriodOptions
-        {
-            get => _periodOptions;
-            set { _periodOptions = value; OnPropertyChanged(); }
-        }
-
+        public ObservableCollection<PeriodOption> PeriodOptions { get => _periodOptions; set { _periodOptions = value; OnPropertyChanged(); } }
         public PeriodOption SelectedPeriod
         {
             get => _selectedPeriod;
-            set
-            {
-                _selectedPeriod = value;
-                OnPropertyChanged();
-                UpdateTimeOptions();
-            }
+            set { _selectedPeriod = value; OnPropertyChanged(); UpdateTimeOptions(); }
         }
-
-        public ObservableCollection<TimeOption> TimeOptions
-        {
-            get => _timeOptions;
-            set { _timeOptions = value; OnPropertyChanged(); }
-        }
-
+        public ObservableCollection<TimeOption> TimeOptions { get => _timeOptions; set { _timeOptions = value; OnPropertyChanged(); } }
         public TimeOption SelectedTimeOption
         {
             get => _selectedTimeOption;
-            set
-            {
-                _selectedTimeOption = value;
-                OnPropertyChanged();
-                LoadChartData();
-            }
+            set { _selectedTimeOption = value; OnPropertyChanged(); LoadChartData(); }
         }
         #endregion
 
@@ -127,35 +71,11 @@ namespace PRN212_PROJECT.View_Model
         private bool _isExpenditureVisible;
         private bool _isFoodComboOrdersVisible;
 
-        public bool IsGrossProfitVisible
-        {
-            get => _isGrossProfitVisible;
-            set { UpdateChartVisibility(nameof(IsGrossProfitVisible), value); OnPropertyChanged(); }
-        }
-
-        public bool IsRevenueVisible
-        {
-            get => _isRevenueVisible;
-            set { UpdateChartVisibility(nameof(IsRevenueVisible), value); OnPropertyChanged(); }
-        }
-
-        public bool IsOrderCountVisible
-        {
-            get => _isOrderCountVisible;
-            set { UpdateChartVisibility(nameof(IsOrderCountVisible), value); OnPropertyChanged(); }
-        }
-
-        public bool IsExpenditureVisible
-        {
-            get => _isExpenditureVisible;
-            set { UpdateChartVisibility(nameof(IsExpenditureVisible), value); OnPropertyChanged(); }
-        }
-
-        public bool IsFoodComboOrdersVisible
-        {
-            get => _isFoodComboOrdersVisible;
-            set { UpdateChartVisibility(nameof(IsFoodComboOrdersVisible), value); OnPropertyChanged(); }
-        }
+        public bool IsGrossProfitVisible { get => _isGrossProfitVisible; set { UpdateChartVisibility(nameof(IsGrossProfitVisible), value); OnPropertyChanged(); } }
+        public bool IsRevenueVisible { get => _isRevenueVisible; set { UpdateChartVisibility(nameof(IsRevenueVisible), value); OnPropertyChanged(); } }
+        public bool IsOrderCountVisible { get => _isOrderCountVisible; set { UpdateChartVisibility(nameof(IsOrderCountVisible), value); OnPropertyChanged(); } }
+        public bool IsExpenditureVisible { get => _isExpenditureVisible; set { UpdateChartVisibility(nameof(IsExpenditureVisible), value); OnPropertyChanged(); } }
+        public bool IsFoodComboOrdersVisible { get => _isFoodComboOrdersVisible; set { UpdateChartVisibility(nameof(IsFoodComboOrdersVisible), value); OnPropertyChanged(); } }
         #endregion
 
         #region Chart Data Properties
@@ -169,59 +89,15 @@ namespace PRN212_PROJECT.View_Model
         private Func<double, string> _formatter;
         private Func<double, string> _orderCountFormatter;
 
-        public ChartValues<double> GrossProfitValues
-        {
-            get => _grossProfitValues ??= new ChartValues<double>();
-            set { _grossProfitValues = value; OnPropertyChanged(); }
-        }
-
-        public ChartValues<double> RevenueValues
-        {
-            get => _revenueValues ??= new ChartValues<double>();
-            set { _revenueValues = value; OnPropertyChanged(); }
-        }
-
-        public ChartValues<double> OrderCountValues
-        {
-            get => _orderCountValues ??= new ChartValues<double>();
-            set { _orderCountValues = value; OnPropertyChanged(); }
-        }
-
-        public ChartValues<double> ExpenditureValues
-        {
-            get => _expenditureValues ??= new ChartValues<double>();
-            set { _expenditureValues = value; OnPropertyChanged(); }
-        }
-
-        public ChartValues<double> FoodComboOrderValues
-        {
-            get => _foodComboOrderValues ??= new ChartValues<double>();
-            set { _foodComboOrderValues = value; OnPropertyChanged(); }
-        }
-
-        public string[] Labels
-        {
-            get => _labels;
-            set { _labels = value; OnPropertyChanged(); }
-        }
-
-        public string[] FoodComboLabels
-        {
-            get => _foodComboLabels;
-            set { _foodComboLabels = value; OnPropertyChanged(); }
-        }
-
-        public Func<double, string> Formatter
-        {
-            get => _formatter;
-            set { _formatter = value; OnPropertyChanged(); }
-        }
-
-        public Func<double, string> OrderCountFormatter
-        {
-            get => _orderCountFormatter;
-            set { _orderCountFormatter = value; OnPropertyChanged(); }
-        }
+        public ChartValues<double> GrossProfitValues { get => _grossProfitValues ??= new ChartValues<double>(); set { _grossProfitValues = value; OnPropertyChanged(); } }
+        public ChartValues<double> RevenueValues { get => _revenueValues ??= new ChartValues<double>(); set { _revenueValues = value; OnPropertyChanged(); } }
+        public ChartValues<double> OrderCountValues { get => _orderCountValues ??= new ChartValues<double>(); set { _orderCountValues = value; OnPropertyChanged(); } }
+        public ChartValues<double> ExpenditureValues { get => _expenditureValues ??= new ChartValues<double>(); set { _expenditureValues = value; OnPropertyChanged(); } }
+        public ChartValues<double> FoodComboOrderValues { get => _foodComboOrderValues ??= new ChartValues<double>(); set { _foodComboOrderValues = value; OnPropertyChanged(); } }
+        public string[] Labels { get => _labels; set { _labels = value; OnPropertyChanged(); } }
+        public string[] FoodComboLabels { get => _foodComboLabels; set { _foodComboLabels = value; OnPropertyChanged(); } }
+        public Func<double, string> Formatter { get => _formatter; set { _formatter = value; OnPropertyChanged(); } }
+        public Func<double, string> OrderCountFormatter { get => _orderCountFormatter; set { _orderCountFormatter = value; OnPropertyChanged(); } }
         #endregion
 
         #region Commands
@@ -242,7 +118,6 @@ namespace PRN212_PROJECT.View_Model
                 return;
             }
 
-            // Initialize Period Options
             PeriodOptions = new ObservableCollection<PeriodOption>
             {
                 new PeriodOption { DisplayName = "Theo ngày", Value = "Day" },
@@ -251,11 +126,9 @@ namespace PRN212_PROJECT.View_Model
             };
             SelectedPeriod = PeriodOptions.First();
 
-            // Initialize Chart Formatters
             Formatter = value => $"{value:F1}M";
             OrderCountFormatter = value => $"{value:N0}";
 
-            // Initialize Commands
             BackCommand = new RelayCommand(ExecuteBack);
             ToggleGrossProfitCommand = new RelayCommand(ExecuteToggleGrossProfit);
             ToggleRevenueCommand = new RelayCommand(ExecuteToggleRevenue);
@@ -263,14 +136,12 @@ namespace PRN212_PROJECT.View_Model
             ToggleExpenditureCommand = new RelayCommand(ExecuteToggleExpenditure);
             ToggleFoodComboOrdersCommand = new RelayCommand(ExecuteToggleFoodComboOrders);
 
-            // Set Initial Visibility
             IsGrossProfitVisible = true;
             IsRevenueVisible = false;
             IsOrderCountVisible = false;
             IsExpenditureVisible = false;
             IsFoodComboOrdersVisible = false;
 
-            // Load Initial Data
             LoadProfitStats();
             UpdateTimeOptions();
             LoadFoodComboOrderData();
@@ -280,8 +151,7 @@ namespace PRN212_PROJECT.View_Model
         #region Command Handlers
         private void ExecuteBack(object parameter)
         {
-            AdminDashBoard adminDashBoard = new AdminDashBoard();
-            adminDashBoard.Show();
+            new AdminDashBoard().Show();
             Application.Current.Windows.OfType<ManageProfit>().FirstOrDefault()?.Close();
         }
 
@@ -341,7 +211,6 @@ namespace PRN212_PROJECT.View_Model
                 var today = DateOnly.FromDateTime(DateTime.Today);
                 var yesterday = today.AddDays(-1);
 
-                // Today Revenue
                 var todayRevenue = ChickenPrnContext.Ins.OrderTables
                     .Where(o => o.Date.HasValue && o.Date.Value == today.ToDateTime(TimeOnly.MinValue))
                     .Sum(o => o.Total) ?? 0;
@@ -353,7 +222,6 @@ namespace PRN212_PROJECT.View_Model
                     ? $"{((todayRevenue - yesterdayRevenue) * 100.0 / yesterdayRevenue):F0}% so với hôm qua"
                     : "N/A";
 
-                // This Week Revenue
                 var startOfThisWeek = today.AddDays(-6);
                 var thisWeekRevenue = ChickenPrnContext.Ins.OrderTables
                     .Where(o => o.Date.HasValue && o.Date.Value >= startOfThisWeek.ToDateTime(TimeOnly.MinValue) && o.Date.Value <= today.ToDateTime(TimeOnly.MinValue))
@@ -368,7 +236,6 @@ namespace PRN212_PROJECT.View_Model
                     ? $"{((thisWeekRevenue - lastWeekRevenue) * 100.0 / lastWeekRevenue):F0}% so với tuần trước"
                     : "N/A";
 
-                // Income/Outcome Ratio (Monthly)
                 var startOfThisMonth = new DateOnly(today.Year, today.Month, 1);
                 var thisMonthRevenue = ChickenPrnContext.Ins.OrderTables
                     .Where(o => o.Date.HasValue && o.Date.Value >= startOfThisMonth.ToDateTime(TimeOnly.MinValue) && o.Date.Value <= today.ToDateTime(TimeOnly.MinValue))
@@ -380,7 +247,6 @@ namespace PRN212_PROJECT.View_Model
                     ? $"{(thisMonthRevenue / (double)thisMonthExpenditure):F2} : 1"
                     : "N/A";
 
-                // Monthly Growth Rate
                 var thisMonthRevenueForGrowth = thisMonthRevenue;
                 var startOfLastMonth = startOfThisMonth.AddMonths(-1);
                 var endOfLastMonth = startOfLastMonth.AddMonths(1).AddDays(-1);
@@ -391,7 +257,6 @@ namespace PRN212_PROJECT.View_Model
                     ? $"{((thisMonthRevenueForGrowth - lastMonthRevenue) * 100.0 / lastMonthRevenue):F1}%"
                     : "N/A";
 
-                // Monthly Profit Margin
                 var thisMonthProfit = thisMonthRevenue - (double)thisMonthExpenditure;
                 MonthlyProfitMargin = thisMonthRevenue > 0
                     ? $"{(thisMonthProfit * 100.0 / thisMonthRevenue):F1}%"
@@ -491,20 +356,14 @@ namespace PRN212_PROJECT.View_Model
                 var expenditures = ChickenPrnContext.Ins.Expenditures
                     .Where(e => e.Date.HasValue)
                     .AsEnumerable()
-                    .Select(e => new
-                    {
-                        e.Cost,
-                        Date = IsValidDateOnly(e.Date.Value) ? e.Date.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null
-                    })
+                    .Select(e => new { e.Cost, Date = IsValidDateOnly(e.Date.Value) ? e.Date.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null })
                     .Where(e => e.Date.HasValue)
                     .ToList();
 
                 switch (SelectedPeriod?.Value)
                 {
                     case "Day":
-                        Labels = Enumerable.Range(0, 24)
-                            .Select(h => $"{startDate:dd/MM/yyyy} {h}h")
-                            .ToArray();
+                        Labels = Enumerable.Range(0, 24).Select(h => $"{startDate:dd/MM/yyyy} {h}h").ToArray();
                         for (int h = 0; h < 24; h++)
                         {
                             var hourStart = startDate.AddHours(h);
@@ -528,9 +387,7 @@ namespace PRN212_PROJECT.View_Model
 
                     case "Month":
                         var daysInMonth = DateTime.DaysInMonth(startDate.Year, startDate.Month);
-                        Labels = Enumerable.Range(1, daysInMonth)
-                            .Select(d => startDate.AddDays(d - 1).ToString("dd/MM/yyyy"))
-                            .ToArray();
+                        Labels = Enumerable.Range(1, daysInMonth).Select(d => startDate.AddDays(d - 1).ToString("dd/MM/yyyy")).ToArray();
                         for (int d = 1; d <= daysInMonth; d++)
                         {
                             var dayStart = startDate.AddDays(d - 1);
@@ -553,9 +410,7 @@ namespace PRN212_PROJECT.View_Model
                         break;
 
                     case "Year":
-                        Labels = Enumerable.Range(1, 12)
-                            .Select(m => new DateTime(startDate.Year, m, 1).ToString("MM/yyyy"))
-                            .ToArray();
+                        Labels = Enumerable.Range(1, 12).Select(m => new DateTime(startDate.Year, m, 1).ToString("MM/yyyy")).ToArray();
                         for (int m = 1; m <= 12; m++)
                         {
                             var monthStart = new DateTime(startDate.Year, m, 1);
@@ -602,6 +457,8 @@ namespace PRN212_PROJECT.View_Model
         {
             try
             {
+                const int TOP_N = 20; // Show top 20 items
+
                 var foodOrders = ChickenPrnContext.Ins.OrderDetailFoods
                     .GroupBy(odf => odf.FoodId)
                     .Select(g => new
@@ -610,7 +467,7 @@ namespace PRN212_PROJECT.View_Model
                             .Where(f => f.FoodId == g.Key)
                             .Select(f => f.FoodName)
                             .FirstOrDefault() ?? $"Food {g.Key}",
-                        Count = g.Sum(odf => odf.Amount ?? 0) // Changed from Quantity to Amount
+                        Count = g.Sum(odf => odf.Amount ?? 0)
                     })
                     .ToList();
 
@@ -622,17 +479,28 @@ namespace PRN212_PROJECT.View_Model
                             .Where(c => c.ComboId == g.Key)
                             .Select(c => c.ComboName)
                             .FirstOrDefault() ?? $"Combo {g.Key}",
-                        Count = g.Sum(odc => odc.Amount ?? 0) // Changed from Quantity to Amount
+                        Count = g.Sum(odc => odc.Amount ?? 0)
                     })
                     .ToList();
 
                 var allOrders = foodOrders.Concat(comboOrders)
-                    .OrderBy(x => x.Name)
+                    .OrderByDescending(x => x.Count) // Sort by count descending
                     .ToList();
 
+                // Take top N and aggregate the rest into "Others"
+                var topOrders = allOrders.Take(TOP_N).ToList();
+                var othersCount = allOrders.Skip(TOP_N).Sum(x => x.Count);
+
                 FoodComboOrderValues.Clear();
-                FoodComboOrderValues.AddRange(allOrders.Select(x => (double)x.Count));
-                FoodComboLabels = allOrders.Select(x => x.Name).ToArray();
+                FoodComboLabels = topOrders.Select(x => x.Name).ToArray();
+
+                if (othersCount > 0)
+                {
+                    topOrders.Add(new { Name = "Others", Count = othersCount });
+                    FoodComboLabels = topOrders.Select(x => x.Name).ToArray();
+                }
+
+                FoodComboOrderValues.AddRange(topOrders.Select(x => (double)x.Count));
 
                 if (FoodComboOrderValues.Count == 0)
                 {

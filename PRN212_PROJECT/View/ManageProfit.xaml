@@ -13,12 +13,11 @@
         Height="1080" 
         Width="1920">
 
-    <!-- Resources -->
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <vm:IndexToLabelConverter x:Key="IndexToLabelConverter"/>
     </Window.Resources>
 
-    <!-- Main Grid -->
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
@@ -34,7 +33,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
-                <materialDesign:PackIcon Kind="ChartLine" Width="40" Height="40" Foreground="White" Margin="0,0,16,0"/>
+                <materialDesign:PackIcon Kind="ChartBar" Width="40" Height="40" Foreground="White" Margin="0,0,16,0"/>
                 <TextBlock Text="QUẢN LÝ LỢI NHUẬN" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
             </StackPanel>
 
@@ -324,48 +323,83 @@
                             </Grid>
                         </materialDesign:Card>
 
-                        <!-- Food/Combo Orders Chart with Scrollbar -->
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
-                                    VerticalScrollBarVisibility="Disabled"
-                                    Visibility="{Binding IsFoodComboOrdersVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <materialDesign:Card Margin="0" Padding="16">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" 
-                                               Text="SỐ LƯỢNG ĐƠN HÀNG THEO THỨC ĂN/COMBO" 
-                                               FontSize="20" 
-                                               FontWeight="SemiBold" 
-                                               Margin="0,0,0,16"/>
-                                    <lvc:CartesianChart Grid.Row="1" 
-                                                        LegendLocation="Right" 
-                                                        MinWidth="800">
+                        <!-- Optimized Food/Combo Orders Chart -->
+                        <materialDesign:Card Margin="0" Padding="16"
+                                           Visibility="{Binding IsFoodComboOrdersVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" 
+                                           Text="TOP 20 ĐƠN HÀNG THỨC ĂN/COMBO" 
+                                           FontSize="20" 
+                                           FontWeight="SemiBold" 
+                                           Margin="0,0,0,16"/>
+                                <lvc:CartesianChart Grid.Row="1" 
+                                                    LegendLocation="None" 
+                                                    MinWidth="800"
+                                                    DataTooltip="{x:Null}">
+                                    <lvc:CartesianChart>
                                         <lvc:CartesianChart.Series>
-                                            <lvc:LineSeries Title="Số đơn" 
-                                                            Values="{Binding FoodComboOrderValues}" 
-                                                            Stroke="#8E24AA" 
-                                                            Fill="Transparent"
-                                                            PointGeometrySize="10"
-                                                            StrokeThickness="3"/>
+                                            <lvc:ColumnSeries Title="Số đơn" 
+                          Values="{Binding FoodComboOrderValues}" 
+                          Fill="#8E24AA"
+                          StrokeThickness="0"
+                          MaxColumnWidth="25" />
                                         </lvc:CartesianChart.Series>
+
+                                        <!-- Correct placement of DataTooltip -->
+                                        <lvc:CartesianChart.DataTooltip>
+                                            <lvc:DefaultTooltip Background="#AA8E24AA" Foreground="White">
+                                                <lvc:DefaultTooltip.ContentTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Series.Title}" FontWeight="Bold" />
+                                                            <TextBlock Text=": " />
+                                                            <TextBlock Text="{Binding Y, StringFormat={}{0:N0}}" />
+                                                            <TextBlock Text=" ("/>
+                                                            <TextBlock Text="{Binding X, Converter={StaticResource IndexToLabelConverter}, 
+                                                   ConverterParameter={Binding RelativeSource={RelativeSource 
+                                                   AncestorType={x:Type lvc:CartesianChart}}, 
+                                                   Path=DataContext.FoodComboLabels}}" />
+                                                            <TextBlock Text=")" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </lvc:DefaultTooltip.ContentTemplate>
+                                            </lvc:DefaultTooltip>
+                                        </lvc:CartesianChart.DataTooltip>
+
                                         <lvc:CartesianChart.AxisX>
                                             <lvc:Axis Labels="{Binding FoodComboLabels}" 
-                                                      LabelsRotation="45" 
-                                                      FontSize="12"
-                                                      Separator="{x:Static lvc:DefaultAxes.CleanSeparator}"/>
+                  LabelsRotation="45" 
+                  FontSize="12"
+                  Separator="{x:Static lvc:DefaultAxes.CleanSeparator}"/>
                                         </lvc:CartesianChart.AxisX>
+
                                         <lvc:CartesianChart.AxisY>
                                             <lvc:Axis Title="Số đơn" 
-                                                      LabelFormatter="{Binding OrderCountFormatter}" 
-                                                      FontSize="14"
-                                                      MinValue="0"/>
+                  LabelFormatter="{Binding OrderCountFormatter}" 
+                  FontSize="14"
+                  MinValue="0"/>
                                         </lvc:CartesianChart.AxisY>
                                     </lvc:CartesianChart>
-                                </Grid>
-                            </materialDesign:Card>
-                        </ScrollViewer>
+
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Labels="{Binding FoodComboLabels}" 
+                                                  LabelsRotation="45" 
+                                                  FontSize="12"
+                                                  Separator="{x:Static lvc:DefaultAxes.CleanSeparator}"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Số đơn" 
+                                                  LabelFormatter="{Binding OrderCountFormatter}" 
+                                                  FontSize="14"
+                                                  MinValue="0"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </materialDesign:Card>
                     </Grid>
                 </Grid>
             </Grid>
