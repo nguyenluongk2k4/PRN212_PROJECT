@@ -14,33 +14,38 @@
         <vm:WidthConverterForFourItems x:Key="WidthConverterForFourItems"/>
         <vm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <vm:TotalPriceConverter x:Key="TotalPriceConverter"/>
+        <vm:ImagePathConverter x:Key="ImagePathConverter"/>
 
         <!-- Data Template for Food -->
+        <!-- Data Template for Food with Image -->
         <DataTemplate x:Key="FoodTemplate">
             <Border Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource WidthConverterForFourItems}}"
-                    Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
+            Height="220" Margin="8" BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="8">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="120"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!-- Food Image Placeholder -->
-                    <Border Grid.Row="0" Background="#FFCCCC"/>
+                    <!-- Food Image -->
+                    <Border Grid.Row="0" Background="#FFCCCC">
+                        <Image Source="{Binding Image,Converter={StaticResource ImagePathConverter}}" Stretch="Fill"/>
+                    </Border>
                     <TextBlock Grid.Row="1" Text="{Binding FoodName, FallbackValue='Tên món không xác định'}" 
-                               Margin="8,8,8,0" FontWeight="Bold" FontSize="14"/>
+                       Margin="8,8,8,0" FontWeight="Bold" FontSize="14"/>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8" VerticalAlignment="Center">
                         <TextBlock Text="{Binding Price, StringFormat={}{0:N0}đ, FallbackValue='0đ'}" 
-                                   FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" FontSize="12"/>
+                           FontWeight="Bold" Foreground="Red" VerticalAlignment="Center" FontSize="12"/>
                         <Button Margin="8,0,0,0" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
-                                Background="Red" Command="{Binding DataContext.AddFoodToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}">
+                        Background="Red" Command="{Binding DataContext.AddFoodToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}">
                             <materialDesign:PackIcon Kind="Plus"/>
                         </Button>
                     </StackPanel>
                 </Grid>
             </Border>
         </DataTemplate>
+
 
         <!-- Data Template for Combo -->
         <DataTemplate x:Key="ComboTemplate">

@@ -27,5 +27,14 @@ namespace PRN212_PROJECT.View
             WindowState = WindowState.Maximized;
 
         }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+            AccountLogin.Clear();
+            this.Close();
+
+        }
     }
 }
