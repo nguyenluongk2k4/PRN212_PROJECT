@@ -11,5 +11,6 @@ public partial class Feedback
 
     public string? Content { get; set; }
 
+
     public DateTime? TimeFeedback { get; set; }
 }

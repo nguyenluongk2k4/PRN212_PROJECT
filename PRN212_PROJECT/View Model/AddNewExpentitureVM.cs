@@ -155,7 +155,8 @@ namespace PRN212_PROJECT.View_Model
                 {
                     Name = ExpentitureName,
                     Executor = ExecutorName,
-                    Cost = Amount
+                    Cost = Amount,
+                    Date = DateOnly.FromDateTime(DateTime.Today)
                 };
                 ChickenPrnContext.Ins.Expenditures.Add(newE);
                 ChickenPrnContext.Ins.SaveChanges();

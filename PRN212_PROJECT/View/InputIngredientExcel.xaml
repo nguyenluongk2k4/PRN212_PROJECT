@@ -86,6 +86,8 @@
                                 Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
                                 SelectedDate="{Binding DeliveryDate, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="0,0,0,16"/>
+                    <TextBox  Text="{Binding Payer ,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Người Thanh Toán"/>
+
 
                     <CheckBox Content="Đã Thanh Toán"
                               IsChecked="{Binding IsPaid, UpdateSourceTrigger=PropertyChanged}"

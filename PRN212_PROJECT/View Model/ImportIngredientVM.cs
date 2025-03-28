@@ -17,6 +17,8 @@ namespace PRN212_PROJECT.View_Model
         private string _supplierNameFilter;
         private DateOnly? _fromDateFilter;
         private DateOnly? _toDateFilter;
+        private SupplierOrder _selectedSupplierOrder;
+        private bool _showEditField;
 
         public ObservableCollection<SupplierOrder> SupplierOrders
         {
@@ -72,12 +74,33 @@ namespace PRN212_PROJECT.View_Model
             }
         }
 
+        public SupplierOrder SelectedSupplierOrder
+        {
+            get => _selectedSupplierOrder;
+            set
+            {
+                _selectedSupplierOrder = value;
+                OnPropertyChanged(nameof(SelectedSupplierOrder));
+                ShowEditField = CanShowEditField(); // Update visibility of edit fields
+            }
+        }
+
+        public bool ShowEditField
+        {
+            get => _showEditField;
+            set
+            {
+                _showEditField = value;
+                OnPropertyChanged(nameof(ShowEditField));
+            }
+        }
+
         public ICommand ExportOrderDetailData { get; set; }
         public ICommand ClearFilterCommand { get; set; }
+        public ICommand SaveChangesCommand { get; set; } // Added
 
         public ImportIngredientVM()
         {
-            // Ensure collections are initialized even if LoadSupplierOrder fails
             _supplierOrders = new ObservableCollection<SupplierOrder>();
             _filteredSupplierOrders = new ObservableCollection<SupplierOrder>();
 
@@ -85,6 +108,13 @@ namespace PRN212_PROJECT.View_Model
             LoadSupplierOrder();
             ExportOrderDetailData = new RelayCommand(ExportFile);
             ClearFilterCommand = new RelayCommand(ClearFilters);
+            SaveChangesCommand = new RelayCommand(SaveChanges); // Initialize the command
+        }
+
+        private bool CanShowEditField()
+        {
+            return SelectedSupplierOrder != null &&
+                   (SelectedSupplierOrder.DeliverDate == null || SelectedSupplierOrder.IsPaid == false);
         }
 
         private void LoadSupplierOrder()
@@ -95,7 +125,7 @@ namespace PRN212_PROJECT.View_Model
                     .Include(x => x.Supplier)
                     .OrderByDescending(o => o.Id)
                     .ToList();
-                SupplierOrders = new ObservableCollection<SupplierOrder>(orders); // This triggers ApplyFilters
+                SupplierOrders = new ObservableCollection<SupplierOrder>(orders);
             }
             catch (Exception ex)
             {
@@ -115,28 +145,24 @@ namespace PRN212_PROJECT.View_Model
 
             IEnumerable<SupplierOrder> filtered = SupplierOrders;
 
-            // Filter by Supplier Name
             if (!string.IsNullOrWhiteSpace(SupplierNameFilter))
             {
                 filtered = filtered.Where(x => x.Supplier?.Name != null &&
                     x.Supplier.Name.Contains(SupplierNameFilter, StringComparison.OrdinalIgnoreCase));
             }
 
-            // Filter by From Date
             if (FromDateFilter.HasValue)
             {
                 filtered = filtered.Where(x => x.OrderDate.HasValue &&
                     x.OrderDate.Value >= FromDateFilter.Value);
             }
 
-            // Filter by To Date
             if (ToDateFilter.HasValue)
             {
                 filtered = filtered.Where(x => x.OrderDate.HasValue &&
                     x.OrderDate.Value <= ToDateFilter.Value);
             }
 
-            // Update FilteredSupplierOrders safely
             FilteredSupplierOrders.Clear();
             foreach (var order in filtered)
             {
@@ -153,6 +179,7 @@ namespace PRN212_PROJECT.View_Model
 
         private void ExportFile(object parameter)
         {
+            // Existing export logic remains unchanged
             if (FilteredSupplierOrders == null || !FilteredSupplierOrders.Any())
             {
                 MessageBox.Show("Không có đơn hàng nào để xuất!", "Cảnh báo",
@@ -235,6 +262,51 @@ namespace PRN212_PROJECT.View_Model
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi xuất file Excel: {ex.Message}", "Lỗi",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SaveChanges(object parameter)
+        {
+            if (SelectedSupplierOrder == null)
+            {
+                MessageBox.Show("Vui lòng chọn một đơn hàng để lưu thay đổi!", "Cảnh báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var orderToUpdate = ChickenPrnContext.Ins.SupplierOrders
+                    .FirstOrDefault(o => o.Id == SelectedSupplierOrder.Id);
+
+                if (orderToUpdate != null)
+                {
+                    orderToUpdate.DeliverDate = SelectedSupplierOrder.DeliverDate;
+                    orderToUpdate.IsPaid = SelectedSupplierOrder.IsPaid;
+                    if (SelectedSupplierOrder.IsPaid == true)
+                    {
+                        Expenditure e=ChickenPrnContext.Ins.Expenditures.FirstOrDefault(x=>x.SupplierOrderId == SelectedSupplierOrder.Id);
+                        if (e != null) { 
+                        e.Date=DateOnly.FromDateTime(DateTime.Today);
+                        ChickenPrnContext.Ins.Expenditures.Update(e);
+                        ChickenPrnContext.Ins.SaveChanges();
+                        
+                        }
+                    }
+
+                    ChickenPrnContext.Ins.SaveChanges();
+
+                    MessageBox.Show("Lưu thay đổi thành công!", "Thành công",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Refresh the data
+                    LoadSupplierOrder();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi lưu thay đổi: {ex.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

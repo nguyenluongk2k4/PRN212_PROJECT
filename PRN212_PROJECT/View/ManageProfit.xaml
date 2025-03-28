@@ -6,10 +6,19 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        xmlns:vm="clr-namespace:PRN212_PROJECT.View_Model"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="ManageProfit" Height="1080" Width="1920">
-    
+        Title="ManageProfit" 
+        Height="1080" 
+        Width="1920">
+
+    <!-- Resources -->
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <!-- Main Grid -->
     <Grid Background="#F5F5F5">
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
@@ -26,10 +35,14 @@
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
                 <materialDesign:PackIcon Kind="ChartLine" Width="40" Height="40" Foreground="White" Margin="0,0,16,0"/>
-                <TextBlock Text="DOANH THU" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
+                <TextBlock Text="QUẢN LÝ LỢI NHUẬN" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
             </StackPanel>
 
-            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="#2E7D32" Margin="20,0"
+            <Button Grid.Column="2" 
+                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="White" 
+                    Foreground="#2E7D32" 
+                    Margin="20,0"
                     Command="{Binding BackCommand}">
                 <materialDesign:PackIcon Kind="ArrowLeft" />
             </Button>
@@ -40,14 +53,24 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <!-- Stats Header -->
                     <RowDefinition Height="Auto" />
+                    <!-- Summary Cards -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Toggle Buttons -->
                     <RowDefinition Height="*" />
+                    <!-- Charts -->
                 </Grid.RowDefinitions>
 
+                <!-- Stats Header -->
                 <Grid Grid.Row="0" Background="#E8F5E9">
-                    <TextBlock Text="THỐNG KÊ DOANH THU" FontSize="18" FontWeight="Bold" Margin="16,8" />
+                    <TextBlock Text="THỐNG KÊ TỔNG QUAN" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Margin="16,8" />
                 </Grid>
 
+                <!-- Summary Cards -->
                 <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="16,8">
                     <materialDesign:Card Width="200" Height="120" Margin="8" Background="#E8F5E9">
                         <StackPanel VerticalAlignment="Center" Margin="16">
@@ -58,7 +81,7 @@
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="Green" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding TodayRevenuePercentage}" Value="Negative">
+                                            <DataTrigger Binding="{Binding TodayRevenuePercentage, ConverterParameter='-'}">
                                                 <Setter Property="Foreground" Value="Red" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -77,7 +100,53 @@
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="Green" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ThisWeekRevenuePercentage}" Value="Negative">
+                                            <DataTrigger Binding="{Binding ThisWeekRevenuePercentage, ConverterParameter='-'}">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Width="200" Height="120" Margin="8" Background="#E8F5E9">
+                        <StackPanel VerticalAlignment="Center" Margin="16">
+                            <TextBlock Text="Tỷ lệ Thu/Chi" FontSize="14" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding IncomeOutcomeRatio}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
+                            <TextBlock Text="Tháng này" FontSize="12" HorizontalAlignment="Center" Foreground="Gray"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Width="200" Height="120" Margin="8" Background="#E8F5E9">
+                        <StackPanel VerticalAlignment="Center" Margin="16">
+                            <TextBlock Text="Tăng trưởng tháng" FontSize="14" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding MonthlyGrowthRate}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
+                            <TextBlock Text="So với tháng trước" FontSize="12" HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Green" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MonthlyGrowthRate, ConverterParameter='-'}">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Width="200" Height="120" Margin="8" Background="#E8F5E9">
+                        <StackPanel VerticalAlignment="Center" Margin="16">
+                            <TextBlock Text="Biên lợi nhuận" FontSize="14" HorizontalAlignment="Center" />
+                            <TextBlock Text="{Binding MonthlyProfitMargin}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" />
+                            <TextBlock Text="Tháng này" FontSize="12" HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Green" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MonthlyProfitMargin, ConverterParameter='-'}">
                                                 <Setter Property="Foreground" Value="Red" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -88,20 +157,216 @@
                     </materialDesign:Card>
                 </WrapPanel>
 
-                <Grid Grid.Row="2" Margin="16,8">
-                    <TextBlock Text="BIỂU ĐỒ DOANH THU" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
-                    <!-- Biểu đồ doanh thu (Column Chart) -->
-                    <lvc:CartesianChart Height="400" LegendLocation="Right">
-                        <lvc:CartesianChart.Series>
-                            <lvc:ColumnSeries Title="Doanh thu (triệu)" Values="{Binding RevenueValues}" Fill="#2E7D32" />
-                        </lvc:CartesianChart.Series>
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding Labels}" LabelsRotation="45" />
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Doanh thu (triệu)" LabelFormatter="{Binding Formatter}" />
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
+                <!-- Toggle Buttons -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="16,8,16,16">
+                    <Button Content="Lợi nhuận gộp" 
+                            Command="{Binding ToggleGrossProfitCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Doanh thu" 
+                            Command="{Binding ToggleRevenueCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Số đơn hàng" 
+                            Command="{Binding ToggleOrderCountCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Chi phí" 
+                            Command="{Binding ToggleExpenditureCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Đơn hàng Thức ăn/Combo" 
+                            Command="{Binding ToggleFoodComboOrdersCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+                </StackPanel>
+
+                <!-- Charts Section -->
+                <Grid Grid.Row="3" Margin="16,8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <!-- Filters -->
+                        <RowDefinition Height="*" />
+                        <!-- Chart Area -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Filters -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
+                        <TextBlock Text="Chọn khoảng thời gian:" 
+                                   FontSize="14" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,8,0"/>
+                        <ComboBox Width="120" 
+                                  ItemsSource="{Binding PeriodOptions}" 
+                                  SelectedItem="{Binding SelectedPeriod, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="DisplayName" 
+                                  Margin="0,0,16,0"/>
+                        <TextBlock Text="Chọn mốc thời gian:" 
+                                   FontSize="14" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,8,0"/>
+                        <ComboBox Width="200" 
+                                  ItemsSource="{Binding TimeOptions}" 
+                                  SelectedItem="{Binding SelectedTimeOption, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="DisplayName"/>
+                    </StackPanel>
+
+                    <!-- Chart Area -->
+                    <Grid Grid.Row="1">
+                        <!-- Gross Profit Chart -->
+                        <materialDesign:Card Margin="0" Padding="16"
+                                           Visibility="{Binding IsGrossProfitVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="LỢI NHUẬN GỘP" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                                <lvc:CartesianChart Grid.Row="1" LegendLocation="Right">
+                                    <lvc:CartesianChart.Series>
+                                        <lvc:LineSeries Title="Lợi nhuận (triệu)" 
+                                                        Values="{Binding GrossProfitValues}" 
+                                                        Stroke="#1976D2" 
+                                                        Fill="Transparent"
+                                                        PointGeometrySize="10"
+                                                        StrokeThickness="3"/>
+                                    </lvc:CartesianChart.Series>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Labels="{Binding Labels}" LabelsRotation="45" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Lợi nhuận (triệu)" LabelFormatter="{Binding Formatter}" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </materialDesign:Card>
+
+                        <!-- Revenue Chart -->
+                        <materialDesign:Card Margin="0" Padding="16"
+                                           Visibility="{Binding IsRevenueVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="DOANH THU" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                                <lvc:CartesianChart Grid.Row="1" LegendLocation="Right">
+                                    <lvc:CartesianChart.Series>
+                                        <lvc:LineSeries Title="Doanh thu (triệu)" 
+                                                        Values="{Binding RevenueValues}" 
+                                                        Stroke="#2E7D32" 
+                                                        Fill="Transparent"
+                                                        PointGeometrySize="10"
+                                                        StrokeThickness="3"/>
+                                    </lvc:CartesianChart.Series>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Labels="{Binding Labels}" LabelsRotation="45" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Doanh thu (triệu)" LabelFormatter="{Binding Formatter}" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </materialDesign:Card>
+
+                        <!-- Order Count Chart -->
+                        <materialDesign:Card Margin="0" Padding="16"
+                                           Visibility="{Binding IsOrderCountVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="SỐ LƯỢNG ĐƠN HÀNG" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                                <lvc:CartesianChart Grid.Row="1" LegendLocation="Right">
+                                    <lvc:CartesianChart.Series>
+                                        <lvc:LineSeries Title="Số đơn" 
+                                                        Values="{Binding OrderCountValues}" 
+                                                        Stroke="#FBC02D" 
+                                                        Fill="Transparent"
+                                                        PointGeometrySize="10"
+                                                        StrokeThickness="3"/>
+                                    </lvc:CartesianChart.Series>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Labels="{Binding Labels}" LabelsRotation="45" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Số đơn" LabelFormatter="{Binding OrderCountFormatter}" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </materialDesign:Card>
+
+                        <!-- Expenditure Chart -->
+                        <materialDesign:Card Margin="0" Padding="16"
+                                           Visibility="{Binding IsExpenditureVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="CHI PHÍ" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                                <lvc:CartesianChart Grid.Row="1" LegendLocation="Right">
+                                    <lvc:CartesianChart.Series>
+                                        <lvc:LineSeries Title="Chi phí (triệu)" 
+                                                        Values="{Binding ExpenditureValues}" 
+                                                        Stroke="#D32F2F" 
+                                                        Fill="Transparent"
+                                                        PointGeometrySize="10"
+                                                        StrokeThickness="3"/>
+                                    </lvc:CartesianChart.Series>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Labels="{Binding Labels}" LabelsRotation="45" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Chi phí (triệu)" LabelFormatter="{Binding Formatter}" FontSize="14"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </materialDesign:Card>
+
+                        <!-- Food/Combo Orders Chart with Scrollbar -->
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                                    VerticalScrollBarVisibility="Disabled"
+                                    Visibility="{Binding IsFoodComboOrdersVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <materialDesign:Card Margin="0" Padding="16">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" 
+                                               Text="SỐ LƯỢNG ĐƠN HÀNG THEO THỨC ĂN/COMBO" 
+                                               FontSize="20" 
+                                               FontWeight="SemiBold" 
+                                               Margin="0,0,0,16"/>
+                                    <lvc:CartesianChart Grid.Row="1" 
+                                                        LegendLocation="Right" 
+                                                        MinWidth="800">
+                                        <lvc:CartesianChart.Series>
+                                            <lvc:LineSeries Title="Số đơn" 
+                                                            Values="{Binding FoodComboOrderValues}" 
+                                                            Stroke="#8E24AA" 
+                                                            Fill="Transparent"
+                                                            PointGeometrySize="10"
+                                                            StrokeThickness="3"/>
+                                        </lvc:CartesianChart.Series>
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis Labels="{Binding FoodComboLabels}" 
+                                                      LabelsRotation="45" 
+                                                      FontSize="12"
+                                                      Separator="{x:Static lvc:DefaultAxes.CleanSeparator}"/>
+                                        </lvc:CartesianChart.AxisX>
+                                        <lvc:CartesianChart.AxisY>
+                                            <lvc:Axis Title="Số đơn" 
+                                                      LabelFormatter="{Binding OrderCountFormatter}" 
+                                                      FontSize="14"
+                                                      MinValue="0"/>
+                                        </lvc:CartesianChart.AxisY>
+                                    </lvc:CartesianChart>
+                                </Grid>
+                            </materialDesign:Card>
+                        </ScrollViewer>
+                    </Grid>
                 </Grid>
             </Grid>
         </materialDesign:Card>

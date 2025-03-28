@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PRN212_PROJECT.Models;
 using PRN212_PROJECT.View_Model;
 
 namespace PRN212_PROJECT.View
@@ -35,6 +36,13 @@ namespace PRN212_PROJECT.View
             InputIngredientExcel excelWindow = new InputIngredientExcel();
             excelWindow.Show();
             this.Close();
+        }
+        private void DgSupplierOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is ImportIngredientVM vm)
+            {
+                vm.SelectedSupplierOrder = dgSupplierOrders.SelectedItem as SupplierOrder;
+            }
         }
     }
 }

@@ -13,6 +13,7 @@
         Height="1080" 
         Width="1920">
     <Window.Resources>
+        <vm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <vm:DateOnlyToDateTimeConverter x:Key="DateOnlyToDateTimeConverter"/>
         <Style x:Key="NoCheckBoxHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="ContentTemplate">
@@ -30,7 +31,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Thanh điều hướng -->
+        <!-- Navigation Bar -->
         <materialDesign:ColorZone Mode="PrimaryMid" Grid.Row="0" Padding="16" Background="#2196F3">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -59,7 +60,7 @@
             </Grid>
         </materialDesign:ColorZone>
 
-        <!-- Nội dung chính -->
+        <!-- Main Content -->
         <Grid Grid.Row="1" Margin="32">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -130,7 +131,7 @@
                 </Grid>
             </Border>
 
-            <!-- Danh sách SupplierOrder -->
+            <!-- SupplierOrder List -->
             <Border Grid.Row="1" 
                     BorderBrush="{DynamicResource MaterialDesignDivider}" 
                     BorderThickness="1" 
@@ -142,6 +143,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Added for edit fields -->
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" 
@@ -156,36 +159,51 @@
                               materialDesign:DataGridAssist.ColumnHeaderPadding="8"
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding FilteredSupplierOrders}"
-                              IsReadOnly="False">
+                              SelectedItem="{Binding SelectedSupplierOrder, UpdateSourceTrigger=PropertyChanged}"
+                              SelectionChanged="DgSupplierOrders_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="Chọn" 
                                                     Binding="{Binding IsSelected}" 
-                                                    Width="*" />
-
+                                                    Width="*" IsReadOnly="False"/>
                             <DataGridTextColumn Header="Nhà Cung Cấp" 
                                                 Binding="{Binding Supplier.Name}" 
-                                                Width="3*" />
-
+                                                Width="3*" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Ngày Đặt Hàng" 
                                                 Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}" 
-                                                Width="*" />
-
+                                                Width="*" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Ngày Giao Hàng" 
                                                 Binding="{Binding DeliverDate, StringFormat={}{0:dd/MM/yyyy}, TargetNullValue='Chưa xác định'}"
-                                                Width="*"
-                                                IsReadOnly="False" />
-
+                                                Width="*" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Tổng Tiền" 
                                                 Binding="{Binding Total, StringFormat={}{0:N0} VND}" 
-                                                Width="2*" />
-
+                                                Width="2*" IsReadOnly="True"/>
                             <DataGridCheckBoxColumn Header="Đã Thanh Toán" 
                                                     Binding="{Binding IsPaid}" 
-                                                    Width="*" />
+                                                    Width="*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Button Grid.Row="2"
+                    <!-- Edit Fields -->
+                    <StackPanel Grid.Row="2" 
+                                Visibility="{Binding ShowEditField, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Orientation="Horizontal"
+                                Margin="0,16,0,0">
+                        <TextBlock Text="Ngày Giao Hàng:" 
+                                   FontSize="14" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,8,0"/>
+                        <DatePicker Width="150" 
+                                    materialDesign:HintAssist.Hint="Chọn ngày giao"
+                                    SelectedDate="{Binding SelectedSupplierOrder.DeliverDate, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Đã Thanh Toán:" 
+                                   FontSize="14" 
+                                   VerticalAlignment="Center" 
+                                   Margin="16,0,8,0"/>
+                        <CheckBox IsChecked="{Binding SelectedSupplierOrder.IsPaid, UpdateSourceTrigger=PropertyChanged}" 
+                                  VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="3"
                             x:Name="btnSaveChanges"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             Content="Lưu Thay Đổi"
@@ -194,14 +212,14 @@
                 </Grid>
             </Border>
 
-            <!-- Nút Import và Export -->
+            <!-- Import and Export Buttons -->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Import từ Excel -->
+                <!-- Import from Excel -->
                 <Border Grid.Column="0" 
                         BorderBrush="{DynamicResource MaterialDesignDivider}" 
                         BorderThickness="1" 

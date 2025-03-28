@@ -150,8 +150,20 @@ namespace PRN212_PROJECT.View_Model
                 OnPropertyChanged(nameof(CanImport));
             }
         }
+        private string _payer;
+        public string Payer
+        {
+            get => _payer;
+            set
+            {
+                _payer = value;
+                OnPropertyChanged(nameof(Payer));
+                UpdateCanImport();
+            }
+        }
 
         public ICommand ImportCommand { get; }
+        
 
         public ImportIngredientExcelVM()
         {
@@ -204,24 +216,46 @@ namespace PRN212_PROJECT.View_Model
 
                     for (int row = 2; row <= rowCount; row++)
                     {
-            
+                        // Check if the entire row is empty
+                        bool isRowEmpty = true;
+                        for (int col = 1; col <= 5; col++) // Assuming 5 columns
+                        {
+                            if (!string.IsNullOrWhiteSpace(worksheet.Cells[row, col].Text))
+                            {
+                                isRowEmpty = false;
+                                break;
+                            }
+                        }
+
+                        if (isRowEmpty)
+                        {
+                            break; // Stop reading further if an empty row is found
+                        }
+
                         if (string.IsNullOrWhiteSpace(worksheet.Cells[row, 1].Text))
                         {
+                            ClearForm();
                             throw new Exception($"Tên sản phẩm không được để trống tại dòng {row}.");
+                            
+
+
                         }
 
                         if (!double.TryParse(worksheet.Cells[row, 2].Text.Replace(" kg", "").Trim(), out double amount))
                         {
+                            ClearForm();
                             throw new Exception($"Số lượng không hợp lệ tại dòng {row}.");
                         }
 
                         if (string.IsNullOrWhiteSpace(worksheet.Cells[row, 3].Text))
                         {
+                            ClearForm();
                             throw new Exception($"Đơn vị đo không được để trống tại dòng {row}.");
                         }
 
                         if (!double.TryParse(worksheet.Cells[row, 4].Text.Replace("VND ", "").Replace(",", "").Trim(), out double unitPrice))
                         {
+                            ClearForm();
                             throw new Exception($"Giá tiền không hợp lệ tại dòng {row}.");
                         }
 
@@ -229,6 +263,7 @@ namespace PRN212_PROJECT.View_Model
                         if (!double.TryParse(worksheet.Cells[row, 5].Text.Replace("VND ", "").Replace(",", "").Trim(), out double total) ||
                             Math.Abs(calculatedTotal - total) > 0.01)
                         {
+                            ClearForm();
                             throw new Exception($"Tổng tiền tại dòng {row} không khớp (Số Lượng * Giá Tiền phải bằng Tổng).");
                         }
 
@@ -248,7 +283,7 @@ namespace PRN212_PROJECT.View_Model
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi đọc file Excel: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                ClearPreview();
+                ClearForm();
             }
         }
 
@@ -280,6 +315,7 @@ namespace PRN212_PROJECT.View_Model
                         !string.IsNullOrEmpty(SelectedSupplierName) &&
                         OrderDate.HasValue &&
                         TotalAmount > 0 &&
+                        !string.IsNullOrEmpty(Payer) &&
                         PreviewData.Any();
         }
 
@@ -298,6 +334,11 @@ namespace PRN212_PROJECT.View_Model
                     MessageBox.Show("Nhà cung cấp không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+                if (DeliveryDate.HasValue && DeliveryDate.Value <= OrderDate.Value)
+                {
+                    MessageBox.Show("Ngày giao hàng phải lớn hơn ngày đặt hàng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
                 // Create SupplierOrder
                 var supplierOrder = new SupplierOrder
@@ -311,6 +352,20 @@ namespace PRN212_PROJECT.View_Model
 
                 ChickenPrnContext.Ins.SupplierOrders.Add(supplierOrder);
                 ChickenPrnContext.Ins.SaveChanges();
+                //create Expenditure
+
+
+                Expenditure expenditure=new Expenditure();
+                    expenditure.Name = $"Thanh Toán Tiền Nhập Hàng Ngày {supplierOrder.OrderDate.Value}";
+                    expenditure.SupplierOrderId = supplierOrder.Id;
+                    expenditure.Executor = Payer;
+                    expenditure.Cost = supplierOrder.Total;
+                if (supplierOrder.IsPaid==true)
+                {
+                    expenditure.Date = DateOnly.FromDateTime(DateTime.Today);
+                }
+                    ChickenPrnContext.Ins.Expenditures.Add(expenditure);
+                    ChickenPrnContext.Ins.SaveChanges();
 
                 // Create SupplierOrderDetails
                 foreach (var detail in PreviewData)
@@ -321,6 +376,8 @@ namespace PRN212_PROJECT.View_Model
 
                 ChickenPrnContext.Ins.SaveChanges();
 
+
+                
                 MessageBox.Show("Import thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                 ClearForm();
             }

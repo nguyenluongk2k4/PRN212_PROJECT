@@ -224,56 +224,63 @@ namespace PRN212_PROJECT.View_Model
             return (bool)value ? Visibility.Visible : Visibility.Hidden;
         }
 
-    public class StringToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public class TotalConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is SupplierOrderDetail detail && detail.Amount.HasValue && detail.UnitPrice.HasValue)
-            {
-                double total = detail.Amount.Value * detail.UnitPrice.Value;
-                return $"{total:N0} VND";
-            }
-            return "0 VND";
-        }
-
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
-        }
+        } 
     }
-    public class DateOnlyToDateTimeConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is DateOnly dateOnly)
-            {
-                return dateOnly.ToDateTime(TimeOnly.MinValue); // Convert to DateTime with minimal time
-            }
-            return null; // For null values
-        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public class StringToVisibilityConverter : IValueConverter
         {
-            if (value is DateTime dateTime)
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
             {
-                return DateOnly.FromDateTime(dateTime); // Convert back to DateOnly
+                return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
             }
-            return null; // For null values
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public class TotalConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value is SupplierOrderDetail detail && detail.Amount.HasValue && detail.UnitPrice.HasValue)
+                {
+                    double total = detail.Amount.Value * detail.UnitPrice.Value;
+                    return $"{total:N0} VND";
+                }
+                return "0 VND";
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public class DateOnlyToDateTimeConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value is DateOnly dateOnly)
+                {
+                    return dateOnly.ToDateTime(TimeOnly.MinValue); // Convert to DateTime with minimal time
+                }
+                return null; // For null values
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value is DateTime dateTime)
+                {
+                    return DateOnly.FromDateTime(dateTime); // Convert back to DateOnly
+                }
+                return null; // For null values
+            }
         }
     }
-}
+
 
 
 
