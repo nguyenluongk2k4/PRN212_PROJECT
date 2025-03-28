@@ -61,7 +61,14 @@ namespace PRN212_PROJECT.View_Model
 
         private string _foodType6;
         private ObservableCollection<Food> _foodListType6;
-
+        public ICommand GoBackDashBoard { get; set; }
+        
+        private void GoBackDB(object parameter)
+        {
+            AdminDashBoard ad = new AdminDashBoard();
+            ad.Show();
+            Application.Current.Windows.OfType<OrderedFood>().FirstOrDefault()?.Close();
+        }
         public ObservableCollection<Food> FoodListType1
         {
             get => _foodListType1;

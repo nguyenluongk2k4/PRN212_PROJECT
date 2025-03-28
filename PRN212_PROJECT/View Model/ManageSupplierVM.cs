@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using PRN212_PROJECT.Models;
+using PRN212_PROJECT.View;
 
 namespace PRN212_PROJECT.View_Model
 {
@@ -106,6 +107,7 @@ namespace PRN212_PROJECT.View_Model
         public ICommand UpdateSupplier { get; set; }
         public ICommand DeleteSupplier { get; set; }
         public ICommand Cancel { get; set; }
+        public ICommand GoBack { get; set; }
 
         public ManageSupplierVM()
         {
@@ -119,8 +121,14 @@ namespace PRN212_PROJECT.View_Model
             UpdateSupplier = new RelayCommand(UpdateSupplierInDB, CanUpdateSupplier);
             DeleteSupplier = new RelayCommand(DeleteSupplierFromDB, CanDeleteSupplier);
             Cancel = new RelayCommand(ClearForm, _ => true);
+            GoBack = new RelayCommand(GoBackDashBoard);
         }
-
+        private void GoBackDashBoard(object parameter)
+        {
+            AdminDashBoard ad = new AdminDashBoard();
+            ad.Show();
+            Application.Current.Windows.OfType<ManageSupplier>().FirstOrDefault()?.Close();
+        }
         private void LoadSupplier()
         {
             var list = ChickenPrnContext.Ins.Suppliers.ToList();

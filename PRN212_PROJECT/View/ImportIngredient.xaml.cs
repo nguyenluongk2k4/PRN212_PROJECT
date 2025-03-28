@@ -26,10 +26,7 @@ namespace PRN212_PROJECT.View
             InitializeComponent();
         }
 
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        
 
         private void BtnExcelImport_Click(object sender, RoutedEventArgs e)
         {

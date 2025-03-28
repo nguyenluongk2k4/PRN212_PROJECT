@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using PRN212_PROJECT.Models;
+using PRN212_PROJECT.View;
 
 namespace PRN212_PROJECT.View_Model
 {
@@ -98,6 +99,7 @@ namespace PRN212_PROJECT.View_Model
         public ICommand ExportOrderDetailData { get; set; }
         public ICommand ClearFilterCommand { get; set; }
         public ICommand SaveChangesCommand { get; set; } // Added
+        public ICommand GoBack { get; set; }
 
         public ImportIngredientVM()
         {
@@ -109,6 +111,13 @@ namespace PRN212_PROJECT.View_Model
             ExportOrderDetailData = new RelayCommand(ExportFile);
             ClearFilterCommand = new RelayCommand(ClearFilters);
             SaveChangesCommand = new RelayCommand(SaveChanges); // Initialize the command
+            GoBack = new RelayCommand(GoBackDashBoard);
+        }
+        private void GoBackDashBoard(object parameter)
+        {
+            AdminDashBoard ad = new AdminDashBoard();
+            ad.Show();
+            Application.Current.Windows.OfType<ImportIngredient>().FirstOrDefault()?.Close();
         }
 
         private bool CanShowEditField()

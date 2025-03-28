@@ -111,6 +111,7 @@ namespace PRN212_PROJECT.View_Model
         public ICommand GoFeedbackManagementCommand { get; }
         public ICommand GoImportGoodsCommand { get; }
         public ICommand GoCreateOrderCommand { get; }
+        public ICommand GoSupplierCommand { get; }
 
         private ObservableCollection<TopFoodItem> _topSellingFoods;
         public ObservableCollection<TopFoodItem> TopSellingFoods
@@ -236,7 +237,9 @@ namespace PRN212_PROJECT.View_Model
             GoFeedbackManagementCommand = new RelayCommand(ExecuteGoFeedbackManagement);
             GoImportGoodsCommand = new RelayCommand(ExecuteGoImportGoods);
             GoCreateOrderCommand = new RelayCommand(ExecuteGoCreateOrder);
+            GoSupplierCommand = new RelayCommand(ExecuteSupplier);
         }
+
 
         private void LoadTopSellingFoods()
         {
@@ -391,6 +394,13 @@ namespace PRN212_PROJECT.View_Model
             loginWindow.Show();
             Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
         }
+        private void ExecuteSupplier(object parameter)
+        {
+            
+            ManageSupplier su = new ManageSupplier();
+            su.Show();
+            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
+        }
 
         private void ExecuteGoOrder(object parameter)
         {
@@ -434,7 +444,9 @@ namespace PRN212_PROJECT.View_Model
 
         private void ExecuteGoImportGoods(object parameter)
         {
-            MessageBox.Show("Admin đang làm");
+            ImportIngredient im = new ImportIngredient();
+            im.Show();
+            Application.Current.Windows.OfType<AdminDashBoard>().FirstOrDefault()?.Close();
         }
 
         private void ExecuteGoCreateOrder(object parameter)

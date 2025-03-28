@@ -124,6 +124,15 @@
                             <TextBlock Text="Món ăn, combo" FontSize="12" TextAlignment="Center" />
                         </StackPanel>
                     </Button>
+                    <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Background="#8E24AA" Foreground="White" Command="{Binding GoSupplierCommand}"
+                    Visibility="{Binding HasPermission[ManageSupplier], Converter={StaticResource BoolToVis}}">
+                        <StackPanel>
+                            <materialDesign:PackIcon Kind="Factory" Width="48" Height="48" HorizontalAlignment="Center" />
+                            <TextBlock Text="Quản lý nhà cung cấp" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="Nhà cung cấp" FontSize="12" TextAlignment="Center" />
+                        </StackPanel>
+                    </Button>
                 </WrapPanel>
             </materialDesign:Card>
             

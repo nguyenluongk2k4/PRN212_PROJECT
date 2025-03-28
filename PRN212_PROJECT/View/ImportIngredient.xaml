@@ -45,7 +45,7 @@
                             Foreground="White"
                             ToolTip="Quay lại"
                             Margin="0,0,16,0"
-                            Click="BtnBack_Click">
+                            Command="{Binding GoBack}">
                         <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
                     </Button>
 

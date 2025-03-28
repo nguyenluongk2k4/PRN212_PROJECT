@@ -308,6 +308,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Subtotal -->
@@ -337,6 +338,14 @@
                         <materialDesign:PackIcon Kind="CashRegister" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
                         <TextBlock Text="THANH TOÁN" FontSize="16" FontWeight="Bold"/>
                         <TextBlock Text="{Binding Total, StringFormat={} {0:N0}đ}" FontSize="16" FontWeight="Bold" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="3" Margin="16,16" Height="50" Background="Blue" Foreground="White"
+    Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding GoBackDashBoard}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Backpack" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Text="Trang Quản lí" FontSize="16" FontWeight="Bold"/>
+                        
                     </StackPanel>
                 </Button>
             </Grid>
