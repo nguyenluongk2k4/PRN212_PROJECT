@@ -66,7 +66,7 @@ namespace PRN212_PROJECT.View_Model
                     return null;
 
                 string imagePath = value.ToString();
-                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..",".."));
+                string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
                 string fullPath = Path.Combine(projectRoot, "images", Path.GetFileName(imagePath));
 
                 if (File.Exists(fullPath))
@@ -86,7 +86,7 @@ namespace PRN212_PROJECT.View_Model
         {
             throw new NotImplementedException();
         }
-       
+
 
     }
     public class TotalPriceConverter : IMultiValueConverter
@@ -218,5 +218,56 @@ namespace PRN212_PROJECT.View_Model
     }
 
 
+    public class StringToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
+        }
 
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class TotalConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is SupplierOrderDetail detail && detail.Amount.HasValue && detail.UnitPrice.HasValue)
+            {
+                double total = detail.Amount.Value * detail.UnitPrice.Value;
+                return $"{total:N0} VND";
+            }
+            return "0 VND";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class DateOnlyToDateTimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DateOnly dateOnly)
+            {
+                return dateOnly.ToDateTime(TimeOnly.MinValue); // Convert to DateTime with minimal time
+            }
+            return null; // For null values
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DateTime dateTime)
+            {
+                return DateOnly.FromDateTime(dateTime); // Convert back to DateOnly
+            }
+            return null; // For null values
+        }
+    }
 }
+
+
+

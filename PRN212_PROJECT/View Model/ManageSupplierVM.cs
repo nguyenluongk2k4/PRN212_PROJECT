@@ -18,7 +18,7 @@ namespace PRN212_PROJECT.View_Model
             set
             {
                 _suppliers = value;
-                OnPropertyChanged(nameof(Suppliers)); // Fixed property name
+                OnPropertyChanged(nameof(Suppliers));
             }
         }
 
@@ -40,6 +40,7 @@ namespace PRN212_PROJECT.View_Model
             set
             {
                 _newSupplierPhone = value;
+                ValidatePhone(); // Validate on change
                 OnPropertyChanged(nameof(NewSupplierPhone));
             }
         }
@@ -62,6 +63,7 @@ namespace PRN212_PROJECT.View_Model
             set
             {
                 _newSupplierEmail = value;
+                ValidateEmail(); // Validate on change
                 OnPropertyChanged(nameof(NewSupplierEmail));
             }
         }
@@ -78,6 +80,28 @@ namespace PRN212_PROJECT.View_Model
             }
         }
 
+        private string _phoneErrorMessage;
+        public string PhoneErrorMessage
+        {
+            get => _phoneErrorMessage;
+            set
+            {
+                _phoneErrorMessage = value;
+                OnPropertyChanged(nameof(PhoneErrorMessage));
+            }
+        }
+
+        private string _emailErrorMessage;
+        public string EmailErrorMessage
+        {
+            get => _emailErrorMessage;
+            set
+            {
+                _emailErrorMessage = value;
+                OnPropertyChanged(nameof(EmailErrorMessage));
+            }
+        }
+
         public ICommand AddNewSupplier { get; set; }
         public ICommand UpdateSupplier { get; set; }
         public ICommand DeleteSupplier { get; set; }
@@ -91,10 +115,10 @@ namespace PRN212_PROJECT.View_Model
 
         private void InitializeCommands()
         {
-            AddNewSupplier = new RelayCommand(AddNewSupplierToDB,CanAddNewSupplier);
-            UpdateSupplier = new RelayCommand(UpdateSupplierInDB,CanUpdateSupplier);
-            DeleteSupplier = new RelayCommand(DeleteSupplierFromDB,CanDeleteSupplier);
-            Cancel = new RelayCommand(ClearForm,_ => true);
+            AddNewSupplier = new RelayCommand(AddNewSupplierToDB, CanAddNewSupplier);
+            UpdateSupplier = new RelayCommand(UpdateSupplierInDB, CanUpdateSupplier);
+            DeleteSupplier = new RelayCommand(DeleteSupplierFromDB, CanDeleteSupplier);
+            Cancel = new RelayCommand(ClearForm, _ => true);
         }
 
         private void LoadSupplier()
@@ -111,6 +135,8 @@ namespace PRN212_PROJECT.View_Model
                 NewSupplierAddress = SelectedSupplier.Address;
                 NewSupplierEmail = SelectedSupplier.Email;
                 NewSupplierPhone = SelectedSupplier.PhoneNumber;
+                PhoneErrorMessage = string.Empty; // Clear errors when loading
+                EmailErrorMessage = string.Empty;
             }
         }
 
@@ -121,6 +147,8 @@ namespace PRN212_PROJECT.View_Model
             NewSupplierEmail = string.Empty;
             NewSupplierPhone = string.Empty;
             SelectedSupplier = null;
+            PhoneErrorMessage = string.Empty;
+            EmailErrorMessage = string.Empty;
         }
 
         // Validation methods
@@ -136,13 +164,13 @@ namespace PRN212_PROJECT.View_Model
 
             if (string.IsNullOrWhiteSpace(NewSupplierPhone))
             {
-                errorMessage = "Số điện thoại không được để trống!";
+                PhoneErrorMessage = "Số điện thoại không được để trống!";
                 return false;
             }
 
             if (!Regex.IsMatch(NewSupplierPhone, @"^\d{10}$"))
             {
-                errorMessage = "Số điện thoại phải gồm 10 chữ số!";
+                PhoneErrorMessage = "Số điện thoại phải gồm 10 chữ số!";
                 return false;
             }
 
@@ -154,33 +182,65 @@ namespace PRN212_PROJECT.View_Model
 
             if (string.IsNullOrWhiteSpace(NewSupplierEmail))
             {
-                errorMessage = "Email không được để trống!";
+                EmailErrorMessage = "Email không được để trống!";
                 return false;
             }
 
             if (!Regex.IsMatch(NewSupplierEmail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                errorMessage = "Email không đúng định dạng!";
+                EmailErrorMessage = "Email không đúng định dạng!";
                 return false;
             }
 
             return true;
         }
 
+        private void ValidatePhone()
+        {
+            if (!string.IsNullOrEmpty(NewSupplierPhone) &&
+                ChickenPrnContext.Ins.Suppliers.Any(x => x.PhoneNumber.Equals(NewSupplierPhone) &&
+                (SelectedSupplier == null || x.Id != SelectedSupplier.Id)))
+            {
+                PhoneErrorMessage = "Số điện thoại đã tồn tại!";
+            }
+            else
+            {
+                PhoneErrorMessage = string.Empty;
+            }
+        }
+
+        private void ValidateEmail()
+        {
+            if (!string.IsNullOrEmpty(NewSupplierEmail) &&
+                ChickenPrnContext.Ins.Suppliers.Any(x => x.Email.Equals(NewSupplierEmail) &&
+                (SelectedSupplier == null || x.Id != SelectedSupplier.Id)))
+            {
+                EmailErrorMessage = "Email đã tồn tại!";
+            }
+            else
+            {
+                EmailErrorMessage = string.Empty;
+            }
+        }
+
         // Add Supplier
         private bool CanAddNewSupplier(object parameter)
         {
             return !string.IsNullOrEmpty(NewSupplierPhone) &&
-                   !ChickenPrnContext.Ins.Suppliers.Any(x => x.PhoneNumber.Equals(NewSupplierPhone));
+                   !ChickenPrnContext.Ins.Suppliers.Any(x => x.PhoneNumber.Equals(NewSupplierPhone) || x.Email.Equals(NewSupplierEmail));
         }
 
         private void AddNewSupplierToDB(object parameter)
         {
             if (!ValidateFields(out string errorMessage))
             {
-                MessageBox.Show(errorMessage, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (string.IsNullOrEmpty(PhoneErrorMessage) && string.IsNullOrEmpty(EmailErrorMessage))
+                    MessageBox.Show(errorMessage, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+            if (!string.IsNullOrEmpty(PhoneErrorMessage) || !string.IsNullOrEmpty(EmailErrorMessage))
+                return;
 
             var newSupplier = new Supplier
             {
@@ -200,16 +260,21 @@ namespace PRN212_PROJECT.View_Model
         // Update Supplier
         private bool CanUpdateSupplier(object parameter)
         {
-            return SelectedSupplier != null;
+            return SelectedSupplier != null &&
+                   (!ChickenPrnContext.Ins.Suppliers.Any(x => (x.PhoneNumber.Equals(NewSupplierPhone) || x.Email.Equals(NewSupplierEmail)) && x.Id != SelectedSupplier.Id));
         }
 
         private void UpdateSupplierInDB(object parameter)
         {
             if (!ValidateFields(out string errorMessage))
             {
-                MessageBox.Show(errorMessage, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (string.IsNullOrEmpty(PhoneErrorMessage) && string.IsNullOrEmpty(EmailErrorMessage))
+                    MessageBox.Show(errorMessage, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+            if (!string.IsNullOrEmpty(PhoneErrorMessage) || !string.IsNullOrEmpty(EmailErrorMessage))
+                return;
 
             var supplierToUpdate = ChickenPrnContext.Ins.Suppliers
                 .FirstOrDefault(s => s.Id == SelectedSupplier.Id);
@@ -222,7 +287,7 @@ namespace PRN212_PROJECT.View_Model
                 supplierToUpdate.Address = NewSupplierAddress;
 
                 ChickenPrnContext.Ins.SaveChanges();
-                LoadSupplier(); // Refresh the list
+                LoadSupplier();
                 ClearForm(parameter);
                 MessageBox.Show("Cập nhật nhà cung cấp thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -253,5 +318,4 @@ namespace PRN212_PROJECT.View_Model
             }
         }
     }
-
 }

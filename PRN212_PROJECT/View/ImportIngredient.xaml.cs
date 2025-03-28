@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PRN212_PROJECT.View_Model;
 
 namespace PRN212_PROJECT.View
 {
@@ -23,5 +24,18 @@ namespace PRN212_PROJECT.View
         {
             InitializeComponent();
         }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnExcelImport_Click(object sender, RoutedEventArgs e)
+        {
+            InputIngredientExcel excelWindow = new InputIngredientExcel();
+            excelWindow.Show();
+            this.Close();
+        }
     }
 }
+

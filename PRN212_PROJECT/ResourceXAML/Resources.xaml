@@ -15,4 +15,6 @@
     <ViewModel:CookerVM x:Key="CookerVM"/>
     <ViewModel:AddNewExpentitureVM x:Key="AddNewExpenditureVM"/>
     <ViewModel:ManageSupplierVM x:Key="ManageSupplierVM"/>
+    <ViewModel:ImportIngredientExcelVM x:Key="ImportExcelVM"/>
+    <ViewModel:ImportIngredientVM x:Key="ImportIngredientVM"/>
 </ResourceDictionary>

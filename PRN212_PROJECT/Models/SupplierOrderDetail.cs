@@ -11,9 +11,9 @@ public partial class SupplierOrderDetail
 
     public string? ProductName { get; set; }
 
-    public int? Amount { get; set; }
+    public double? Amount { get; set; }
 
     public double? UnitPrice { get; set; }
 
-    public virtual SupplierOrder SupplierOrder { get; set; } = null!;
+    public string? CalculationUnit { get; set; }
 }

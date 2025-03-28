@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:BaseVM="clr-namespace:PRN212_PROJECT.View_Model"
         xmlns:local="clr-namespace:PRN212_PROJECT.View"
         mc:Ignorable="d"
         Title="Manage Supplier" 
@@ -11,7 +12,9 @@
         Width="1920"
         WindowState="Maximized"
         DataContext="{StaticResource ManageSupplierVM}">
-
+    <Window.Resources>
+        <BaseVM:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -89,13 +92,13 @@
                                         <StackPanel Orientation="Horizontal">
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     ToolTip="Chỉnh sửa"
-                                                    Command="{Binding UpdateSupplier}"
+                                                    Command="{Binding DataContext.UpdateSupplier, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                     Margin="0,0,8,0">
                                                 <materialDesign:PackIcon Kind="Pencil" />
                                             </Button>
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     ToolTip="Xóa"
-                                                    Command="{Binding DeleteSupplier}"
+                                                    Command="{Binding DataContext.DeleteSupplier, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                     Foreground="{DynamicResource MaterialDesignValidationErrorBrush}">
                                                 <materialDesign:PackIcon Kind="Delete" />
                                             </Button>
@@ -125,21 +128,35 @@
                            Margin="0,0,0,16" 
                            Text="{Binding NewSupplierName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-                    <TextBox materialDesign:HintAssist.Hint="Số Điện Thoại"
-                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                           Margin="0,0,0,16" 
-                           Text="{Binding NewSupplierPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                           MaxLength="10"/>
+                    <StackPanel>
+                        <TextBox materialDesign:HintAssist.Hint="Số Điện Thoại"
+                               Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                               Margin="0,0,0,8" 
+                               Text="{Binding NewSupplierPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                               MaxLength="10"/>
+                        <TextBlock Text="{Binding PhoneErrorMessage}" 
+                                 Foreground="Red" 
+                                 FontSize="12" 
+                                 Margin="0,0,0,8" 
+                                 Visibility="{Binding PhoneErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                    </StackPanel>
 
                     <TextBox materialDesign:HintAssist.Hint="Địa Chỉ"
                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                            Margin="0,0,0,16" 
                            Text="{Binding NewSupplierAddress, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-                    <TextBox materialDesign:HintAssist.Hint="Email"
-                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                           Margin="0,0,0,24" 
-                           Text="{Binding NewSupplierEmail, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                    <StackPanel>
+                        <TextBox materialDesign:HintAssist.Hint="Email"
+                               Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                               Margin="0,0,0,8" 
+                               Text="{Binding NewSupplierEmail, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        <TextBlock Text="{Binding EmailErrorMessage}" 
+                                 Foreground="Red" 
+                                 FontSize="12" 
+                                 Margin="0,0,0,16" 
+                                 Visibility="{Binding EmailErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                    </StackPanel>
 
                     <StackPanel Orientation="Horizontal" 
                               HorizontalAlignment="Right">
@@ -154,6 +171,17 @@
                               Margin="0,0,8,0"
                               Command="{Binding AddNewSupplier}"
                               Width="100"/>
+
+                        <Button Content="Sửa" 
+                              Style="{StaticResource MaterialDesignRaisedButton}"
+                              Margin="0,0,8,0"
+                              Command="{Binding UpdateSupplier}"
+                              Width="100"/>
+
+                        <Button Content="Xóa" 
+                              Style="{StaticResource MaterialDesignRaisedButton}"
+                              Width="100"
+                              Command="{Binding DeleteSupplier}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>

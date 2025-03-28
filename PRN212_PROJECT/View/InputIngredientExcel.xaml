@@ -4,10 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:PRN212_PROJECT.View_Model"
+        xmlns:local="clr-namespace:PRN212_PROJECT.View"
+        xmlns:BaseVM="clr-namespace:PRN212_PROJECT.View_Model"
+        DataContext="{StaticResource ImportExcelVM}"
         mc:Ignorable="d"
-        Title="InputIngredientExcel" Height="1080" Width="1920"
+        Title="Import Nguyên Liệu Từ Excel" 
+        Height="1080" 
+        Width="1920"
         WindowState="Maximized">
+    <Window.Resources>
+        <BaseVM:TotalConverter x:Key="TotalConverter"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,13 +35,14 @@
                             Style="{StaticResource MaterialDesignIconButton}"
                             Foreground="White"
                             ToolTip="Quay lại"
-                            Margin="0,0,16,0">
+                            Margin="0,0,16,0"
+                            Click="BtnBack_Click">
                         <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
                     </Button>
 
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="FileExcelBox" Width="30" Height="30" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBlock Text="Import Nguyên Liệu" 
+                        <TextBlock Text="Import Nguyên Liệu Từ Excel" 
                                    FontSize="20" 
                                    Foreground="White" 
                                    VerticalAlignment="Center"/>
@@ -44,131 +53,166 @@
 
         <!-- Nội dung chính -->
         <Grid Grid.Row="1" Margin="16">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
+            <!-- Phần form và chọn file (bên trái) -->
+            <Border Grid.Column="0" 
+                    BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                    BorderThickness="1" 
+                    CornerRadius="8"
+                    Margin="0,0,16,0"
+                    Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Thông Tin Đơn Hàng" 
+                               FontSize="18" 
+                               FontWeight="Medium" 
+                               Margin="0,0,0,16"/>
 
-                <!-- Phần chọn file và thông tin file -->
-                <Border Grid.Column="0" 
-                        BorderBrush="{DynamicResource MaterialDesignDivider}" 
-                        BorderThickness="1" 
-                        CornerRadius="8"
-                        Margin="0,0,16,0"
-                        Padding="16">
-                    <StackPanel>
-                        <TextBlock Text="Chọn File Excel" 
-                                   FontSize="18" 
+                    <ComboBox materialDesign:HintAssist.Hint="Chọn Nhà Cung Cấp"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              ItemsSource="{Binding ListSupplierName}"
+                              SelectedItem="{Binding SelectedSupplierName, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,0,16"/>
+
+                    <DatePicker materialDesign:HintAssist.Hint="Ngày Đặt Hàng"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                SelectedDate="{Binding OrderDate, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,0,16"/>
+
+                    <DatePicker materialDesign:HintAssist.Hint="Ngày Giao Hàng"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                SelectedDate="{Binding DeliveryDate, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,0,16"/>
+
+                    <CheckBox Content="Đã Thanh Toán"
+                              IsChecked="{Binding IsPaid, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,0,16"/>
+
+                    <TextBlock materialDesign:HintAssist.Hint="Tổng Tiền"
+                           
+                           Text="{Binding TotalAmount, StringFormat={}{0:N0} VND}"
+                             Margin="0,0,0,16"
+                             
+                             PreviewTextInput="NumberValidationTextBox"/>
+
+                    <TextBlock Text="Chọn File Excel" 
+                               FontSize="18" 
+                               FontWeight="Medium" 
+                               Margin="0,16,0,16"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0" 
+                                 materialDesign:HintAssist.Hint="Đường dẫn file Excel"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 x:Name="txtFilePath"
+                                 IsReadOnly="True"
+                                 Text="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Button Grid.Column="1" 
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                x:Name="btnBrowseFile"
+                                Margin="16,0,0,0"
+                                Click="BtnBrowseFile_Click"
+                                ToolTip="Chọn file Excel">
+                            <materialDesign:PackIcon Kind="FileExcel" Width="20" Height="20"/>
+                        </Button>
+                    </Grid>
+
+                    <!-- Thông tin file -->
+                    <StackPanel Margin="0,16,0,0">
+                        <TextBlock Text="Thông Tin File" 
+                                   FontSize="16" 
                                    FontWeight="Medium" 
-                                   Margin="0,0,0,16"/>
+                                   Margin="0,0,0,8"/>
 
-                        <Grid>
+                        <Grid Margin="0,8,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBox Grid.Column="0" 
-                                     materialDesign:HintAssist.Hint="Đường dẫn file Excel"
-                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                     x:Name="txtFilePath"
-                                     IsReadOnly="True"/>
-
-                            <Button Grid.Column="1" 
-                                    
-                                    Style="{StaticResource MaterialDesignRaisedButton}"
-                                    x:Name="btnBrowseFile"
-                                    Margin="16,0,0,0">
-                                <materialDesign:PackIcon Kind="FileExcel" />
-                            </Button>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Tên File:" 
+                                       FontWeight="Medium" 
+                                       Margin="0,0,8,0"/>
+                            <TextBlock Grid.Column="1" 
+                                       x:Name="txtFileName" 
+                                       Text="{Binding FileName, FallbackValue='Chưa chọn file'}"/>
                         </Grid>
-
-                        <!-- Thông tin file -->
-                        <StackPanel Margin="0,16,0,0">
-                            <TextBlock Text="Thông Tin File" 
-                                       FontSize="16" 
-                                       FontWeight="Medium"/>
-
-                            <Grid Margin="0,8,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" 
-                                           Text="Tên File:" 
-                                           FontWeight="Medium" 
-                                           Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" 
-                                           x:Name="txtFileName" 
-                                           Text="Chưa chọn file"/>
-                            </Grid>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" 
-                                           Text="Số Dòng:" 
-                                           FontWeight="Medium" 
-                                           Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" 
-                                           x:Name="txtRowCount" 
-                                           Text="0"/>
-                            </Grid>
-                        </StackPanel>
                     </StackPanel>
-                </Border>
 
-                <!-- Phần xem trước dữ liệu -->
-                <Border Grid.Column="1" 
-                        BorderBrush="{DynamicResource MaterialDesignDivider}" 
-                        BorderThickness="1" 
-                        CornerRadius="8"
-                        Padding="16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                    <!-- Nút điều khiển -->
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Right" 
+                                Margin="0,24,0,0">
+                        <Button Content="Hủy" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="0,0,8,0"
+                                Click="BtnCancel_Click"
+                                ToolTip="Hủy bỏ và quay lại"/>
+                        <Button Content="Import" 
+                                x:Name="btnImport"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Command="{Binding ImportCommand}"
+                                IsEnabled="{Binding CanImport}"
+                                ToolTip="Import dữ liệu vào hệ thống"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
-                        <TextBlock Grid.Row="0" 
-                                   Text="Xem Trước Dữ Liệu" 
-                                   FontSize="18" 
-                                   FontWeight="Medium" 
-                                   Margin="0,0,0,16"/>
+            <!-- Phần xem trước dữ liệu (bên phải) -->
+            <Border Grid.Column="1" 
+                    BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                    BorderThickness="1" 
+                    CornerRadius="8"
+                    Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <DataGrid Grid.Row="1" 
-                                  x:Name="dgPreviewData"
-                                  materialDesign:DataGridAssist.CellPadding="8"
-                                  materialDesign:DataGridAssist.ColumnHeaderPadding="8"
-                                  AutoGenerateColumns="True"
-                                  IsReadOnly="True"/>
-                    </Grid>
-                </Border>
-            </Grid>
+                    <TextBlock Grid.Row="0" 
+                               Text="Xem Trước Dữ Liệu" 
+                               FontSize="18" 
+                               FontWeight="Medium" 
+                               Margin="0,0,0,16"/>
 
-            <!-- Nút điều khiển -->
-            <StackPanel Grid.Row="1" 
-                        Orientation="Horizontal" 
-                        HorizontalAlignment="Right" 
-                        Margin="0,16,0,0">
-                <Button Content="Hủy" 
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Margin="0,0,8,0"/>
-                <Button Content="Import" 
-                        x:Name="btnImport"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        IsEnabled="False"/>
-            </StackPanel>
+                    <DataGrid Grid.Row="1" 
+                              x:Name="dgPreviewData"
+                              materialDesign:DataGridAssist.CellPadding="8"
+                              materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              ItemsSource="{Binding PreviewData}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tên" 
+                                                Binding="{Binding ProductName}" 
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Số Lượng" 
+                                                Binding="{Binding Amount}" 
+                                                Width="100"/>
+                            <DataGridTextColumn Header="Đơn Vị Đo" 
+                                                Binding="{Binding CalculationUnit}" 
+                                                Width="100"/>
+                            <DataGridTextColumn Header="Giá Tiền" 
+                                                Binding="{Binding UnitPrice, StringFormat={}{0:N0} VND}" 
+                                                Width="120"/>
+                            <DataGridTextColumn Header="Tổng" 
+                                                Binding="{Binding Path=., Converter={StaticResource TotalConverter}}" 
+                                                Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Window>
