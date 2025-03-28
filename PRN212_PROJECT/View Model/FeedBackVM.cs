@@ -14,8 +14,17 @@ namespace PRN212_PROJECT.View_Model
         public ICommand GoFeedBack { get; }
 
         public ICommand GoOrderFood {  get; }
+        public ICommand LogoutBtn { get; set; }
 
         public ICommand GoBackOrderCommand {  get; }
+
+        private void LogOutBtn(object parameter)
+        {
+            AccountLogin.Clear();
+            Login lo = new Login();
+            lo.Show();
+            Application.Current.Windows.OfType<FeedBackOderder>().FirstOrDefault()?.Close();
+        }
         private void ExecuteGoFeedBack(object parameter)
         {
             FeedbackForm fb = new FeedbackForm();
