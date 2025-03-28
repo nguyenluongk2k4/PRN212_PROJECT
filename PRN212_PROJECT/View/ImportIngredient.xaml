@@ -14,7 +14,6 @@
         Width="1920">
     <Window.Resources>
         <vm:DateOnlyToDateTimeConverter x:Key="DateOnlyToDateTimeConverter"/>
-        <!-- Style to remove the checkbox from the column header -->
         <Style x:Key="NoCheckBoxHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="ContentTemplate">
                 <Setter.Value>
@@ -68,13 +67,68 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Tiêu đề -->
-            <TextBlock Grid.Row="0" 
-                       Text="Quản Lý Đơn Hàng Nhà Cung Cấp" 
-                       FontSize="22" 
-                       FontWeight="Medium" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,0,0,32"/>
+            <!-- Filter Bar -->
+            <Border Grid.Row="0"
+                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16"
+                    Margin="0,0,0,16"
+                    Background="{DynamicResource MaterialDesignBackground}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" 
+                               Text="Tìm kiếm:" 
+                               FontSize="16" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,16,0"/>
+
+                    <TextBox Grid.Column="1" 
+                             materialDesign:HintAssist.Hint="Tên nhà cung cấp"
+                             Text="{Binding SupplierNameFilter, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="14"
+                             Margin="0,0,16,0"/>
+
+                    <TextBlock Grid.Column="2" 
+                               Text="Từ ngày:" 
+                               FontSize="16" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,16,0"/>
+
+                    <DatePicker Grid.Column="3" 
+                                materialDesign:HintAssist.Hint="Chọn ngày bắt đầu"
+                                SelectedDate="{Binding FromDateFilter, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,16,0"/>
+
+                    <TextBlock Grid.Column="4" 
+                               Text="Đến ngày:" 
+                               FontSize="16" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,16,0"/>
+
+                    <DatePicker Grid.Column="5" 
+                                materialDesign:HintAssist.Hint="Chọn ngày kết thúc"
+                                SelectedDate="{Binding ToDateFilter, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,16,0"/>
+
+                    <Button Grid.Column="6"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="Xóa bộ lọc"
+                            Command="{Binding ClearFilterCommand}"
+                            Foreground="#D32F2F">
+                        <materialDesign:PackIcon Kind="CloseCircle" Width="24" Height="24"/>
+                    </Button>
+                </Grid>
+            </Border>
 
             <!-- Danh sách SupplierOrder -->
             <Border Grid.Row="1" 
@@ -97,40 +151,39 @@
                                Margin="0,0,0,16"/>
 
                     <DataGrid Grid.Row="1" 
-          x:Name="dgSupplierOrders"
-          materialDesign:DataGridAssist.CellPadding="8"
-          materialDesign:DataGridAssist.ColumnHeaderPadding="8"
-          AutoGenerateColumns="False"
-          ItemsSource="{Binding SupplierOrders}"
-          IsReadOnly="False">
+                              x:Name="dgSupplierOrders"
+                              materialDesign:DataGridAssist.CellPadding="8"
+                              materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding FilteredSupplierOrders}"
+                              IsReadOnly="False">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="Chọn" 
-                                Binding="{Binding IsSelected}" 
-                                Width="*" />
+                                                    Binding="{Binding IsSelected}" 
+                                                    Width="*" />
 
                             <DataGridTextColumn Header="Nhà Cung Cấp" 
-                            Binding="{Binding Supplier.Name}" 
-                            Width="3*" />
+                                                Binding="{Binding Supplier.Name}" 
+                                                Width="3*" />
 
                             <DataGridTextColumn Header="Ngày Đặt Hàng" 
-                            Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}" 
-                            Width="*" />
+                                                Binding="{Binding OrderDate, StringFormat={}{0:dd/MM/yyyy}}" 
+                                                Width="*" />
 
                             <DataGridTextColumn Header="Ngày Giao Hàng" 
-                            Binding="{Binding DeliverDate, StringFormat={}{0:dd/MM/yyyy}, TargetNullValue='Chưa xác định'}"
-                            Width="*"
-                            IsReadOnly="False" />
+                                                Binding="{Binding DeliverDate, StringFormat={}{0:dd/MM/yyyy}, TargetNullValue='Chưa xác định'}"
+                                                Width="*"
+                                                IsReadOnly="False" />
 
                             <DataGridTextColumn Header="Tổng Tiền" 
-                            Binding="{Binding Total, StringFormat={}{0:N0} VND}" 
-                            Width="2*" />
+                                                Binding="{Binding Total, StringFormat={}{0:N0} VND}" 
+                                                Width="2*" />
 
                             <DataGridCheckBoxColumn Header="Đã Thanh Toán" 
-                                Binding="{Binding IsPaid}" 
-                                Width="*" />
+                                                    Binding="{Binding IsPaid}" 
+                                                    Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
-
 
                     <Button Grid.Row="2"
                             x:Name="btnSaveChanges"
@@ -161,10 +214,10 @@
                                     VerticalAlignment="Center"
                                     Margin="32">
                             <materialDesign:PackIcon Kind="FileExcel" 
-                                                   Width="100" 
-                                                   Height="100" 
-                                                   HorizontalAlignment="Center"
-                                                   Foreground="#217346"/>
+                                                     Width="100" 
+                                                     Height="100" 
+                                                     HorizontalAlignment="Center"
+                                                     Foreground="#217346"/>
                             <TextBlock Text="Import từ Excel" 
                                        FontSize="18" 
                                        FontWeight="Medium"
@@ -196,10 +249,10 @@
                                     VerticalAlignment="Center"
                                     Margin="32">
                             <materialDesign:PackIcon Kind="FileExport" 
-                                                   Width="100" 
-                                                   Height="100" 
-                                                   HorizontalAlignment="Center"
-                                                   Foreground="#D32F2F"/>
+                                                     Width="100" 
+                                                     Height="100" 
+                                                     HorizontalAlignment="Center"
+                                                     Foreground="#D32F2F"/>
                             <TextBlock Text="Export to Excel" 
                                        FontSize="18" 
                                        FontWeight="Medium"
