@@ -115,8 +115,8 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
                                 <DataGridTextColumn Header="Nội dung" Binding="{Binding Content}" Width="*"/>
-                                <DataGridTextColumn Header="Đánh giá" Binding="{Binding Rating}" Width="Auto"/>
-                                <DataGridTextColumn Header="Ngày tạo" Binding="{Binding CreatedDate, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}" Width="Auto"/>
+                                <DataGridTextColumn Header="Đánh giá" Binding="{Binding Rate}" Width="Auto"/>
+                                <DataGridTextColumn Header="Ngày tạo" Binding="{Binding TimeFeedback, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

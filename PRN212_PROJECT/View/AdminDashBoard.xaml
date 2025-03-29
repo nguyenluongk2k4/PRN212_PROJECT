@@ -96,7 +96,7 @@
                     </Button>
 
                     <Button Width="200" Height="120" Margin="12" Style="{StaticResource MaterialDesignRaisedButton}" 
-                            Background="#D81B60" Foreground="White" Command="{Binding GoImportGoodsCommand}"
+                            Background="#0277BD" Foreground="White" Command="{Binding GoImportGoodsCommand}"
                             Visibility="{Binding HasPermission[ImportGoods], Converter={StaticResource BoolToVis}}">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="TruckDelivery" Width="48" Height="48" HorizontalAlignment="Center" />

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PRN212_PROJECT.Models;
+using PRN212_PROJECT.View;
 
 namespace PRN212_PROJECT.View_Model
 {
@@ -29,7 +30,10 @@ namespace PRN212_PROJECT.View_Model
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
+            ImportIngredient id = new ImportIngredient();
+            id.Show();
             this.Close();
+            
         }
 
         private void BtnBrowseFile_Click(object sender, RoutedEventArgs e)

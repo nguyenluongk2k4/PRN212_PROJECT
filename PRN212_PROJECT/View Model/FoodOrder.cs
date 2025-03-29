@@ -235,6 +235,7 @@ namespace PRN212_PROJECT.View_Model
             GoCash = new RelayCommand(ExecuteGoCash);
 
             CancelOrder = new RelayCommand(ResetOrderValues);
+            GoBackDashBoard = new RelayCommand(GoBackDB);
 
             AddOrder = new RelayCommand(AddOrdered);
             loadQr();

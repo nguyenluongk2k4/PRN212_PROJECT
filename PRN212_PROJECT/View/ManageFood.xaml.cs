@@ -58,5 +58,12 @@ namespace PRN212_PROJECT.View
             ComboScreen cb = new ComboScreen();
             cb.Show();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            AdminDashBoard ad = new AdminDashBoard();
+            ad.Show();
+            this.Close();
+        }
     }
 }

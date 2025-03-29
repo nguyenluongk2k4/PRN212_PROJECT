@@ -37,7 +37,7 @@
                 <TextBlock Text="QUẢN LÝ DANH MỤC" FontSize="30" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
             </StackPanel>
 
-            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="20,0">
+            <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" Background="White" Foreground="Red" Margin="20,0" Click="Button_Click_1">
                 <materialDesign:PackIcon Kind="ArrowLeft" />
             </Button>
         </Grid>
