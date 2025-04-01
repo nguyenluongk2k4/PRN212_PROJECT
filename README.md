@@ -1,5 +1,5 @@
 # PRN212_PROJECT
-This project is about Fast Food restaurant management and order features. On the side of staff(owner,staff,cooker), we provide ability to manage  every combos,dishes,ingredient sources , view comming order,prepare order,mark order as done.The restaurant owener can view the report statistic by day,week,month,year that facilites keep tracking restaurant status and adjust staff's authorization in system. On the other side of customer, we provide a screen to allow customer order directly at store(like tablet in mc donal),feedback to import restaurant's services.
+This project is about fast food restaurant management and ordering features. On the side of staff(owner, staff, cooker), we provide the ability to manage  every combo, dish, ingredient source, view coming orders, prepare orders, and mark orders as done. The restaurant owner can view the reported statistics by day, week, month, or year which facilitates tracking restaurant status and adjusting staff's authorization in the system. On the other side of the customer, we provide a screen to allow customers to order directly at the store(like a tablet in mc donal), and feedback to import the restaurant's services.
 Account:
 Admin:admin_nam
 Staff:staff_hai
